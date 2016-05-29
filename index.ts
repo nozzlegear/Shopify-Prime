@@ -30,4 +30,4 @@ export function authorize()
     throw new Error("Not Implemented");
 }
 
-export {baseService} from "./services" 
+export {BaseService} from "./modules" 

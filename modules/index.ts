@@ -4,28 +4,34 @@ import * as fetch from "isomorphic-fetch";
 import {stringify} from "qs";
 import uri = require("jsuri");
 
-export class baseService
+export class ShopifyError extends Error
+{
+    constructor(data: any)
+    {
+        super();
+    }
+}
+
+export class BaseService
 {
     constructor(private shopDomain: string, private accessToken: string, private resource: string)
     {
-        this.headers = new Headers();
-        
         if (accessToken)
         {
             this.headers.append("X-Shopify-Access-Token", accessToken);
         }
-        
-        throw new Error("Not Implemented");
     }
     
-    private headers: Headers;
+    private headers = new Headers();
     
     public setCredentials(shopDomain: string, accessToken: string)
     {
+        this.shopDomain = shopDomain;
         
+        this.headers.set("X-Shopify-Access-Token", accessToken);
     }
     
-    public createRequest<T>(method: "GET" | "POST" | "PUT" | "DELETE", path: string, payload?: Object)
+    public async createRequest<T>(method: "GET" | "POST" | "PUT" | "DELETE", path: string, rootElement: string, payload?: Object)
     {
         method = method.toUpperCase() as any;
         
@@ -38,15 +44,20 @@ export class baseService
             url.query(stringify(payload));
         }
         
-        return fetch(url.toString(), {headers: this.headers, method: method, body: JSON.stringify(payload)})
-            .then((result) =>
-            {
-                if (!result.ok)
-                {
-                    let error = result.json<ShopifyError>();
-                }
-                
-                return result.json<T>(); 
-            })
+        //Fetch will only throw an exception when there is a network-related error, not when Shopify returns a non-200 response.
+        const result = await fetch(url.toString(), {
+            headers: this.headers, 
+            method: method, 
+            body: payload && JSON.stringify(payload)
+        });
+            
+        if (!result.ok)
+        {
+            let error = result.json();
+            
+            throw new ShopifyError(error);
+        }
+        
+        return result.json()[rootElement] as T; 
     }
 }
