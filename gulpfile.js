@@ -1,6 +1,7 @@
 "use strict";
 
 const ts          = require("gulp-typescript");
+const seq         = require("run-sequence");
 const path        = require("path");
 const gulp        = require("gulp");
 const replace     = require("gulp-string-replace");
@@ -40,4 +41,7 @@ gulp.task("build:tests", () =>
     return buildTests;
 });
 
-gulp.task("default", ["build", "build:tests"]);
+gulp.task("default", (cb) =>
+{
+    seq("build", "build:tests", cb);   
+});

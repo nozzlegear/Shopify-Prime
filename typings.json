@@ -6,8 +6,7 @@
     "isomorphic-fetch": "github:nozzlegear/isomorphic-fetch.d.ts#fcc8a4a"
   },
   "globalDependencies": {
-    "jsuri": "registry:dt/jsuri#1.3.0+20160317120654",
-    "qs": "registry:dt/qs#0.0.0+20160317120654"
+    "jsuri": "registry:dt/jsuri#1.3.0+20160317120654"
   },
   "devDependencies": {
     "chai": "registry:npm/chai#3.5.0+20160415060238"

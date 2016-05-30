@@ -22,12 +22,17 @@ export class BaseService
     {
         method = method.toUpperCase() as any;
         
-        const headers = new fetch.Headers();
-        headers.append("Accept", "application/json");
+        const options = {
+            headers: new fetch.Headers(),
+            method: method,
+            body: undefined as string,
+        };
+        
+        options.headers.append("Accept", "application/json");
         
         if (this.accessToken)
         {
-            headers.append("X-Shopify-Access-Token", this.accessToken);
+            options.headers.append("X-Shopify-Access-Token", this.accessToken);
         }
         
         const url = new uri(this.shopDomain);
@@ -36,20 +41,23 @@ export class BaseService
         
         if ((method === "GET" || method === "DELETE") && payload)
         {
-            url.query(stringify(payload));
+            for (const prop in payload)
+            {
+                const value = payload[prop];
+                
+                //Shopify expects qs array values to be joined by a comma, e.g. fields=field1,field2,field3
+                url.addQueryParam(prop, Array.isArray(value) ? value.join(",") : value);
+            }
         }
         else if (payload)
         {
-            headers.append("Content-Type", "application/json");
+            options.body = JSON.stringify(payload);
+            
+            options.headers.append("Content-Type", "application/json");
         }
         
         //Fetch will only throw an exception when there is a network-related error, not when Shopify returns a non-200 response.
-        const result = await fetch(url.toString(), {
-            headers: headers, 
-            method: method, 
-            body: payload && JSON.stringify(payload)
-        });
-            
+        const result = await fetch(url.toString(), options);
         const json = await result.json();
         
         if (!result.ok)

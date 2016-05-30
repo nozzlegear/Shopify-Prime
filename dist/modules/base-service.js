@@ -9,7 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 const uri = require("jsuri");
-const qs_1 = require("qs");
 const shopify_error_1 = require("./shopify-error");
 const fetch = require("isomorphic-fetch");
 class BaseService {
@@ -25,26 +24,31 @@ class BaseService {
     createRequest(method, path, rootElement, payload) {
         return __awaiter(this, void 0, void 0, function* () {
             method = method.toUpperCase();
-            const headers = new fetch.Headers();
-            headers.append("Accept", "application/json");
+            const options = {
+                headers: new fetch.Headers(),
+                method: method,
+                body: undefined,
+            };
+            options.headers.append("Accept", "application/json");
             if (this.accessToken) {
-                headers.append("X-Shopify-Access-Token", this.accessToken);
+                options.headers.append("X-Shopify-Access-Token", this.accessToken);
             }
             const url = new uri(this.shopDomain);
             url.protocol("https");
             url.path(`${this.resource}/${path}`);
             if ((method === "GET" || method === "DELETE") && payload) {
-                url.query(qs_1.stringify(payload));
+                for (const prop in payload) {
+                    const value = payload[prop];
+                    //Shopify expects qs array values to be joined by a comma, e.g. fields=field1,field2,field3
+                    url.addQueryParam(prop, Array.isArray(value) ? value.join(",") : value);
+                }
             }
             else if (payload) {
-                headers.append("Content-Type", "application/json");
+                options.body = JSON.stringify(payload);
+                options.headers.append("Content-Type", "application/json");
             }
             //Fetch will only throw an exception when there is a network-related error, not when Shopify returns a non-200 response.
-            const result = yield fetch(url.toString(), {
-                headers: headers,
-                method: method,
-                body: payload && JSON.stringify(payload)
-            });
+            const result = yield fetch(url.toString(), options);
             const json = yield result.json();
             if (!result.ok) {
                 throw new shopify_error_1.ShopifyError(result, json);
