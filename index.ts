@@ -111,9 +111,36 @@ export function isAuthenticProxyRequest(querystring: {[index: string]: any}, sho
     return digest.toUpperCase() === signature.toUpperCase();
 }
 
-export function isAuthenticWebhook()
+/**
+ * Determines if an incoming webhook requeset is authentic.
+ * @param headers Either an object containing the request's headers, or the X-Shopify-Hmac-SHA256 header string itself.
+ * @param requestBody The entire request body as a string.
+ * @param shopifySecretKey Your app's secret key.
+ * @returns a boolean indicating whether the request is authentic or not.
+ */
+export function isAuthenticWebhook(headers: {[index: string]: any} | string, requestBody: string, shopifySecretKey: string)
 {
-    throw new Error("Not Implemented");
+    let hmac: string;
+    
+    if (typeof headers === "string")
+    {
+        hmac = headers;
+    }
+    else
+    {
+        hmac = headers["X-Shopify-Hmac-SHA256"];
+    }
+    
+    if (!hmac)
+    {
+        return false;
+    }
+    
+    const digest = crypto.createHmac("sha256", shopifySecretKey)
+        .update(requestBody)
+        .digest("hex") as string;
+        
+    return digest.toUpperCase() === hmac.toUpperCase();
 }
 
 /**

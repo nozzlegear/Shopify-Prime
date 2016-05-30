@@ -105,7 +105,7 @@ describe("Shopify Prime auth functions", function ()
         })
     })
     
-    describe(".IsAuthenticRequest", () =>
+    describe(".isAuthenticRequest", () =>
     {
         it ("should return true for a valid request", () =>
         {
@@ -126,6 +126,33 @@ describe("Shopify Prime auth functions", function ()
                 hmac: "abcd"
             }
             const result = auth.isAuthenticRequest(qs, config.secretKey);
+            
+            expect(result).to.equal(false);
+        })
+    })
+    
+    describe(".isAuthenticWebhookRequest", () =>
+    {
+        const body = '{"order":{"id":123456}}'; 
+        const header = "117448acb11a944b2c30aaef38dcfee66ad51772e602a921aeab8268157ebe3a";
+        
+        it ("should return true for a valid request with a header string", () =>
+        {
+            const result = auth.isAuthenticWebhook(header, body, config.secretKey);
+            
+            expect(result).to.equal(true);
+        })
+        
+        it ('should return true for a valid request with a header object', () =>
+        {
+            const result = auth.isAuthenticWebhook({"X-Shopify-Hmac-SHA256": header}, body, config.secretKey);
+            
+            expect(result).to.equal(true);
+        })
+        
+        it ("should return false for an invalid request", () =>
+        {
+            const result = auth.isAuthenticWebhook({}, body, config.secretKey);
             
             expect(result).to.equal(false);
         })

@@ -19,7 +19,16 @@ export declare function isAuthenticRequest(querystring: {
 export declare function isAuthenticProxyRequest(querystring: {
     [index: string]: any;
 }, shopifySecretKey: string): boolean;
-export declare function isAuthenticWebhook(): void;
+/**
+ * Determines if an incoming webhook requeset is authentic.
+ * @param headers Either an object containing the request's headers, or the X-Shopify-Hmac-SHA256 header string itself.
+ * @param requestBody The entire request body as a string.
+ * @param shopifySecretKey Your app's secret key.
+ * @returns a boolean indicating whether the request is authentic or not.
+ */
+export declare function isAuthenticWebhook(headers: {
+    [index: string]: any;
+} | string, requestBody: string, shopifySecretKey: string): boolean;
 /**
  * A convenience function that tries to ensure that a given URL is a valid Shopify store by checking the response headers for X-ShopId. This is an undocumented feature, use at your own risk.
  */
