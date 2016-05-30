@@ -12,7 +12,7 @@ export class BaseService
 {
     constructor(private shopDomain: string, private accessToken: string, private resource: string)
     {
-        
+
     }
     
     public static buildDefaultHeaders()
@@ -50,7 +50,9 @@ export class BaseService
         
         const url = new uri(this.shopDomain);
         url.protocol("https");
-        url.path(`${this.resource}/${path}`);
+        
+        //Ensure no erroneous double slashes in path
+        url.path(`${this.resource}/${path}`.replace(/\/+/ig, "/"));
         
         if ((method === "GET" || method === "DELETE") && payload)
         {
