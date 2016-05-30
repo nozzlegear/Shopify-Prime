@@ -1,0 +1,7 @@
+{
+    "apiKey":      "abcd1234",
+    "secretKey":   "abcd1234",
+    "shopDomain":  "example.myshopify.com",
+    "accessToken": "abcd1234",
+    "comment":     "To run tests, edit the fields above and then rename this file to tests.private.json."
+}

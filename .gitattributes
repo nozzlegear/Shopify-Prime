@@ -1,0 +1,5 @@
+# Tell GitHub's language statistics to ignore certain files
+
+gulpfile.js linguist-vendored
+typings/modules linguist-vendored
+typings/globals linguist-vendored

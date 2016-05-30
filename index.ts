@@ -30,4 +30,5 @@ export function authorize()
     throw new Error("Not Implemented");
 }
 
-export {BaseService} from "./modules" 
+export {BaseService} from "./modules/base-service"; 
+export {ShopifyError} from "./modules/shopify-error";
