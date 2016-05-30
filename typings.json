@@ -3,7 +3,7 @@
   "main": "dist/index.d.ts",
   "ambient": false,
   "dependencies": {
-    "isomorphic-fetch": "github:nozzlegear/isomorphic-fetch.d.ts#fcc8a4a"
+    "node-fetch": "github:nozzlegear/node-fetch.d.ts#6abf724"
   },
   "globalDependencies": {
     "jsuri": "registry:dt/jsuri#1.3.0+20160317120654"

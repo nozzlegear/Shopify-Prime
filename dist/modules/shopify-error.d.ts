@@ -1,5 +1,5 @@
 /// <reference path="../../typings/index.d.ts" />
-import { IResponse } from "isomorphic-fetch";
+import { IResponse } from "node-fetch";
 export declare class ShopifyError extends Error {
     body: {
         errors: string | {

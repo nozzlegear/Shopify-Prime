@@ -2,7 +2,7 @@
 
 import {expect} from "chai";
 import {ShopifyError} from "../dist";
-import fetch = require("isomorphic-fetch");
+import fetch = require("node-fetch");
 
 describe("ShopifyError", function ()
 {

@@ -2,6 +2,7 @@
 
 import uri = require("jsuri");
 import {BaseService} from "./modules/base-service";
+import * as fetch from "node-fetch";
 
 export type AuthScope = (
     "read_content"       | 
@@ -37,9 +38,21 @@ export function isAuthenticWebhook()
     throw new Error("Not Implemented");
 }
 
-export function isValidShopifyUrl()
+/**
+ * A convenience function that tries to ensure that a given URL is a valid Shopify store by checking the response headers for X-ShopId. This is an undocumented feature, use at your own risk.
+ */
+export async function isValidShopifyDomain(shopifyDomain: string)
 {
-    throw new Error("Not Implemented");
+    const url = new uri(shopifyDomain);
+    url.protocol("https");
+    url.path("/admin");
+    
+    const response = await fetch(url.toString(), {
+        method: "HEAD",
+        headers: BaseService.buildDefaultHeaders(),
+    });
+    
+    return response.headers.has("X-ShopId");
 }
 
 /**

@@ -4,7 +4,10 @@ export declare type AuthScope = ("read_content" | "write_content" | "read_themes
 export declare function isAuthenticRequest(): void;
 export declare function isAuthenticProxyRequest(): void;
 export declare function isAuthenticWebhook(): void;
-export declare function isValidShopifyUrl(): void;
+/**
+ * A convenience function that tries to ensure that a given URL is a valid Shopify store by checking the response headers for X-ShopId. This is an undocumented feature, use at your own risk.
+ */
+export declare function isValidShopifyDomain(shopifyDomain: string): Promise<boolean>;
 /**
  * Builds an authorization URL for Shopify OAuth integration. Send your user to this URL where they'll be asked to accept installation of your Shopify app.
  * @param scopes An array of scope permissions that your app will need from the user.

@@ -60,4 +60,25 @@ describe("Shopify Prime auth functions", function ()
             expect(url).to.contain(`state=${state}`);
         })
     })
+    
+    describe(".isValidShopifyDomain", () =>
+    {
+        it ("should return true for a valid domain", async (cb) =>
+        {
+            const isValid = await auth.isValidShopifyDomain(config.shopDomain);
+            
+            expect(isValid).to.equal(true);
+            
+            cb();
+        });
+        
+        it ("should return false for an invalid domain", async (cb) =>
+        {
+            const isValid = await auth.isValidShopifyDomain("example.com");
+            
+            expect(isValid).to.equal(false);
+            
+            cb();
+        })
+    })
 })

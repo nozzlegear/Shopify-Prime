@@ -10,12 +10,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 const uri = require("jsuri");
 const shopify_error_1 = require("./shopify-error");
-const fetch = require("isomorphic-fetch");
+const fetch = require("node-fetch");
+const version = require("../../package.json").version;
 class BaseService {
     constructor(shopDomain, accessToken, resource) {
         this.shopDomain = shopDomain;
         this.accessToken = accessToken;
         this.resource = resource;
+    }
+    static buildDefaultHeaders() {
+        const headers = new fetch.Headers();
+        headers.append("Accept", "application/json");
+        headers.append("User-Agent", `Shopify Prime ${version} (https://github.com/nozzlegear/shopify-prime)`);
+        return headers;
     }
     setCredentials(shopDomain, accessToken) {
         this.shopDomain = shopDomain;
@@ -25,7 +32,7 @@ class BaseService {
         return __awaiter(this, void 0, void 0, function* () {
             method = method.toUpperCase();
             const options = {
-                headers: new fetch.Headers(),
+                headers: BaseService.buildDefaultHeaders(),
                 method: method,
                 body: undefined,
             };

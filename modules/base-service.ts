@@ -1,15 +1,28 @@
 /// <reference path="./../typings/index.d.ts" />
 
 import uri = require("jsuri");
-import {stringify} from "qs";
 import {ShopifyError} from "./shopify-error";
-import * as fetch from "isomorphic-fetch";
+import * as fetch from "node-fetch";
+
+declare var require: any;
+
+const version = require("../../package.json").version;
 
 export class BaseService
 {
     constructor(private shopDomain: string, private accessToken: string, private resource: string)
     {
         
+    }
+    
+    public static buildDefaultHeaders()
+    {
+        const headers = new fetch.Headers();
+        
+        headers.append("Accept", "application/json");
+        headers.append("User-Agent", `Shopify Prime ${version} (https://github.com/nozzlegear/shopify-prime)`);
+        
+        return headers;
     }
     
     public setCredentials(shopDomain: string, accessToken: string)
@@ -23,7 +36,7 @@ export class BaseService
         method = method.toUpperCase() as any;
         
         const options = {
-            headers: new fetch.Headers(),
+            headers: BaseService.buildDefaultHeaders(),
             method: method,
             body: undefined as string,
         };
