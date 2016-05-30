@@ -81,4 +81,53 @@ describe("Shopify Prime auth functions", function ()
             cb();
         })
     })
+    
+    describe(".isAuthenticProxyRequest", () =>
+    {
+        it ("should return true for a valid request", () =>
+        {
+            const qs = {
+                shop: "stages-test-shop-2.myshopify.com",
+                timestamp: "1464592588",
+                signature: "e5d8a117dbbe3fd262f25c5ab3ff5c8eacd363b487b5fd2372425d2b6a4dce6b",
+                path_prefix: "/apps/stages-tracking-widget-1",
+            }
+            const result = auth.isAuthenticProxyRequest(qs, config.secretKey);
+            
+            expect(result).to.equal(true); 
+        });
+        
+        it ("should return false for an invalid request", () =>
+        {
+            const result = auth.isAuthenticProxyRequest({signature: "abcd"}, config.secretKey);
+            
+            expect(result).to.equal(false);
+        })
+    })
+    
+    describe(".IsAuthenticRequest", () =>
+    {
+        it ("should return true for a valid request", () =>
+        {
+            const qs = {
+                signature: "1f013145b16c437fa695f7f448ca79ce",
+                shop: "stages-test-shop-2.myshopify.com",
+                timestamp: "1464593148",
+                hmac: "ea89e21116cc3ca8cf8f484f6d7a151f08af5b8c544c42c310c4bd06511247ca",
+            }
+            const result = auth.isAuthenticRequest(qs, config.secretKey);
+            
+            expect(result).to.equal(true);
+        })
+        
+        it ("should return false for an invalid request", () =>
+        {
+            const qs = {
+                hmac: "abcd"
+            }
+            const result = auth.isAuthenticRequest(qs, config.secretKey);
+            
+            expect(result).to.equal(false);
+        })
+    })
 })

@@ -1,8 +1,9 @@
 /// <reference path="./typings/index.d.ts" />
 
 import uri = require("jsuri");
-import {BaseService} from "./modules/base-service";
+import * as crypto from "crypto"; 
 import * as fetch from "node-fetch";
+import {BaseService} from "./modules/base-service";
 
 export type AuthScope = (
     "read_content"       | 
@@ -23,14 +24,91 @@ export type AuthScope = (
     "write_shipping"
 );
 
-export function isAuthenticRequest()
+/**
+ * Replaces special querystring characters when calculating an authenticity signature in @isAuthenticRequest and @isAuthenticProxyRequest.
+ */
+function replaceChars(s: string, isKey: boolean)
 {
-    throw new Error("Not Implemented");
+    if (!s)
+    {
+        return "";
+    }
+    
+    let output = s.replace(/%/ig, "%25").replace(/&/ig, "%26");
+    
+    if (isKey)
+    {
+        output = output.replace(/=/ig, "%3D");
+    }
+    
+    return output;
 }
 
-export function isAuthenticProxyRequest()
+function buildHashString(type: "web" | "proxy", querystring: {[index: string]: any})
 {
-    throw new Error("Not Implemented");
+    // To calculate signature:
+    // 1. Cast querystring to KVP pairs.
+    // 2. Remove `signature` and `hmac` keys.
+    // 3. Replace & with %26, % with %25 in keys and values.
+    // 4. Replace = with %3D in keys only.
+    // 5. Join each key and value with = (key=value).
+    // 6. Sorty kvps alphabetically.
+    // 7. Join kvps together with & in a web request (key=value&key=value&key=value) and null in a proxy request (key=valuekey=value).
+    // 8. Compute the kvps with an HMAC-SHA256 using the secret key.
+    // 9. Request is authentic if the computed string equals the `hmac` (web) or 'signature' (proxy) in querystring.
+    // Reference: https://docs.shopify.com/api/guides/authentication/oauth#making-authenticated-requests
+    
+    const kvps = Object.getOwnPropertyNames(querystring)
+        .filter((key) => key !== "signature" && key !== "hmac")
+        .sort()
+        .map(key => `${replaceChars(key, true)}=${replaceChars(querystring[key], false)}`)
+        .join(type === "web" ? "&" : "");
+        
+    return kvps;
+}
+
+/**
+ * Determines if an incoming page request is authentic.
+ * @param querystring The collection of querystring parameters from the request.
+ * @param shopifySecretKey Your app's secret key.
+ * @returns a boolean indicating whether the request is authentic or not.
+ */
+export function isAuthenticRequest(querystring: {[index: string]: any}, shopifySecretKey: string)
+{
+    const hmac = querystring["hmac"] as string;
+    
+    if (!hmac)
+    {
+        return false;
+    }
+    
+    const digest = crypto.createHmac("sha256", shopifySecretKey)
+        .update(buildHashString("web", querystring))
+        .digest("hex") as string;
+        
+    return digest.toUpperCase() === hmac.toUpperCase();
+}
+
+/**
+ * Determines if an incoming proxy page request is authentic.
+ * @param querystring The collection of querystring parameters from the request.
+ * @param shopifySecretKey Your app's secret key.
+ * @returns a boolean indicating whether the request is authentic or not.
+ */
+export function isAuthenticProxyRequest(querystring: {[index: string]: any}, shopifySecretKey: string)
+{
+    const signature = querystring["signature"] as string;
+    
+    if (!signature)
+    {
+        return false;
+    }
+    
+    const digest = crypto.createHmac("sha256", shopifySecretKey)
+        .update(buildHashString("proxy", querystring))
+        .digest("hex") as string;
+        
+    return digest.toUpperCase() === signature.toUpperCase();
 }
 
 export function isAuthenticWebhook()
