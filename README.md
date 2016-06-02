@@ -73,22 +73,25 @@ More functionality will be added each week until it reachs full parity with Shop
 An access token is the token returned after authenticating and authorizing a Shopify app installation with a
 real Shopify store.
 
-All instances of `myShopifyUrl` refer to your users' `*.myshopify.com` URL (although their custom domain should work too).
+All instances of `shopDomain` refer to your users' `*.myshopify.com` URL (although their custom domain should work too).
 
 ```cs
-var service = new ShopifyProductService(myShopifyUrl, shopAccessToken);
+import {Charges} from "shopify-prime";
+
+const chargeService = new Charges(shopDomain, shopAccessToken);
 ```
 
 ## Using Shopify Prime with a private Shopify app
 
-Shopify Prime should work out of the box with your private Shopify application, all you need to do is replace the `shopAccessToken` with your private app's password when initializing a ShopifyService:
+Shopify Prime should work out of the box with your private Shopify application, all you need to do is replace the `shopAccessToken` with your private app's password when initializing a service:
 
 ```cs
-var service = new ShopifyProductService(myShopifyUrl, privateAppPassword)
+import {Orders} from "shopify-prime";
+
+const orderService = new Orders(shopDomain, privateAppPassword)
 ```
 
-If you just need an access token for a private Shopify app, or for running the tests in this library, refer
-to the **Tests** section below.
+If you just need an access token for a private Shopify app, or for running the tests in this library, refer to the **Tests** section below.
 
 # Authorization and authentication
 
@@ -103,8 +106,10 @@ Shopify Prime will call the given URL and check for an `X-ShopId` header in the 
 **Note**, however, that this feature is undocumented by Shopify and may break at any time. Use at your own discretion.
 
 ```js
+import {isValidShopifyDomain} from "shopify-prime";
+
 const urlFromUser = "https://example.myshopify.com";
-const isValidUrl = await ShopifyAuthorizationService.IsValidMyShopifyUrl(urlFromUser).
+const isValidUrl = await isValidMyShopifyDomain(urlFromUser).
 ```
 
 ### Build an authorization URL
@@ -232,7 +237,7 @@ on a monthly basis for using your application.
 import {RecurringCharges, RecurringCharge} from "shopify-prime";
 
 const service = new RecurringCharges(shopDomain, shopAccessToken);
-const charge: RecurringCharge = {
+let charge: RecurringCharge = {
     Name = "Lorem Ipsum Plan",
     Price = 12.34,
     Test = true,   //Marks this charge as a test, meaning it won't charge the shop owner.
@@ -257,7 +262,7 @@ const charge = await service.get(chargeId);
 import {RecurringCharges} from "shopify-prime";
 
 const service = new RecurringCharges(shopDomain, shopAccessToken);
-const charges: RecurringCharge[] = await service.list();
+const list: RecurringCharge[] = await service.list();
 ```
 
 ### Activating a charge
@@ -293,32 +298,35 @@ charge on the shop owner's account. One-time charges cannot be deleted.
 
 ### Create a one-time charge
 
-```c#
-var service = new ShopifyChargeService(myShopifyUrl, shopAccessToken);
-var charge = new ShopifyCharge()
-{
+```ts
+import {Charges, Charge} from "shopify-prime";
+
+const service = new Charges(shopDomain, shopAccessToken);
+let charge: Charge = {
     Name = "Lorem Ipsum Charge",
     Price = 12.34,
     Test = true, //Marks this charge as a test, meaning it won't charge the shop owner.
 }
 
-charge = await service.CreateAsync(charge);
+charge = await service.create(charge);
 ```
 
 ### Retrieve a one-time charge
 
-```c#
-var service = new ShopifyChargeService(myShopifyUrl, shopAccessToken);
+```ts
+import {Charges} from "shopify-prime";
 
-var charge = await service.GetAsync(chargeId);
+const service = new Charges(shopDomain, shopAccessToken);
+const charge = await service.get(chargeId);
 ```
 
 ### Listing one-time charges
 
-```c#
-var service = new ShopifyChargeService(myShopifyUrl, shopAccessToken);
+```ts
+import {Charges, Charge} from "shopify-prime";
 
-IEnumerable<ShopifyCharge> charges = await service.ListAsync();
+const service = new Charges(shopDomain, shopAccessToken);
+const list: Charge[] = service.list();
 ```
 
 ### Activating a charge
@@ -326,8 +334,10 @@ IEnumerable<ShopifyCharge> charges = await service.ListAsync();
 Just like recurring charges, creating a one-time charge does not actually charge the shop owner. You need to
 send them to the charge's `ConfirmationUrl`, have them accept the charge, then activate it.
 
-```c#
-var service = new ShopifyChargeService(myShopifyUrl, shopAccessToken);
+```ts
+import {Charges} from "shopify-prime";
 
-await service.ActivateAsync(chargeId);
+const service = new Charges(shopDomain, shopAccessToken);
+
+await service.activate(chargeId);
 ```
