@@ -4,7 +4,6 @@ const ts          = require("gulp-typescript");
 const seq         = require("run-sequence");
 const path        = require("path");
 const gulp        = require("gulp");
-const replace     = require("gulp-string-replace");
 const mergetasks  = require("merge2");
 
 const tsFiles = ["index.ts", "modules/**/*.ts"];

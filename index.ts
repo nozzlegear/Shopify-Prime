@@ -82,7 +82,7 @@ function buildHashString(type: "web" | "proxy", querystring: {[index: string]: a
  * @param shopifySecretKey Your app's secret key.
  * @returns a boolean indicating whether the request is authentic or not.
  */
-export function isAuthenticRequest(querystring: {[index: string]: any}, shopifySecretKey: string)
+export async function isAuthenticRequest(querystring: {[index: string]: any}, shopifySecretKey: string)
 {
     const hmac = querystring["hmac"] as string;
     
@@ -104,7 +104,7 @@ export function isAuthenticRequest(querystring: {[index: string]: any}, shopifyS
  * @param shopifySecretKey Your app's secret key.
  * @returns a boolean indicating whether the request is authentic or not.
  */
-export function isAuthenticProxyRequest(querystring: {[index: string]: any}, shopifySecretKey: string)
+export async function isAuthenticProxyRequest(querystring: {[index: string]: any}, shopifySecretKey: string)
 {
     const signature = querystring["signature"] as string;
     
@@ -127,7 +127,7 @@ export function isAuthenticProxyRequest(querystring: {[index: string]: any}, sho
  * @param shopifySecretKey Your app's secret key.
  * @returns a boolean indicating whether the request is authentic or not.
  */
-export function isAuthenticWebhook(headers: {[index: string]: any} | string, requestBody: string, shopifySecretKey: string)
+export async function isAuthenticWebhook(headers: {[index: string]: any} | string, requestBody: string, shopifySecretKey: string)
 {
     let hmac: string;
     
@@ -177,7 +177,7 @@ export async function isValidShopifyDomain(shopifyDomain: string)
  * @param redirectUrl An optional URL that the user will be sent to after integration. Override's the Shopify app's default redirect URL.
  * @param state An optional, random string value provided by your application which is unique for each authorization request. During the OAuth callback phase, your application should check that this value matches the one you provided to this method.
  */
-export function buildAuthorizationUrl(scopes: AuthScope[], shopifyDomain: string, shopifyApiKey: string, redirectUrl?: string, state?: string)
+export async function buildAuthorizationUrl(scopes: AuthScope[], shopifyDomain: string, shopifyApiKey: string, redirectUrl?: string, state?: string)
 {
     const url = new uri(shopifyDomain);
     url.protocol("https");

@@ -59,14 +59,16 @@ function buildHashString(type, querystring) {
  * @returns a boolean indicating whether the request is authentic or not.
  */
 function isAuthenticRequest(querystring, shopifySecretKey) {
-    const hmac = querystring["hmac"];
-    if (!hmac) {
-        return false;
-    }
-    const digest = crypto.createHmac("sha256", shopifySecretKey)
-        .update(buildHashString("web", querystring))
-        .digest("hex");
-    return digest.toUpperCase() === hmac.toUpperCase();
+    return __awaiter(this, void 0, void 0, function* () {
+        const hmac = querystring["hmac"];
+        if (!hmac) {
+            return false;
+        }
+        const digest = crypto.createHmac("sha256", shopifySecretKey)
+            .update(buildHashString("web", querystring))
+            .digest("hex");
+        return digest.toUpperCase() === hmac.toUpperCase();
+    });
 }
 exports.isAuthenticRequest = isAuthenticRequest;
 /**
@@ -76,14 +78,16 @@ exports.isAuthenticRequest = isAuthenticRequest;
  * @returns a boolean indicating whether the request is authentic or not.
  */
 function isAuthenticProxyRequest(querystring, shopifySecretKey) {
-    const signature = querystring["signature"];
-    if (!signature) {
-        return false;
-    }
-    const digest = crypto.createHmac("sha256", shopifySecretKey)
-        .update(buildHashString("proxy", querystring))
-        .digest("hex");
-    return digest.toUpperCase() === signature.toUpperCase();
+    return __awaiter(this, void 0, void 0, function* () {
+        const signature = querystring["signature"];
+        if (!signature) {
+            return false;
+        }
+        const digest = crypto.createHmac("sha256", shopifySecretKey)
+            .update(buildHashString("proxy", querystring))
+            .digest("hex");
+        return digest.toUpperCase() === signature.toUpperCase();
+    });
 }
 exports.isAuthenticProxyRequest = isAuthenticProxyRequest;
 /**
@@ -94,20 +98,22 @@ exports.isAuthenticProxyRequest = isAuthenticProxyRequest;
  * @returns a boolean indicating whether the request is authentic or not.
  */
 function isAuthenticWebhook(headers, requestBody, shopifySecretKey) {
-    let hmac;
-    if (typeof headers === "string") {
-        hmac = headers;
-    }
-    else {
-        hmac = headers["X-Shopify-Hmac-SHA256"];
-    }
-    if (!hmac) {
-        return false;
-    }
-    const digest = crypto.createHmac("sha256", shopifySecretKey)
-        .update(requestBody)
-        .digest("hex");
-    return digest.toUpperCase() === hmac.toUpperCase();
+    return __awaiter(this, void 0, void 0, function* () {
+        let hmac;
+        if (typeof headers === "string") {
+            hmac = headers;
+        }
+        else {
+            hmac = headers["X-Shopify-Hmac-SHA256"];
+        }
+        if (!hmac) {
+            return false;
+        }
+        const digest = crypto.createHmac("sha256", shopifySecretKey)
+            .update(requestBody)
+            .digest("hex");
+        return digest.toUpperCase() === hmac.toUpperCase();
+    });
 }
 exports.isAuthenticWebhook = isAuthenticWebhook;
 /**
@@ -135,18 +141,20 @@ exports.isValidShopifyDomain = isValidShopifyDomain;
  * @param state An optional, random string value provided by your application which is unique for each authorization request. During the OAuth callback phase, your application should check that this value matches the one you provided to this method.
  */
 function buildAuthorizationUrl(scopes, shopifyDomain, shopifyApiKey, redirectUrl, state) {
-    const url = new uri(shopifyDomain);
-    url.protocol("https");
-    url.path("admin/oauth/authorize");
-    url.addQueryParam("client_id", shopifyApiKey);
-    url.addQueryParam("scope", scopes.join(","));
-    if (redirectUrl) {
-        url.addQueryParam("redirect_url", redirectUrl);
-    }
-    if (state) {
-        url.addQueryParam("state", state);
-    }
-    return url.toString();
+    return __awaiter(this, void 0, void 0, function* () {
+        const url = new uri(shopifyDomain);
+        url.protocol("https");
+        url.path("admin/oauth/authorize");
+        url.addQueryParam("client_id", shopifyApiKey);
+        url.addQueryParam("scope", scopes.join(","));
+        if (redirectUrl) {
+            url.addQueryParam("redirect_url", redirectUrl);
+        }
+        if (state) {
+            url.addQueryParam("state", state);
+        }
+        return url.toString();
+    });
 }
 exports.buildAuthorizationUrl = buildAuthorizationUrl;
 /**
