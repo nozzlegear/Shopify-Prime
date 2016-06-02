@@ -131,7 +131,7 @@ describe("Shopify Prime auth functions", function ()
         })
     })
     
-    describe(".isAuthenticWebhookRequest", () =>
+    describe(".isAuthenticWebhook", () =>
     {
         const body = '{"order":{"id":123456}}'; 
         const header = "117448acb11a944b2c30aaef38dcfee66ad51772e602a921aeab8268157ebe3a";
