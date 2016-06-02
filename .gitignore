@@ -34,6 +34,7 @@ node_modules
 
 # Ignore built test files
 built-tests
+built_tests
 
 # Ignore private configuration files
 *.private.json

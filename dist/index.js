@@ -11,8 +11,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const uri = require("jsuri");
 const crypto = require("crypto");
 const fetch = require("node-fetch");
-const base_service_1 = require("./modules/base-service");
+const base_service_1 = require("./modules/base_service");
 exports.BaseService = base_service_1.BaseService;
+// #region Service and entity exports
+var charges_1 = require("./modules/charges");
+exports.Charges = charges_1.Charges;
+var shopify_error_1 = require("./modules/shopify_error");
+exports.ShopifyError = shopify_error_1.ShopifyError;
+var recurring_charges_1 = require("./modules/recurring_charges");
+exports.RecurringCharges = recurring_charges_1.RecurringCharges;
 /**
  * Replaces special querystring characters when calculating an authenticity signature in @isAuthenticRequest and @isAuthenticProxyRequest.
  */
@@ -162,5 +169,3 @@ function authorize(code, shopDomain, shopifyApiKey, shopifySecretKey) {
     });
 }
 exports.authorize = authorize;
-var shopify_error_1 = require("./modules/shopify-error");
-exports.ShopifyError = shopify_error_1.ShopifyError;

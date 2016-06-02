@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 const uri = require("jsuri");
-const shopify_error_1 = require("./shopify-error");
+const shopify_error_1 = require("./shopify_error");
 const fetch = require("node-fetch");
 const version = require("../../package.json").version;
 class BaseService {
@@ -17,6 +17,10 @@ class BaseService {
         this.shopDomain = shopDomain;
         this.accessToken = accessToken;
         this.resource = resource;
+        //Ensure resource starts with admin/
+        if (!/^[\/]?admin\//ig.test(resource)) {
+            this.resource = "admin/" + resource;
+        }
     }
     static buildDefaultHeaders() {
         const headers = new fetch.Headers();

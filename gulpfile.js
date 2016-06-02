@@ -36,7 +36,7 @@ gulp.task("build:tests", () =>
     const buildTests = gulp.src("tests/*.ts")
         .pipe(ts(testsProject))
         .js
-        .pipe(gulp.dest("built-tests"));
+        .pipe(gulp.dest("built_tests"));
 
     return buildTests;
 });

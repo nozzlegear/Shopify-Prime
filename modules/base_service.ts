@@ -1,7 +1,7 @@
 /// <reference path="./../typings/index.d.ts" />
 
 import uri = require("jsuri");
-import {ShopifyError} from "./shopify-error";
+import {ShopifyError} from "./shopify_error";
 import * as fetch from "node-fetch";
 
 declare var require: any;
@@ -12,7 +12,11 @@ export class BaseService
 {
     constructor(private shopDomain: string, private accessToken: string, private resource: string)
     {
-
+        //Ensure resource starts with admin/
+        if (! /^[\/]?admin\//ig.test(resource))
+        {
+            this.resource = "admin/" + resource;
+        }
     }
     
     public static buildDefaultHeaders()
@@ -31,7 +35,7 @@ export class BaseService
         this.accessToken = accessToken;
     }
     
-    public async createRequest<T>(method: "GET" | "POST" | "PUT" | "DELETE", path: string, rootElement: string, payload?: Object)
+    public async createRequest<T>(method: "GET" | "POST" | "PUT" | "DELETE", path: string, rootElement?: string, payload?: Object)
     {
         method = method.toUpperCase() as any;
         
@@ -82,4 +86,20 @@ export class BaseService
         
         return rootElement ? json[rootElement] as T : json as T; 
     }
+}
+
+export interface FieldOptions
+{
+    /**
+     * Restricts the result to only the fields specified.
+     */
+    fields?: string[];
+}
+
+export interface ListOptions extends FieldOptions
+{
+    /**
+     * Restricts results to those created after the given id.
+     */
+    since_id?: number;
 }

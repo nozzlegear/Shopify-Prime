@@ -3,7 +3,16 @@
 import uri = require("jsuri");
 import * as crypto from "crypto"; 
 import * as fetch from "node-fetch";
-import {BaseService} from "./modules/base-service";
+import {BaseService, ListOptions, FieldOptions} from "./modules/base_service";
+
+// #region Service and entity exports
+
+export {BaseService, ListOptions, FieldOptions};
+export {Charges, Charge} from "./modules/charges";
+export {ShopifyError} from "./modules/shopify_error";
+export {RecurringCharges, RecurringCharge} from "./modules/recurring_charges";
+
+// #endregion
 
 export type AuthScope = (
     "read_content"       | 
@@ -208,6 +217,3 @@ export async function authorize(code: string, shopDomain: string, shopifyApiKey:
     
     return response;
 }
-
-export {BaseService};
-export {ShopifyError} from "./modules/shopify-error";
