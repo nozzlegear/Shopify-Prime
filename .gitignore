@@ -38,3 +38,7 @@ built_tests
 
 # Ignore private configuration files
 *.private.json
+
+# Ignore typings folder. Can cause big errors for TS projects when global definitions (like Node) 
+# exist in both. Instead, typings should only be installed during dev.
+typings
