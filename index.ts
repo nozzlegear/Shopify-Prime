@@ -188,7 +188,7 @@ export async function buildAuthorizationUrl(scopes: AuthScope[], shopifyDomain: 
     
     if (redirectUrl)
     {
-        url.addQueryParam("redirect_url", redirectUrl);
+        url.addQueryParam("redirect_uri", redirectUrl);
     }
     
     if (state)

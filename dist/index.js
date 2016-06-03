@@ -1,3 +1,5 @@
+// Exported definitions should never contain triple-slash references: 
+// https://www.typescriptlang.org/docs/handbook/typings-for-npm-packages.html
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -147,7 +149,7 @@ function buildAuthorizationUrl(scopes, shopifyDomain, shopifyApiKey, redirectUrl
         url.addQueryParam("client_id", shopifyApiKey);
         url.addQueryParam("scope", scopes.join(","));
         if (redirectUrl) {
-            url.addQueryParam("redirect_url", redirectUrl);
+            url.addQueryParam("redirect_uri", redirectUrl);
         }
         if (state) {
             url.addQueryParam("state", state);

@@ -29,7 +29,7 @@ describe("Shopify Prime auth functions", function ()
             expect(url).to.contain(`/admin/oauth/authorize`);
             expect(url).to.contain(`client_id=${config.apiKey}`);
             expect(url).to.contain(`scope=${encodeURIComponent("read_orders,write_orders")}`);
-            expect(url).to.contain(`redirect_url=${encodeURIComponent(redirect)}`);
+            expect(url).to.contain(`redirect_uri=${encodeURIComponent(redirect)}`);
         })
         
         it ("should build an authorization url with a state", async () =>
@@ -56,7 +56,7 @@ describe("Shopify Prime auth functions", function ()
             expect(url).to.contain(`/admin/oauth/authorize`);
             expect(url).to.contain(`client_id=${config.apiKey}`);
             expect(url).to.contain(`scope=${encodeURIComponent("read_orders,write_orders")}`);
-            expect(url).to.contain(`redirect_url=${encodeURIComponent(redirect)}`);
+            expect(url).to.contain(`redirect_uri=${encodeURIComponent(redirect)}`);
             expect(url).to.contain(`state=${state}`);
         })
     })
