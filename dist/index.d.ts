@@ -1,4 +1,3 @@
-/// <reference path="../typings/index.d.ts" />
 import { BaseService, ListOptions, FieldOptions } from "./modules/base_service";
 export { BaseService, ListOptions, FieldOptions };
 export { Charges, Charge } from "./modules/charges";

@@ -1,4 +1,5 @@
-/// <reference path="./typings/index.d.ts" />
+// Exported definitions should never contain triple-slash references: 
+// https://www.typescriptlang.org/docs/handbook/typings-for-npm-packages.html
 
 import uri = require("jsuri");
 import * as crypto from "crypto"; 
