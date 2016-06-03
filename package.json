@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "prepublish": "npm test",
-    "test": "gulp & mocha built_tests/"
+    "test": "gulp && mocha built_tests/"
   },
   "repository": {
     "type": "git",
