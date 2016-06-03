@@ -1,31 +1,31 @@
 /// <reference path="./../typings/index.d.ts" />
 
-declare var require: any;
+const config: {[prop: string]: string} = process.env;
 
-const config      = require("../tests.private.json") as {[prop: string] : string};
-const apiKey      = config["apiKey"];
-const secretKey   = config["secretKey"]; 
-const shopDomain  = config["shopDomain"];
-const accessToken = config["accessToken"];
+// Grab secret keys
+const apiKey      = config["gearworks-apiKey"] || config["apiKey"] ;
+const secretKey   = config["gearworks-secretKey"] || config["secretKey"]; 
+const shopDomain  = config["gearworks-shopDomain"] || config["shopDomain"];
+const accessToken = config["gearworks-accessToken"] || config["accessToken"];
 
 if (!apiKey)
 {
-    throw new Error("Expected 'apiKey' in tests.private.json to exist.");
+    throw new Error(`Expected 'apiKey' in process.env to exist.`);
 }
 
 if (!secretKey)
 {
-    throw new Error("Expected 'secretKey' in tests.private.json to exist.");
+    throw new Error(`Expected 'secretKey' in process.env to exist.`);
 }
 
 if (!shopDomain)
 {
-    throw new Error("Expected 'shopDomain' in tests.private.json to exist.");
+    throw new Error(`Expected 'shopDomain' in process.env to exist.`);
 }
 
 if (!accessToken)
 {
-    throw new Error("Expected 'accessToken' in tests.private.json to exist.");
+    throw new Error(`Expected 'accessToken' in process.env to exist.`);
 }
 
 export {apiKey, secretKey, shopDomain, accessToken};
