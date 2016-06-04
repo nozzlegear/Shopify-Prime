@@ -6,7 +6,7 @@
         "sourceMap": false,
         "forceConsistentCasingInFileNames": true,
         "preserveConstEnums": true,
-        "outDir": "bin"
+        "outDir": "bin"        
     },
     "exclude": [
         "node_modules"

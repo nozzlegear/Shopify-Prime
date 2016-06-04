@@ -1,6 +1,6 @@
 /// <reference path="./../typings/index.d.ts" />
 
-declare const process: {env: any};
+declare var process: {env: any;};
 
 const config: {[prop: string]: string} = process.env;
 

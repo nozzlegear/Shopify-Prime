@@ -3,7 +3,7 @@
   "main": "dist/index.d.ts",
   "ambient": false,
   "dependencies": {
-    "crypto": "github:nozzlegear/crypto.d.ts#1b1ca92",
+    "crypto-js": "github:nozzlegear/crypto-js.d.ts#4b495e8",
     "node-fetch": "github:nozzlegear/node-fetch.d.ts#6abf724"
   },
   "globalDependencies": {

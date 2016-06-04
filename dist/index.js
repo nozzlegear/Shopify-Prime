@@ -10,8 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 const uri = require("jsuri");
-const crypto = require("crypto");
 const fetch = require("node-fetch");
+const crypto = require("crypto-js");
 const base_service_1 = require("./modules/base_service");
 exports.BaseService = base_service_1.BaseService;
 // #region Service and entity exports
@@ -53,6 +53,9 @@ function buildHashString(type, querystring) {
         .join(type === "web" ? "&" : "");
     return kvps;
 }
+function getHmacHash(secretKey, hashString) {
+    return crypto.HmacSHA256(hashString, secretKey).toString().toUpperCase();
+}
 /**
  * Determines if an incoming page request is authentic.
  * @param querystring The collection of querystring parameters from the request.
@@ -65,10 +68,8 @@ function isAuthenticRequest(querystring, shopifySecretKey) {
         if (!hmac) {
             return false;
         }
-        const digest = crypto.createHmac("sha256", shopifySecretKey)
-            .update(buildHashString("web", querystring))
-            .digest("hex");
-        return digest.toUpperCase() === hmac.toUpperCase();
+        const computed = getHmacHash(shopifySecretKey, buildHashString("web", querystring));
+        return computed === hmac.toUpperCase();
     });
 }
 exports.isAuthenticRequest = isAuthenticRequest;
@@ -84,10 +85,8 @@ function isAuthenticProxyRequest(querystring, shopifySecretKey) {
         if (!signature) {
             return false;
         }
-        const digest = crypto.createHmac("sha256", shopifySecretKey)
-            .update(buildHashString("proxy", querystring))
-            .digest("hex");
-        return digest.toUpperCase() === signature.toUpperCase();
+        const computed = getHmacHash(shopifySecretKey, buildHashString("proxy", querystring));
+        return computed === signature.toUpperCase();
     });
 }
 exports.isAuthenticProxyRequest = isAuthenticProxyRequest;
@@ -110,10 +109,9 @@ function isAuthenticWebhook(headers, requestBody, shopifySecretKey) {
         if (!hmac) {
             return false;
         }
-        const digest = crypto.createHmac("sha256", shopifySecretKey)
-            .update(requestBody)
-            .digest("hex");
-        return digest.toUpperCase() === hmac.toUpperCase();
+        const computed = getHmacHash(shopifySecretKey, requestBody);
+        console.log("Computed", computed, "Hmac", hmac);
+        return computed === hmac.toUpperCase();
     });
 }
 exports.isAuthenticWebhook = isAuthenticWebhook;

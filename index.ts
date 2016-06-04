@@ -2,8 +2,8 @@
 // https://www.typescriptlang.org/docs/handbook/typings-for-npm-packages.html
 
 import uri = require("jsuri");
-import * as crypto from "crypto";
 import * as fetch from "node-fetch";
+import * as crypto from "crypto-js"; 
 import {BaseService, ListOptions, FieldOptions} from "./modules/base_service";
 
 // #region Service and entity exports
@@ -82,6 +82,11 @@ function buildHashString(type: "web" | "proxy", querystring: {[index: string]: a
     return kvps;
 }
 
+function getHmacHash(secretKey: string, hashString: string)
+{       
+    return crypto.HmacSHA256(hashString, secretKey).toString().toUpperCase();
+}
+
 /**
  * Determines if an incoming page request is authentic.
  * @param querystring The collection of querystring parameters from the request.
@@ -96,12 +101,10 @@ export async function isAuthenticRequest(querystring: {[index: string]: any}, sh
     {
         return false;
     }
-    
-    const digest = crypto.createHmac("sha256", shopifySecretKey)
-        .update(buildHashString("web", querystring))
-        .digest("hex") as string;
+
+    const computed = getHmacHash(shopifySecretKey, buildHashString("web", querystring))
         
-    return digest.toUpperCase() === hmac.toUpperCase();
+    return computed === hmac.toUpperCase();
 }
 
 /**
@@ -119,11 +122,9 @@ export async function isAuthenticProxyRequest(querystring: {[index: string]: any
         return false;
     }
     
-    const digest = crypto.createHmac("sha256", shopifySecretKey)
-        .update(buildHashString("proxy", querystring))
-        .digest("hex") as string;
+    const computed = getHmacHash(shopifySecretKey, buildHashString("proxy", querystring))
         
-    return digest.toUpperCase() === signature.toUpperCase();
+    return computed === signature.toUpperCase();
 }
 
 /**
@@ -151,11 +152,11 @@ export async function isAuthenticWebhook(headers: {[index: string]: any} | strin
         return false;
     }
     
-    const digest = crypto.createHmac("sha256", shopifySecretKey)
-        .update(requestBody)
-        .digest("hex") as string;
+    const computed = getHmacHash(shopifySecretKey, requestBody)
+    
+    console.log("Computed", computed, "Hmac", hmac);
         
-    return digest.toUpperCase() === hmac.toUpperCase();
+    return computed === hmac.toUpperCase();
 }
 
 /**
