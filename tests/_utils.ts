@@ -3,10 +3,10 @@
 const config: {[prop: string]: string} = process.env;
 
 // Grab secret keys
-const apiKey      = config["gearworks-apiKey"] || config["apiKey"] ;
-const secretKey   = config["gearworks-secretKey"] || config["secretKey"]; 
-const shopDomain  = config["gearworks-shopDomain"] || config["shopDomain"];
-const accessToken = config["gearworks-accessToken"] || config["accessToken"];
+const apiKey      = config["shopify-prime-apiKey"] || config["apiKey"] ;
+const secretKey   = config["shopify-prime-secretKey"] || config["secretKey"]; 
+const shopDomain  = config["shopify-prime-shopDomain"] || config["shopDomain"];
+const accessToken = config["shopify-prime-accessToken"] || config["accessToken"];
 
 if (!apiKey)
 {
