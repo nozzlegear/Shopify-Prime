@@ -15,6 +15,11 @@ export {RecurringCharges, RecurringCharge} from "./modules/recurring_charges";
 
 // #endregion
 
+export interface ShopifyObject 
+{
+    id: number;
+}
+
 export type AuthScope = (
     "read_content"       | 
     "write_content"      |

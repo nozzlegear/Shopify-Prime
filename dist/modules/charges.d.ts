@@ -1,4 +1,5 @@
 /// <reference path="../../typings/index.d.ts" />
+import { ShopifyObject } from "../index";
 import { BaseService, FieldOptions, ListOptions } from "./base_service";
 /**
  * A service for manipulating Shopify's ApplicationCharge API.
@@ -29,7 +30,7 @@ export declare class Charges extends BaseService {
 /**
  * Represents a one-time application charge.
  */
-export interface Charge {
+export interface Charge extends ShopifyObject {
     /**
      * The URL that the customer should be sent to, to accept or decline the application charge.
      */

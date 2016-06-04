@@ -3,6 +3,9 @@ export { BaseService, ListOptions, FieldOptions };
 export { Charges, Charge } from "./modules/charges";
 export { ShopifyError } from "./modules/shopify_error";
 export { RecurringCharges, RecurringCharge } from "./modules/recurring_charges";
+export interface ShopifyObject {
+    id: number;
+}
 export declare type AuthScope = ("read_content" | "write_content" | "read_themes" | "write_themes" | "read_products" | "write_products" | "read_customers" | "write_customers" | "read_orders" | "write_orders" | "read_script_tags" | "write_script_tags" | "read_fulfillments" | "write_fulfillments" | "read_shipping" | "write_shipping");
 /**
  * Determines if an incoming page request is authentic.
