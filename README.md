@@ -1,5 +1,7 @@
 # Shopify Prime
 
+[![Build Status](https://travis-ci.org/nozzlegear/Shopify-Prime.svg?branch=master)](https://travis-ci.org/nozzlegear/Shopify-Prime)
+
 Shopify Prime is a promise-driven NodeJS library built to help developers easily authenticate and make calls against the Shopify API. It was inspired by and borrows heavily from my other Shopify library, [Shopify Prime](https://github.com/nozzlegear/Shopify Prime).
 
 Shopify Prime is complete with full TypeScript definitions for all classes, interfaces and functions, and provides many quality of life improvements over most other Node Shopify libs. Tired of using undocumented libs that haven't been updated in ages, expect you to know all of the URL paths, and are little more than a basic wrapper over Node's http library? Give Shopify Prime a try!
