@@ -17,7 +17,10 @@ export {RecurringCharges, RecurringCharge} from "./modules/recurring_charges";
 
 export interface ShopifyObject 
 {
-    id: number;
+    /**
+     * The object's id.
+     */
+    id?: number;
 }
 
 export type AuthScope = (
