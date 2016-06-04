@@ -3,11 +3,11 @@
   "main": "dist/index.d.ts",
   "ambient": false,
   "dependencies": {
+    "crypto": "github:nozzlegear/crypto.d.ts#1b1ca92",
     "node-fetch": "github:nozzlegear/node-fetch.d.ts#6abf724"
   },
   "globalDependencies": {
-    "jsuri": "registry:dt/jsuri#1.3.0+20160317120654",
-    "node": "registry:env/node#4.0.0+20160507210304"
+    "jsuri": "registry:dt/jsuri#1.3.0+20160317120654"
   },
   "devDependencies": {
     "chai": "registry:npm/chai#3.5.0+20160415060238"

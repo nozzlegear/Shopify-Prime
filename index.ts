@@ -2,7 +2,7 @@
 // https://www.typescriptlang.org/docs/handbook/typings-for-npm-packages.html
 
 import uri = require("jsuri");
-import * as crypto from "crypto"; 
+import * as crypto from "crypto";
 import * as fetch from "node-fetch";
 import {BaseService, ListOptions, FieldOptions} from "./modules/base_service";
 

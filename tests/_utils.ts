@@ -1,5 +1,7 @@
 /// <reference path="./../typings/index.d.ts" />
 
+declare const process: {env: any};
+
 const config: {[prop: string]: string} = process.env;
 
 // Grab secret keys
