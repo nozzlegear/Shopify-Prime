@@ -9,6 +9,7 @@ import {BaseService, ListOptions, FieldOptions} from "./modules/base_service";
 // #region Service and entity exports
 
 export {BaseService, ListOptions, FieldOptions};
+export {Shops, Shop} from "./modules/shops";
 export {Charges, Charge} from "./modules/charges";
 export {ShopifyError} from "./modules/shopify_error";
 export {RecurringCharges, RecurringCharge} from "./modules/recurring_charges";
@@ -157,8 +158,6 @@ export async function isAuthenticWebhook(headers: {[index: string]: any} | strin
     
     const computed = getHmacHash(shopifySecretKey, requestBody)
     
-    console.log("Computed", computed, "Hmac", hmac);
-        
     return computed === hmac.toUpperCase();
 }
 

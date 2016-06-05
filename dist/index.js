@@ -15,6 +15,8 @@ const crypto = require("crypto-js");
 const base_service_1 = require("./modules/base_service");
 exports.BaseService = base_service_1.BaseService;
 // #region Service and entity exports
+var shops_1 = require("./modules/shops");
+exports.Shops = shops_1.Shops;
 var charges_1 = require("./modules/charges");
 exports.Charges = charges_1.Charges;
 var shopify_error_1 = require("./modules/shopify_error");
@@ -110,7 +112,6 @@ function isAuthenticWebhook(headers, requestBody, shopifySecretKey) {
             return false;
         }
         const computed = getHmacHash(shopifySecretKey, requestBody);
-        console.log("Computed", computed, "Hmac", hmac);
         return computed === hmac.toUpperCase();
     });
 }
