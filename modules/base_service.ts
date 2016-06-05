@@ -77,7 +77,17 @@ export class BaseService
         
         //Fetch will only throw an exception when there is a network-related error, not when Shopify returns a non-200 response.
         const result = await fetch(url.toString(), options);
-        const json = await result.json();
+        let json = await result.text() as any;
+        
+        try
+        {
+            json = JSON.parse(json);
+        }
+        catch (e)
+        {
+            //Set ok to false to throw an error with the body's text.
+            result.ok = false;
+        }
         
         if (!result.ok)
         {

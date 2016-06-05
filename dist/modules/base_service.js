@@ -61,7 +61,14 @@ class BaseService {
             }
             //Fetch will only throw an exception when there is a network-related error, not when Shopify returns a non-200 response.
             const result = yield fetch(url.toString(), options);
-            const json = yield result.json();
+            let json = yield result.text();
+            try {
+                json = JSON.parse(json);
+            }
+            catch (e) {
+                //Set ok to false to throw an error with the body's text.
+                result.ok = false;
+            }
             if (!result.ok) {
                 throw new shopify_error_1.ShopifyError(result, json);
             }
