@@ -18,7 +18,7 @@ export class RecurringCharges extends BaseService
      */
     public create(charge: RecurringCharge)
     {
-        return this.createRequest<RecurringCharge>("POST", ".json", "recurring_application_charge", charge);
+        return this.createRequest<RecurringCharge>("POST", ".json", "recurring_application_charge", {recurring_application_charge: charge});
     }
     
     /**

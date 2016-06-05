@@ -18,7 +18,7 @@ export class Charges extends BaseService
      */
     public create(charge: Charge)
     {
-        return this.createRequest<Charge>("POST", ".json", "application_charge", charge);
+        return this.createRequest<Charge>("POST", ".json", "application_charge", {application_charge: charge});
     }
     
     /**

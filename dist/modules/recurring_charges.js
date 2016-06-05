@@ -12,7 +12,7 @@ class RecurringCharges extends base_service_1.BaseService {
      * Creates a new charge.
      */
     create(charge) {
-        return this.createRequest("POST", ".json", "recurring_application_charge", charge);
+        return this.createRequest("POST", ".json", "recurring_application_charge", { recurring_application_charge: charge });
     }
     /**
      * Gets a charge with the given id.

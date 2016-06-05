@@ -12,7 +12,7 @@ class Charges extends base_service_1.BaseService {
      * Creates a new charge.
      */
     create(charge) {
-        return this.createRequest("POST", ".json", "application_charge", charge);
+        return this.createRequest("POST", ".json", "application_charge", { application_charge: charge });
     }
     /**
      * Gets a charge with the given id.
