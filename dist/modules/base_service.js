@@ -46,8 +46,8 @@ class BaseService {
             }
             const url = new uri(this.shopDomain);
             url.protocol("https");
-            //Ensure no erroneous double slashes in path
-            url.path(`${this.resource}/${path}`.replace(/\/+/ig, "/"));
+            //Ensure no erroneous double slashes in path and that it doesn't end in /.json
+            url.path(`${this.resource}/${path}`.replace(/\/+/ig, "/").replace(/\/\.json/ig, ".json"));
             if ((method === "GET" || method === "DELETE") && payload) {
                 for (const prop in payload) {
                     const value = payload[prop];
