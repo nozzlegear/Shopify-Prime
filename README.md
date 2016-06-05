@@ -1,6 +1,8 @@
 # Shopify Prime
 
 [![Build Status](https://travis-ci.org/nozzlegear/Shopify-Prime.svg?branch=master)](https://travis-ci.org/nozzlegear/Shopify-Prime)
+[![npm](https://img.shields.io/npm/v/shopify-prime.svg?maxAge=2592000)](https://npmjs.com/package/shopify-prime)
+[![license](https://img.shields.io/github/license/nozzlegear/shopify-prime.svg?maxAge=2592000)](https://github.com/nozzlegear/Shopify-Prime/blob/master/LICENSE)
 
 Shopify Prime is a promise-driven NodeJS library built to help developers easily authenticate and make calls against the Shopify API. It was inspired by and borrows heavily from my other Shopify library, [ShopifySharp](https://github.com/nozzlegear/ShopifySharp).
 
@@ -66,6 +68,7 @@ This library is still pretty new. It currently suppports the following Shopify A
 - [OAuth authentication](#authorization-and-authentication).
 - [Application charges (in-app purchases)](#one-time-application-charges)
 - [Recurring application charges (subscriptions)](#recurring-application-charges-charge-shop-owners-to-use-your-app)
+- [Shops](#shops)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -342,4 +345,31 @@ import {Charges} from "shopify-prime";
 const service = new Charges(shopDomain, shopAccessToken);
 
 await service.activate(chargeId);
+```
+
+## Shops
+
+### Retrieving shop information
+
+```js
+import {Shops} from "shopify-prime";
+
+const service = new Shops(shopDomain, shopAccessToken);
+const shop = await service.get();
+```
+
+### Uninstalling your app
+
+n cases where user intervention is not required, you can send a request to a Shopify shop to force it to uninstall your application. After sending this request, the shop access token will be immediately revoked and invalidated.
+
+Uninstalling an application is an irreversible operation. Be entirely sure that you no longer need to make API calls for the shop in which the application has been installed.
+
+Uninstalling an application also performs various cleanup tasks within Shopify. Registered Webhooks, ScriptTags and App Links will be destroyed as part of this operation. Also if an application is uninstalled during key rotation, both the old and new Access Tokens will be rendered useless.
+
+```js
+import {Shops} from "shopify-prime";
+
+const service = new Shops(shopDomain, shopAccessToken);
+
+await shop.forceUninstallApp();
 ```
