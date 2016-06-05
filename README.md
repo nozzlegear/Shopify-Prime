@@ -231,7 +231,7 @@ You can also pass in the request body as a string, rather than using the input s
 body string needs to be identical to the way it was sent from Shopify. If it has been modified, the
 verification will fail.
 
-## Recurring Application Charges (charge shop owners to use your app)
+## Recurring Application Charges (monthly subscriptions)
 
 The Shopify billing API lets you create a recurring charge on a shop owner's account, letting them pay you
 on a monthly basis for using your application. 
@@ -360,7 +360,7 @@ const shop = await service.get();
 
 ### Uninstalling your app
 
-n cases where user intervention is not required, you can send a request to a Shopify shop to force it to uninstall your application. After sending this request, the shop access token will be immediately revoked and invalidated.
+In cases where user intervention is not required, you can send a request to a Shopify shop to force it to uninstall your application. After sending this request, the shop access token will be immediately revoked and invalidated.
 
 Uninstalling an application is an irreversible operation. Be entirely sure that you no longer need to make API calls for the shop in which the application has been installed.
 
