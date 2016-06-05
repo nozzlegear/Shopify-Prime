@@ -1,7 +1,7 @@
 /// <reference path="./../typings/index.d.ts" />
 
 import {ShopifyObject} from "../index";
-import {BaseService} from "./base_service";
+import {BaseService, FieldOptions} from "./base_service";
 
 /**
  * A service for manipulating Shopify shops.
@@ -15,10 +15,11 @@ export class Shops extends BaseService
     
     /**
      * Returns shop data for the shop.
+     * @param options Options for filtering the result.
      */
-    public get()
+    public get(options?: FieldOptions)
     {
-        return this.createRequest<Shop>("GET", "shop.json", "shop");
+        return this.createRequest<Shop>("GET", "shop.json", "shop", options);
     }
     
     /**

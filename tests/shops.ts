@@ -21,5 +21,14 @@ describe("Shops", function ()
         expect(shop.myshopify_domain).to.be.a("string");
     });
     
+    it ("should get a shop with only a name field", async () =>
+    {
+        const shop = await service.get({fields: ["name"]});
+        
+        expect(shop).to.not.be.null;
+        expect(Object.getOwnPropertyNames(shop).length).to.equal(1);
+        expect(shop.name).to.be.a("string");
+    })
+    
     it ("should force uninstall the app, but cannot be tested with a private app");
 }) 

@@ -1,6 +1,6 @@
 /// <reference path="../../typings/index.d.ts" />
 import { ShopifyObject } from "../index";
-import { BaseService } from "./base_service";
+import { BaseService, FieldOptions } from "./base_service";
 /**
  * A service for manipulating Shopify shops.
  */
@@ -8,8 +8,9 @@ export declare class Shops extends BaseService {
     constructor(shopDomain?: string, accessToken?: string);
     /**
      * Returns shop data for the shop.
+     * @param options Options for filtering the result.
      */
-    get(): Promise<Shop>;
+    get(options?: FieldOptions): Promise<Shop>;
     /**
      * Forces the shop to uninstall your Shopify app. Uninstalling an application is an irreversible operation. Be entirely sure that you no longer need to make API calls for the shop in which the application has been installed.
      */
