@@ -3,8 +3,9 @@
   "version": "1.1.3",
   "description": "Shopify Prime is a NodeJS library built to help developers easily authenticate and make calls against the Shopify API. It was inspired by and borrows heavily from ShopifySharp.",
   "main": "dist/index.js",
+  "typings": "./index",
   "scripts": {
-    "test": "gulp && mocha built_tests/"
+    "test": "gulp test"
   },
   "repository": {
     "type": "git",
@@ -22,7 +23,6 @@
     "url": "https://github.com/nozzlegear/shopify-prime/issues"
   },
   "homepage": "https://github.com/nozzlegear/shopify-prime#readme",
-  "typings": "./dist/index.d.ts",
   "dependencies": {
     "crypto-js": "^3.1.6",
     "jsuri": "^1.3.1",
@@ -32,6 +32,7 @@
     "chai": "^3.5.0",
     "gulp": "^3.9.1",
     "gulp-foreach": "^0.1.0",
+    "gulp-mocha": "^2.2.0",
     "gulp-string-replace": "^0.1.0",
     "gulp-typescript": "^2.13.5",
     "merge2": "^1.0.2",

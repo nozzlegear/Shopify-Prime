@@ -26,13 +26,7 @@ const Shopify = require("shopify-prime");
 import * as Shopify from "shopify-prime";
 ```
 
-Using TypeScript? Install the Shopify Prime definitions with [typings](https://github.com/typings/typings):
-
-```bash
-typings install file:node_modules/shopify-prime/typings.json --save
-```
-
-(TypeScript definitions will soon be added to the Typings registry.)
+Using TypeScript? The TypeScript compiler should automatically find Shopify Prime definitions for you when you install Shopify Prime via NPM. Just make sure your `tsconfig.json` has `moduleResolution` set to the default `"node"`.
 
 ## Async/await and promises
 
