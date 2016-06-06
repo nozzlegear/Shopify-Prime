@@ -38,7 +38,7 @@ With async/await:
 
 ```js
 //1. async/await
-const shop = await shops.get(shopId);
+const shop = await shops.get();
 
 //Do something with the shop
 ```
@@ -46,7 +46,7 @@ const shop = await shops.get(shopId);
 With promises:
 
 ```js
-const shop = shops.get(shopId).then((shop) => {
+const shop = shops.get().then((shop) => {
     //Do something with the shop.
 }); 
 ```
@@ -63,6 +63,7 @@ This library is still pretty new. It currently suppports the following Shopify A
 - [Application charges (in-app purchases)](#one-time-application-charges)
 - [Recurring application charges (subscriptions)](#recurring-application-charges-charge-shop-owners-to-use-your-app)
 - [Shops](#shops)
+- [Webhooks](#webhooks)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -74,7 +75,7 @@ real Shopify store.
 
 All instances of `shopDomain` refer to your users' `*.myshopify.com` URL (although their custom domain should work too).
 
-```cs
+```js
 import {Charges} from "shopify-prime";
 
 const chargeService = new Charges(shopDomain, shopAccessToken);
@@ -84,7 +85,7 @@ const chargeService = new Charges(shopDomain, shopAccessToken);
 
 Shopify Prime should work out of the box with your private Shopify application, all you need to do is replace the `shopAccessToken` with your private app's password when initializing a service:
 
-```cs
+```js
 import {Orders} from "shopify-prime";
 
 const orderService = new Orders(shopDomain, privateAppPassword)
@@ -366,4 +367,70 @@ import {Shops} from "shopify-prime";
 const service = new Shops(shopDomain, shopAccessToken);
 
 await shop.forceUninstallApp();
+```
+
+## Webhooks
+
+### Creating a webhook
+
+```js
+import {Webhooks, Webhook} from "shopify-prime";
+
+const service = new Webhooks(shopDomain, shopAccessToken);
+const webhook: Webhook = {
+    address = "https://my.webhook.url.com/path",
+    topic = "themes/publish",
+};
+
+webhook = await service.create(webhook);
+```
+
+### Retrieving a webhook
+
+```js
+import {Webhooks, Webhook} from "shopify-prime";
+
+const service = new Webhooks(shopDomain, shopAccessToken);
+const webhook = await service.get(webhookId);
+```
+
+### Updating a webhook
+
+```js
+import {Webhooks, Webhook} from "shopify-prime";
+
+const service = new Webhooks(shopDomain, shopAccessToken);
+const webhook = await service.update(webhookId, {
+    address: "https://my.webhook.url.com/new/path"
+});
+
+console.log(webhook.address); // "https://my.webhook.url.com/new/path"
+```
+
+### Deleting a webhook
+
+```js
+import {Webhooks, Webhook} from "shopify-prime";
+
+const service = new Webhooks(shopDomain, shopAccessToken);
+
+await service.delete(webhookId);
+```
+
+### Counting webhooks
+
+```js
+import {Webhooks, Webhook} from "shopify-prime";
+
+const service = new Webhooks(shopDomain, shopAccessToken);
+const count = await service.count();
+```
+
+### Listing webhooks
+
+```js
+import {Webhooks, Webhook} from "shopify-prime";
+
+const service = new Webhooks(shopDomain, shopAccessToken);
+const webhooks: Webhook[] = await service.list();
 ```
