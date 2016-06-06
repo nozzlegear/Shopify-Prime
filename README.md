@@ -1,8 +1,8 @@
 # Shopify Prime
 
 [![Build Status](https://travis-ci.org/nozzlegear/Shopify-Prime.svg?branch=master)](https://travis-ci.org/nozzlegear/Shopify-Prime)
-[![npm](https://img.shields.io/npm/v/shopify-prime.svg?maxAge=2592000)](https://npmjs.com/package/shopify-prime)
-[![license](https://img.shields.io/github/license/nozzlegear/shopify-prime.svg?maxAge=2592000)](https://github.com/nozzlegear/Shopify-Prime/blob/master/LICENSE)
+[![npm](https://img.shields.io/npm/v/shopify-prime.svg?maxAge=3600)](https://npmjs.com/package/shopify-prime)
+[![license](https://img.shields.io/github/license/nozzlegear/shopify-prime.svg?maxAge=3600)](https://github.com/nozzlegear/Shopify-Prime/blob/master/LICENSE)
 
 Shopify Prime is a promise-driven NodeJS library built to help developers easily authenticate and make calls against the Shopify API. It was inspired by and borrows heavily from my other Shopify library, [ShopifySharp](https://github.com/nozzlegear/ShopifySharp).
 
