@@ -1,7 +1,7 @@
 /// <reference path="./../typings/index.d.ts" />
 
 import {expect} from "chai";
-import {RecurringCharges} from "../dist";
+import {RecurringCharges} from "../index";
 import * as config from "./_utils";
 
 describe("RecurringCharges", function ()

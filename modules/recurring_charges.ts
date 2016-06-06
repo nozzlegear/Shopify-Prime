@@ -1,7 +1,8 @@
 /// <reference path="./../typings/index.d.ts" />
 
 import {Charge} from "./charges";
-import {BaseService, FieldOptions, ListOptions} from "./base_service";
+import {FieldOptions, ListOptions} from "../options";
+import {ShopifyObject, BaseService} from "../infrastructure";
 
 /**
  * A service for manipulating Shopify's RecurringCharge API.

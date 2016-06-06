@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const uri = require("jsuri");
 const shopify_error_1 = require("./shopify_error");
 const fetch = require("node-fetch");
+//Get package.json from 2-levels up as this file will be in dist/infrastructure.
 const version = require("../../package.json").version;
 class BaseService {
     constructor(shopDomain, accessToken, resource) {
@@ -27,10 +28,6 @@ class BaseService {
         headers.append("Accept", "application/json");
         headers.append("User-Agent", `Shopify Prime ${version} (https://github.com/nozzlegear/shopify-prime)`);
         return headers;
-    }
-    setCredentials(shopDomain, accessToken) {
-        this.shopDomain = shopDomain;
-        this.accessToken = accessToken;
     }
     createRequest(method, path, rootElement, payload) {
         return __awaiter(this, void 0, void 0, function* () {

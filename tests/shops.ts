@@ -2,7 +2,7 @@
 
 import {expect} from "chai";
 import * as config from "./_utils";
-import {Shops, Shop} from "../dist";
+import {Shops, Shop} from "../index";
 
 describe("Shops", function () 
 {

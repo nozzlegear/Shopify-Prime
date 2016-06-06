@@ -1,8 +1,9 @@
 /// <reference path="./../typings/index.d.ts" />
 
 import {expect} from "chai";
-import {ShopifyError} from "../dist";
+import {Infrastructure} from "../index";
 import fetch = require("node-fetch");
+import ShopifyError = Infrastructure.ShopifyError;
 
 describe("ShopifyError", function ()
 {

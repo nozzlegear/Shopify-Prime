@@ -6,6 +6,7 @@ import * as fetch from "node-fetch";
 
 declare var require: any;
 
+//Get package.json from 2-levels up as this file will be in dist/infrastructure.
 const version = require("../../package.json").version;
 
 export class BaseService
@@ -29,13 +30,7 @@ export class BaseService
         return headers;
     }
     
-    public setCredentials(shopDomain: string, accessToken: string)
-    {
-        this.shopDomain = shopDomain;
-        this.accessToken = accessToken;
-    }
-    
-    public async createRequest<T>(method: "GET" | "POST" | "PUT" | "DELETE", path: string, rootElement?: string, payload?: Object)
+    protected async createRequest<T>(method: "GET" | "POST" | "PUT" | "DELETE", path: string, rootElement?: string, payload?: Object)
     {
         method = method.toUpperCase() as any;
         
@@ -96,20 +91,4 @@ export class BaseService
         
         return rootElement ? json[rootElement] as T : json as T; 
     }
-}
-
-export interface FieldOptions
-{
-    /**
-     * Restricts the result to only the fields specified.
-     */
-    fields?: string[];
-}
-
-export interface ListOptions extends FieldOptions
-{
-    /**
-     * Restricts results to those created after the given id.
-     */
-    since_id?: number;
 }

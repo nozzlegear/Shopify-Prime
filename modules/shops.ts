@@ -1,14 +1,14 @@
 /// <reference path="./../typings/index.d.ts" />
 
-import {ShopifyObject} from "../index";
-import {BaseService, FieldOptions} from "./base_service";
+import {FieldOptions, ListOptions} from "../options";
+import {ShopifyObject, BaseService} from "../infrastructure";
 
 /**
  * A service for manipulating Shopify shops.
  */
 export class Shops extends BaseService
 {
-    constructor(shopDomain?: string, accessToken?: string)
+    constructor(shopDomain: string, accessToken: string)
     {
         super(shopDomain, accessToken, "");
     }

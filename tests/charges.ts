@@ -1,7 +1,7 @@
 /// <reference path="./../typings/index.d.ts" />
 
 import {expect} from "chai";
-import {Charges} from "../dist";
+import {Charges} from "../index";
 import * as config from "./_utils";
 
 describe("Charges", function ()

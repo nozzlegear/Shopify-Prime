@@ -1,6 +1,6 @@
 /// <reference path="../../typings/index.d.ts" />
-import { ShopifyObject } from "../index";
-import { BaseService, FieldOptions, ListOptions } from "./base_service";
+import { FieldOptions, ListOptions } from "../options";
+import { ShopifyObject, BaseService } from "../infrastructure";
 /**
  * A service for manipulating Shopify's ApplicationCharge API.
  */

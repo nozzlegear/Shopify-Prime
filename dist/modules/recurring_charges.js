@@ -1,10 +1,10 @@
 /// <reference path="./../typings/index.d.ts" />
 "use strict";
-const base_service_1 = require("./base_service");
+const infrastructure_1 = require("../infrastructure");
 /**
  * A service for manipulating Shopify's RecurringCharge API.
  */
-class RecurringCharges extends base_service_1.BaseService {
+class RecurringCharges extends infrastructure_1.BaseService {
     constructor(shopDomain, accessToken) {
         super(shopDomain, accessToken, "recurring_application_charges");
     }
