@@ -64,6 +64,7 @@ This library is still pretty new. It currently suppports the following Shopify A
 - [Recurring application charges (subscriptions)](#recurring-application-charges-charge-shop-owners-to-use-your-app)
 - [Shops](#shops)
 - [Webhooks](#webhooks)
+- [Script Tags](#script-tags)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -377,7 +378,7 @@ await shop.forceUninstallApp();
 import {Webhooks, Webhook} from "shopify-prime";
 
 const service = new Webhooks(shopDomain, shopAccessToken);
-const webhook: Webhook = {
+let webhook: Webhook = {
     address = "https://my.webhook.url.com/path",
     topic = "themes/publish",
 };
@@ -433,4 +434,77 @@ import {Webhooks, Webhook} from "shopify-prime";
 
 const service = new Webhooks(shopDomain, shopAccessToken);
 const webhooks: Webhook[] = await service.list();
+```
+
+## Script Tags
+
+Script tags let you add remote javascript tags that are loaded into the pages of a shop's storefront, letting you
+dynamically change the functionality of their shop without manually editing their store's template.
+
+### Creating a script tag
+
+```js
+import {ScriptTags, ScriptTag} from "shopify-prime";
+
+const service = new ScriptTags(shopDomain, shopAccessToken);
+let tag: ScriptTag = {
+    event = "onload",
+    src  = "https://example.com/my-javascript-file.js"
+}
+
+tag = await service.create(tag);
+```
+
+### Retrieving a script tag
+
+```js
+import {ScriptTags, ScriptTag} from "shopify-prime";
+
+const service = new ScriptTags(shopDomain, shopAccessToken);
+const tag = await service.get(tagId);
+```
+
+### Updating a script tag
+
+```js
+import {ScriptTags, ScriptTag} from "shopify-prime";
+
+const service = new ScriptTags(shopDomain, shopAccessToken);
+let tag = await service.get(tagId);
+
+tag = await service.update(tag.id, {src: "https://example.com/my-new-javascript-file.js"});
+```
+
+### Deleting a script tag
+
+```js
+import {ScriptTags, ScriptTag} from "shopify-prime";
+
+const service = new ScriptTags(shopDomain, shopAccessToken);
+
+await service.delete(tagId);
+```
+
+### Counting script tags
+
+```js
+import {ScriptTags, ScriptTag} from "shopify-prime";
+
+const service = new ScriptTags(shopDomain, shopAccessToken);
+let count = await service.count();
+
+//Optionally filter the count to only those tags with a specific Src
+count = await service.count({src: "https://example.com/my-filtered-url.js"});
+```
+
+### Listing script tags
+
+```js
+import {ScriptTags, ScriptTag} from "shopify-prime";
+
+const service = new ScriptTags(shopDomain, shopAccessToken);
+let tags = await service.list();
+
+//Optionally filter the list to only those tags with a specific Src
+tags = await service.list({src: "https://example.com/my-filtered-url.js"});
 ```
