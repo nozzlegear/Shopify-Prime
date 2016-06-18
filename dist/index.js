@@ -13,6 +13,8 @@ var charges_1 = require("./modules/charges");
 exports.Charges = charges_1.Charges;
 var webhooks_1 = require("./modules/webhooks");
 exports.Webhooks = webhooks_1.Webhooks;
+var script_tags_1 = require("./modules/script_tags");
+exports.ScriptTags = script_tags_1.ScriptTags;
 var recurring_charges_1 = require("./modules/recurring_charges");
 exports.RecurringCharges = recurring_charges_1.RecurringCharges;
 // Export auth functions at the top level

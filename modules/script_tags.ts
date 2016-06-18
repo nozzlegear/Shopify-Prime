@@ -77,9 +77,9 @@ export interface ScriptTag extends ShopifyObject
     created_at?: string;
 
     /**
-     * DOM event which triggers the loading of the script. Currently, 'on_load' is the only accepted value.
+     * DOM event which triggers the loading of the script. Currently, 'onload' is the only accepted value.
      */
-    event?: "on_load";
+    event?: "onload";
 
     /**
      * Specifies the src of the script tag, i.e. which URL to load it from.
