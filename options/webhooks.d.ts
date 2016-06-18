@@ -1,4 +1,4 @@
-import {WebhookTopic} from "../../enums";
+import {WebhookTopic} from "../enums";
 
 export interface WebhookOptions
 {

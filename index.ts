@@ -11,6 +11,7 @@ export {Infrastructure};
 export {Shops, Shop} from "./modules/shops";
 export {Charges, Charge} from "./modules/charges";
 export {Webhooks, Webhook} from "./modules/webhooks";
+export {ScriptTags, ScriptTag} from "./modules/script_tags";
 export {RecurringCharges, RecurringCharge} from "./modules/recurring_charges";
 
 // Export auth functions at the top level
