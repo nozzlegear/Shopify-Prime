@@ -14,5 +14,8 @@ export type AuthScope = (
     "read_fulfillments"  |
     "write_fulfillments" |
     "read_shipping"      |
-    "write_shipping"
+    "write_shipping"     |
+    "read_analytics"     |
+    "read_users"         |
+    "write_users"        
 );
