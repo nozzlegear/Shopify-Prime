@@ -15,11 +15,17 @@ const tsFiles = ["index.ts", "modules/**/*.ts", "enums/**/*.ts", "infrastructure
 gulp.task("build", function ()
 {
     const build = gulp.src(tsFiles)
-        .pipe(ts(libProject))
+        .pipe(ts(libProject));
+    
+    const js = build
         .js
         .pipe(gulp.dest("./dist"));
+
+    const dts = build
+        .dts
+        .pipe(gulp.dest("./dist"));
     
-    return build;
+    return mergetasks([js, dts]);
 })
 
 gulp.task("test", ["build"], () => 
