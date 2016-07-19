@@ -62,6 +62,7 @@ This library is still pretty new. It currently suppports the following Shopify A
 - [OAuth authentication](#authorization-and-authentication).
 - [Application charges (in-app purchases)](#one-time-application-charges)
 - [Recurring application charges (subscriptions)](#recurring-application-charges-charge-shop-owners-to-use-your-app)
+- [Usage charges](#usage-charges)
 - [Shops](#shops)
 - [Webhooks](#webhooks)
 - [Script Tags](#script-tags)
@@ -341,6 +342,39 @@ import {Charges} from "shopify-prime";
 const service = new Charges(shopDomain, shopAccessToken);
 
 await service.activate(chargeId);
+```
+
+## Usage charges
+
+Shopify's Usage Charges let you set a capped amount on a recurring application charge, and only charge for usage. For example, you can create a charge that's capped at $100.00 per month, and then charge e.g. $1.00 for every 1000 emails your user sends using your app.
+
+To create a usage charge, you first need to create a recurring charge with a `capped_amount` value and a `terms` string. Your customers will see the terms when activating the recurring charge, so set it to something they can read like "$1.00 per 1000 emails".
+
+### Creating a usage charge
+
+```js
+import {UsageCharges, UsageCharge} from "shopify-prime";
+
+const service = new UsageCharges(shopDomain, shopAccessToken);
+const charge: UsageCharge = await service.create(recurringChargeId, {description: "Used 1000 emails", price: 1.00});
+```
+
+### Getting a usage charge
+
+```js
+import {UsageCharges, UsageCharge} from "shopify-prime";
+
+const service = new UsageCharges(shopDomain, shopAccessToken);
+const charge: UsageCharge = await service.get(recurringChargeId, usageChargeId);
+```
+
+### Listing usage charges
+
+```js
+import {UsageCharges, UsageCharge} from "shopify-prime";
+
+const service = new UsageCharges(shopDomain, shopAccessToken);
+const list: UsageCharge[] = await service.list(recurringChargeId);
 ```
 
 ## Shops
