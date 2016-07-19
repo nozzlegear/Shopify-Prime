@@ -50,6 +50,14 @@ export interface RecurringCharge extends Charge {
      */
     cancelled_on?: string;
     /**
+     * The capped amount is the limit a customer can be charged for usage based billing.
+     */
+    capped_amount?: number;
+    /**
+     * tates the terms and conditions of usage based billing charges. Must be present in order to create usage charges. These are presented to the merchant when they approve the usage charges for your app.
+     */
+    terms?: string;
+    /**
      * Number of days the customer is eligible for a free trial.
      */
     trial_days: number;
