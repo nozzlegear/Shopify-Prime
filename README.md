@@ -684,7 +684,7 @@ Additionally, Application Credits cannot be used by private applications.
 ### Creating an Application Credit
 
 ```js
-const { ApplicationCredits } from "shopify-prime";
+import { ApplicationCredits } from "shopify-prime";
 
 const service = new ApplicationCredits(shopDomain, shopAccessToken);
 const credit = await service.create({
@@ -696,7 +696,7 @@ const credit = await service.create({
 ### Getting an Application Credit
 
 ```js
-const { ApplicationCredits } from "shopify-prime";
+import { ApplicationCredits } from "shopify-prime";
 
 const service = new ApplicationCredits(shopDomain, shopAccessToken);
 const credit = await service.get(id);
@@ -705,7 +705,7 @@ const credit = await service.get(id);
 ### Listing Application Credits
 
 ```js
-const { ApplicationCredits } from "shopify-prime";
+import { ApplicationCredits } from "shopify-prime";
 
 const service = new ApplicationCredits(shopDomain, shopAccessToken);
 const credits = await service.list();
