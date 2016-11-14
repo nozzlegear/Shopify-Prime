@@ -51,6 +51,21 @@ describe("Shopify Prime auth functions", function () {
             expect(url).to.contain(`redirect_uri=${encodeURIComponent(redirect)}`);
             expect(url).to.contain(`state=${state}`);
         })
+
+        it("should build an authorization url with grant permissions", async () => {
+            const redirect = "https://example.com/my/path?query=string";
+            const state = "1780650a-2610-46ca-986a-830f4dcb8085";
+            const url = await Auth.buildAuthorizationUrl(["read_orders", "write_orders"], config.shopDomain, config.apiKey, redirect, undefined, ["per-user"]);
+
+            expect(url).to.be.a("string");
+            expect(url).to.contain(config.shopDomain);
+            expect(url).to.contain(`/admin/oauth/authorize`);
+            expect(url).to.contain(`client_id=${config.apiKey}`);
+            expect(url).to.contain(`scope=${encodeURIComponent("read_orders,write_orders")}`);
+            expect(url).to.contain(`redirect_uri=${encodeURIComponent(redirect)}`);
+            expect(url).to.contain(`grant_options[]=${encodeURIComponent('per-user')}`);
+            expect(url).to.not.contain(`state=${state}`);
+        })
     })
 
     describe(".isValidShopifyDomain", () => {

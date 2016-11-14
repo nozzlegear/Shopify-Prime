@@ -1,6 +1,7 @@
 import uri = require("jsuri");
 import fetch from "node-fetch";
 import * as crypto from "crypto-js";
+import { AuthGrant } from "../typings/enums/auth_grant";
 import { AuthScope } from "../typings/enums/auth_scope";
 import BaseService from "../infrastructure/base_service";
 
@@ -132,8 +133,9 @@ export async function isValidShopifyDomain(shopifyDomain: string) {
  * @param shopifyApiKey Your app's API key. This is NOT your secret key.
  * @param redirectUrl An optional URL that the user will be sent to after integration. Override's the Shopify app's default redirect URL.
  * @param state An optional, random string value provided by your application which is unique for each authorization request. During the OAuth callback phase, your application should check that this value matches the one you provided to this method.
+ * @param grants An optional array of token grant types.
  */
-export async function buildAuthorizationUrl(scopes: AuthScope[], shopifyDomain: string, shopifyApiKey: string, redirectUrl?: string, state?: string) {
+export async function buildAuthorizationUrl(scopes: AuthScope[], shopifyDomain: string, shopifyApiKey: string, redirectUrl?: string, state?: string, grants?: AuthGrant[]) {
     const url = new uri(shopifyDomain);
     url.protocol("https");
     url.path("admin/oauth/authorize");
@@ -148,8 +150,15 @@ export async function buildAuthorizationUrl(scopes: AuthScope[], shopifyDomain: 
         url.addQueryParam("state", state);
     }
 
+    if (grants && Array.isArray(grants)) {
+        grants.forEach(grant => url.addQueryParam("grant_options[]", grant));
+    } else if (grants && typeof(grants) === "string") {
+        url.addQueryParam("grant_options[]", grants as string);
+    }
+
     return url.toString();
 }
+
 
 /**
  * Finalizes app installation, generating a permanent access token for the user's store.
