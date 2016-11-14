@@ -156,4 +156,22 @@ describe("Orders", function () {
         expect(order).to.be.an("object");
         expect(order.closed_at).to.satisfy((closed_at) => closed_at === null || closed_at === undefined);
     })
+
+    it("should cancel an order", async () => {
+        const id = (await createOrder()).id;
+        const order = await service.cancel(id);
+    
+        expect(order).to.be.an("object");
+        expect(order.id).to.equal(id);
+    })
+
+    it("should cancel an order with options", async () => {
+        const id = (await createOrder()).id;
+        const order = await service.cancel(id, {
+            reason: "customer",
+        })
+
+        expect(order).to.be.an("object");
+        expect(order.id).to.equal(id);
+    })
 });

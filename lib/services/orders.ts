@@ -4,7 +4,7 @@ import { Transaction } from "../typings/models/transaction";
 
 // Enums
 import { FieldOptions } from "../typings/options/base";
-import { OrderCountOptions, OrderListOptions, OrderCreateOptions } from "../typings/options/orders";
+import { OrderCountOptions, OrderListOptions, OrderCreateOptions, OrderCancelOptions } from "../typings/options/orders";
 
 export default class Orders extends BaseService {
     constructor(shopDomain: string, accessToken: string) {
@@ -85,5 +85,14 @@ export default class Orders extends BaseService {
      */
     public open(id: number) {
         return this.createRequest<Order>("POST", `${id}/open.json`, "order");
+    }
+
+    /**
+     * Cancels an order with the given id.
+     * @param id The order's id.
+     * @param options Options for canceling the order.
+     */
+    public cancel(id: number, options?: OrderCancelOptions) {
+        return this.createRequest<Order>("POST", `${id}/cancel.json`, 'order');
     }
 }
