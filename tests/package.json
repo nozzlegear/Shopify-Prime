@@ -1,0 +1,30 @@
+{
+  "name": "tests",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node ./node_modules/.bin/tsc -p .",
+    "build:lib": "cd ../lib && npm run build && cd ../tests",
+    "refresh": "npm run build:lib && yarn cache clean && yarn add file:../lib",
+    "test": "npm run refresh && npm run build && node ./node_modules/.bin/mocha built",
+    "test:auth": "node ./node_modules/.bin/mocha built/authorization.js",
+    "test:charges": "node ./node_modules/.bin/mocha built/charges.js",
+    "test:errors": "node ./node_modules/.bin/mocha built/shopify_error.js",
+    "test:orders": "node ./node_modules/.bin/mocha built/orders.js",
+    "test:recurring_charges": "node ./node_modules/.bin/mocha built/recurring_charges.js",
+    "test:script_tags": "node ./node_modules/.bin/mocha built/script_tags.js",
+    "test:shops": "node ./node_modules/.bin/mocha built/shops.js",
+    "test:usage_charges": "node ./node_modules/.bin/mocha built/usage_charges.js",
+    "test:webhooks": "node ./node_modules/.bin/mocha built/webhooks.js"
+  },
+  "dependencies": {
+    "shopify-prime": "file:../lib"
+  },
+  "devDependencies": {
+    "@types/chai": "^3.4.34",
+    "@types/mocha": "^2.2.32",
+    "chai": "^3.5.0",
+    "mocha": "^3.1.2",
+    "typescript": "2.0.8"
+  }
+}

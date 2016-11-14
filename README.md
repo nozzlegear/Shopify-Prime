@@ -26,7 +26,20 @@ const Shopify = require("shopify-prime");
 import * as Shopify from "shopify-prime";
 ```
 
-Using TypeScript? The TypeScript compiler should automatically find Shopify Prime definitions for you when you install Shopify Prime via NPM. Just make sure your `tsconfig.json` has `moduleResolution` set to the default `"node"`.
+## Typescript declarations
+
+Using TypeScript? The TypeScript compiler will automatically pull in Shopify Prime definitions for you when you install Shopify Prime, **as long as you're using TypeScript 2+**. Interfaces and extra types are available under the `Models`, `Enums` and `Options` exports from the main `"shopify-prime"` module.
+
+```js
+import { Shops } from "shopify-prime";
+
+// Typescript interfaces — not real JS objects:
+import { Models, Enums, Options } from "shopify-prime";
+
+const shop: Models.Shop = await new Shops(shopDomain, shopAccessToken).get(shopId);
+```
+
+Finally, because Shopify Prime uses async/await and promises, you'll need to set your tsconfig.json's target to `"es6"`. While not strictly necessary, Typescript won't know about the `Promise` type and will default all services' return types to `any` if you don't set your target to es6.
 
 ## Async/await and promises
 
@@ -66,6 +79,7 @@ This library is still pretty new. It currently suppports the following Shopify A
 - [Shops](#shops)
 - [Webhooks](#webhooks)
 - [Script Tags](#script-tags)
+- [Orders](#orders)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -108,10 +122,10 @@ Shopify Prime will call the given URL and check for an `X-ShopId` header in the 
 **Note**, however, that this feature is undocumented by Shopify and may break at any time. Use at your own discretion.
 
 ```js
-import {isValidShopifyDomain} from "shopify-prime";
+import { Auth } from "shopify-prime";
 
 const urlFromUser = "https://example.myshopify.com";
-const isValidUrl = await isValidMyShopifyDomain(urlFromUser).
+const isValidUrl = await Auth.isValidMyShopifyDomain(urlFromUser).
 ```
 
 ### Build an authorization URL
@@ -119,7 +133,7 @@ const isValidUrl = await isValidMyShopifyDomain(urlFromUser).
 Redirect your users to this authorization URL, where they'll be prompted to install your app to their Shopify store.
 
 ```js
-import {buildAuthorizationUrl} from "shopify-prime";
+import { Auth } from "shopify-prime";
 
 //This is the user's store URL.
 const usersShopifyUrl = "https://example.myshopify.com";
@@ -132,7 +146,7 @@ const redirectUrl = "https://example.com/my/redirect/url";
 const permissions = ["read_orders", "write_orders"];
 
 //Build the URL and send your user to it where they'll be prompted to install your app.
-const authUrl = buildAuthorizationUrl(scopes, usersShopifyurl, yourShopifyApiKey, redirect);
+const authUrl = Auth.buildAuthorizationUrl(scopes, usersShopifyurl, yourShopifyApiKey, redirect);
 ```
 
 ### Authorize an installation and generate an access token
@@ -145,14 +159,14 @@ The access token you receive after authorizing should be stored in your database
 shop's resources (e.g. orders, customers, fulfillments, etc.)
 
 ```js
-import {authorize} from "shopify-prime";
+import { Auth } from "shopify-prime";
 
 // The querystring will have several parameters you need for authorization. 
 // Refer to your server framework docs for details on getting a request querystring.
 const code = request.QueryString["code"];
 const shopUrl = request.QueryString["shop"];
 
-const accessToken = await authorize(code, shopUrl, shopifyApiKey, shopifySecretKey)
+const accessToken = await Auth.authorize(code, shopUrl, shopifyApiKey, shopifySecretKey)
 ```
 
 ### Determine if a request is authentic
@@ -164,17 +178,14 @@ secret key.
 Pass the entire querystring to `.isAuthenticRequest` to verify the request.
 
 ```js
-import {isAuthenticRequest} from "shopify-prime";
+import { Auth } from "shopify-prime";
 
 const qs = request.QueryString;
-const isAuthentic = await isAuthenticRequest(qs, shopifySecretKey);
+const isAuthentic = await Auth.isAuthenticRequest(qs, shopifySecretKey);
 
-if (isAuthentic)
-{
+if (isAuthentic) {
     //Request is authentic.
-}
-else
-{
+} else {
     //Request is not authentic and should not be acted on.
 }
 ```
@@ -184,17 +195,14 @@ else
 Nearly identical to authenticating normal requests, a proxy page request only differs in the way the querystring is formatted to calculate the hmac signature. All proxy page requests coming from Shopify will have a querystring parameter named `signature` that you can use to verify the request. This signature is a hash of all querystring parameters and your app's secret key.
 
 ```js
-import {isAuthenticProxyRequest} from "shopify-prime";
+import { Auth } from "shopify-prime";
 
 const qs = request.QueryString;
-const isAuthentic = await isAuthenticProxyRequest(qs, shopifySecretKey);
+const isAuthentic = await Auth.isAuthenticProxyRequest(qs, shopifySecretKey);
 
-if (isAuthentic)
-{
+if (isAuthentic) {
     //Request is authentic.
-}
-else
-{
+} else {
     //Request is not authentic and should not be acted on.
 }
 ```
@@ -208,18 +216,15 @@ secret key.
 Pass that header and the request body string to `.isAuthenticWebhook` to verify the request.
 
 ```js
-import {isAuthenticWebhook} from "shopify-prime";
+import { Auth } from "shopify-prime";
 
 const hmacHeader = request.QueryString["X-Shopify-Hmac-SHA256"];
 const body = request.body.toString();
-const isAuthentic = await isAuthenticWebhook(hmacHeader, body, shopifySecretKey);
+const isAuthentic = await Auth.isAuthenticWebhook(hmacHeader, body, shopifySecretKey);
 
-if (isAuthentic)
-{
+if (isAuthentic) {
     //Webhook is authentic.
-}
-else
-{
+} else {
     //Webhook is not authentic and should not be acted on.
 }
 ```
@@ -236,10 +241,10 @@ on a monthly basis for using your application.
 ### Create a recurring charge
 
 ```ts
-import {RecurringCharges, RecurringCharge} from "shopify-prime";
+import { RecurringCharges } from "shopify-prime";
 
 const service = new RecurringCharges(shopDomain, shopAccessToken);
-let charge: RecurringCharge = {
+let charge = {
     Name = "Lorem Ipsum Plan",
     Price = 12.34,
     Test = true,   //Marks this charge as a test, meaning it won't charge the shop owner.
@@ -252,7 +257,7 @@ charge = await service.create(charge);
 ### Retrieve a recurring charge
 
 ```ts
-import {RecurringCharges} from "shopify-prime";
+import { RecurringCharges } from "shopify-prime";
 
 const service = new RecurringCharges(shopDomain, shopAccessToken);
 const charge = await service.get(chargeId);
@@ -261,10 +266,10 @@ const charge = await service.get(chargeId);
 ### Listing recurring charges
 
 ```ts
-import {RecurringCharges} from "shopify-prime";
+import { RecurringCharges } from "shopify-prime";
 
 const service = new RecurringCharges(shopDomain, shopAccessToken);
-const list: RecurringCharge[] = await service.list();
+const list = await service.list();
 ```
 
 ### Activating a charge
@@ -273,7 +278,7 @@ Creating a charge does not actually charge the shop owner or even start their fr
 send them to the charge's `confirmation_url`, have them accept the charge, then activate it.
 
 ```ts
-import {RecurringCharges} from "shopify-prime";
+import { RecurringCharges } from "shopify-prime";
 
 const service = new RecurringCharges(shopDomain, shopAccessToken);
 
@@ -286,7 +291,7 @@ Charges cannot be deleted unless they've been activated. Shopify automatically d
 after 48 hours pass without activation.
 
 ```ts
-import {RecurringCharges, RecurringCharge} from "shopify-prime";
+import { RecurringCharges } from "shopify-prime";
 
 const service = new RecurringCharges(shopDomain, shopAccessToken);
 
@@ -301,10 +306,10 @@ charge on the shop owner's account. One-time charges cannot be deleted.
 ### Create a one-time charge
 
 ```ts
-import {Charges, Charge} from "shopify-prime";
+import { Charges } from "shopify-prime";
 
 const service = new Charges(shopDomain, shopAccessToken);
-let charge: Charge = {
+let charge = {
     Name = "Lorem Ipsum Charge",
     Price = 12.34,
     Test = true, //Marks this charge as a test, meaning it won't charge the shop owner.
@@ -316,7 +321,7 @@ charge = await service.create(charge);
 ### Retrieve a one-time charge
 
 ```ts
-import {Charges} from "shopify-prime";
+import { Charges } from "shopify-prime";
 
 const service = new Charges(shopDomain, shopAccessToken);
 const charge = await service.get(chargeId);
@@ -325,10 +330,10 @@ const charge = await service.get(chargeId);
 ### Listing one-time charges
 
 ```ts
-import {Charges, Charge} from "shopify-prime";
+import { Charges } from "shopify-prime";
 
 const service = new Charges(shopDomain, shopAccessToken);
-const list: Charge[] = service.list();
+const list = service.list();
 ```
 
 ### Activating a charge
@@ -337,7 +342,7 @@ Just like recurring charges, creating a one-time charge does not actually charge
 send them to the charge's `ConfirmationUrl`, have them accept the charge, then activate it.
 
 ```ts
-import {Charges} from "shopify-prime";
+import { Charges } from "shopify-prime";
 
 const service = new Charges(shopDomain, shopAccessToken);
 
@@ -353,28 +358,28 @@ To create a usage charge, you first need to create a recurring charge with a `ca
 ### Creating a usage charge
 
 ```js
-import {UsageCharges, UsageCharge} from "shopify-prime";
+import { UsageCharges } from "shopify-prime";
 
 const service = new UsageCharges(shopDomain, shopAccessToken);
-const charge: UsageCharge = await service.create(recurringChargeId, {description: "Used 1000 emails", price: 1.00});
+const charge = await service.create(recurringChargeId, {description: "Used 1000 emails", price: 1.00});
 ```
 
 ### Getting a usage charge
 
 ```js
-import {UsageCharges, UsageCharge} from "shopify-prime";
+import { UsageCharges } from "shopify-prime";
 
 const service = new UsageCharges(shopDomain, shopAccessToken);
-const charge: UsageCharge = await service.get(recurringChargeId, usageChargeId);
+const charge = await service.get(recurringChargeId, usageChargeId);
 ```
 
 ### Listing usage charges
 
 ```js
-import {UsageCharges, UsageCharge} from "shopify-prime";
+import { UsageCharges } from "shopify-prime";
 
 const service = new UsageCharges(shopDomain, shopAccessToken);
-const list: UsageCharge[] = await service.list(recurringChargeId);
+const list = await service.list(recurringChargeId);
 ```
 
 ## Shops
@@ -382,7 +387,7 @@ const list: UsageCharge[] = await service.list(recurringChargeId);
 ### Retrieving shop information
 
 ```js
-import {Shops} from "shopify-prime";
+import { Shops } from "shopify-prime";
 
 const service = new Shops(shopDomain, shopAccessToken);
 const shop = await service.get();
@@ -397,7 +402,7 @@ Uninstalling an application is an irreversible operation. Be entirely sure that 
 Uninstalling an application also performs various cleanup tasks within Shopify. Registered Webhooks, ScriptTags and App Links will be destroyed as part of this operation. Also if an application is uninstalled during key rotation, both the old and new Access Tokens will be rendered useless.
 
 ```js
-import {Shops} from "shopify-prime";
+import { Shops } from "shopify-prime";
 
 const service = new Shops(shopDomain, shopAccessToken);
 
@@ -409,10 +414,10 @@ await shop.forceUninstallApp();
 ### Creating a webhook
 
 ```js
-import {Webhooks, Webhook} from "shopify-prime";
+import { Webhooks } from "shopify-prime";
 
 const service = new Webhooks(shopDomain, shopAccessToken);
-let webhook: Webhook = {
+let webhook = {
     address = "https://my.webhook.url.com/path",
     topic = "themes/publish",
 };
@@ -423,7 +428,7 @@ webhook = await service.create(webhook);
 ### Retrieving a webhook
 
 ```js
-import {Webhooks, Webhook} from "shopify-prime";
+import { Webhooks } from "shopify-prime";
 
 const service = new Webhooks(shopDomain, shopAccessToken);
 const webhook = await service.get(webhookId);
@@ -432,20 +437,18 @@ const webhook = await service.get(webhookId);
 ### Updating a webhook
 
 ```js
-import {Webhooks, Webhook} from "shopify-prime";
+import { Webhooks } from "shopify-prime";
 
 const service = new Webhooks(shopDomain, shopAccessToken);
 const webhook = await service.update(webhookId, {
     address: "https://my.webhook.url.com/new/path"
 });
-
-console.log(webhook.address); // "https://my.webhook.url.com/new/path"
 ```
 
 ### Deleting a webhook
 
 ```js
-import {Webhooks, Webhook} from "shopify-prime";
+import { Webhooks } from "shopify-prime";
 
 const service = new Webhooks(shopDomain, shopAccessToken);
 
@@ -455,7 +458,7 @@ await service.delete(webhookId);
 ### Counting webhooks
 
 ```js
-import {Webhooks, Webhook} from "shopify-prime";
+import { Webhooks } from "shopify-prime";
 
 const service = new Webhooks(shopDomain, shopAccessToken);
 const count = await service.count();
@@ -464,10 +467,10 @@ const count = await service.count();
 ### Listing webhooks
 
 ```js
-import {Webhooks, Webhook} from "shopify-prime";
+import { Webhooks } from "shopify-prime";
 
 const service = new Webhooks(shopDomain, shopAccessToken);
-const webhooks: Webhook[] = await service.list();
+const webhooks = await service.list();
 ```
 
 ## Script Tags
@@ -478,10 +481,10 @@ dynamically change the functionality of their shop without manually editing thei
 ### Creating a script tag
 
 ```js
-import {ScriptTags, ScriptTag} from "shopify-prime";
+import { ScriptTags } from "shopify-prime";
 
 const service = new ScriptTags(shopDomain, shopAccessToken);
-let tag: ScriptTag = {
+let tag = {
     event = "onload",
     src  = "https://example.com/my-javascript-file.js"
 }
@@ -492,7 +495,7 @@ tag = await service.create(tag);
 ### Retrieving a script tag
 
 ```js
-import {ScriptTags, ScriptTag} from "shopify-prime";
+import { ScriptTags } from "shopify-prime";
 
 const service = new ScriptTags(shopDomain, shopAccessToken);
 const tag = await service.get(tagId);
@@ -501,7 +504,7 @@ const tag = await service.get(tagId);
 ### Updating a script tag
 
 ```js
-import {ScriptTags, ScriptTag} from "shopify-prime";
+import { ScriptTags } from "shopify-prime";
 
 const service = new ScriptTags(shopDomain, shopAccessToken);
 let tag = await service.get(tagId);
@@ -512,7 +515,7 @@ tag = await service.update(tag.id, {src: "https://example.com/my-new-javascript-
 ### Deleting a script tag
 
 ```js
-import {ScriptTags, ScriptTag} from "shopify-prime";
+import { ScriptTags } from "shopify-prime";
 
 const service = new ScriptTags(shopDomain, shopAccessToken);
 
@@ -522,7 +525,7 @@ await service.delete(tagId);
 ### Counting script tags
 
 ```js
-import {ScriptTags, ScriptTag} from "shopify-prime";
+import { ScriptTags } from "shopify-prime";
 
 const service = new ScriptTags(shopDomain, shopAccessToken);
 let count = await service.count();
@@ -541,4 +544,115 @@ let tags = await service.list();
 
 //Optionally filter the list to only those tags with a specific Src
 tags = await service.list({src: "https://example.com/my-filtered-url.js"});
+```
+
+## Orders
+
+### Creating an Order
+
+```js
+import { Orders } from "shopify-prime";
+
+const service = new Orders(shopDomain, shopAccessToken);
+const order = await service.create({
+    billing_address: {
+        address1: "123 4th Street",
+        city: "Minneapolis",
+        province: "Minnesota",
+        province_code: "MN",
+        zip: "55401",
+        phone: "555-555-5555",
+        first_name: "John",
+        last_name: "Doe",
+        company: "Tomorrow Corporation",
+        country: "United States",
+        country_code: "US",
+        default: true,
+    },
+    line_items: [
+        {
+            name: "Test Line Item",
+            title: "Test Line Item Title",
+            quantity: 2,
+            price: 5
+        },
+        {
+            name: "Test Line Item 2",
+            title: "Test Line Item Title 2",
+            quantity: 2,
+            price: 5
+        }
+    ],
+    financial_status: "paid",
+    total_price: 5.00,
+    email: Date.now + "@example.com",
+    note: "Test note about the customer.",
+});
+```
+
+### Getting an Order
+
+```js
+import { Orders } from "shopify-prime";
+
+const service = new Orders(shopDomain, shopAccessToken);
+const order = await service.get(id);
+```
+
+### Updating an Order
+
+```js
+import { Orders } from "shopify-prime";
+
+const service = new Orders(shopDomain, shopAccessToken);
+let order = await service.get(id);
+
+order.note = "Updated note";
+order = await service.update(id, order);
+```
+
+### Listing Orders
+
+```js
+import { Orders } from "shopify-prime";
+
+const service = new Orders(shopDomain, shopAccessToken);
+const orders = await service.list();
+```
+
+### Counting Orders
+
+```js
+import { Orders } from "shopify-prime";
+
+const service = new Orders(shopDomain, shopAccessToken);
+const orderCount = await service.count();
+```
+
+### Deleting an Order
+
+```js
+import { Orders } from "shopify-prime";
+
+const service = new Orders(shopDomain, shopAccessToken);
+
+await service.delete(id);
+```
+
+### Closing an Order
+
+```js
+import { Orders } from "shopify-prime";
+
+const service = new Orders(shopDomain, shopAccessToken);
+const order = await service.close(id);
+```
+
+### Opening an Order
+
+```js
+import { Orders } from "shopify-prime";
+
+const service = new Orders(shopDomain, shopAccessToken);
+const order = await service.open(id);
 ```

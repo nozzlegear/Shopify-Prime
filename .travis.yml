@@ -1,3 +1,17 @@
 language: node_js
 node_js:
-  - "5.1"
+  - "6.9"
+
+before_install:
+  - npm install -g yarn --cache-min 999999999
+
+install:
+  - cd lib && yarn
+
+script: 
+  - cd ../tests && yarn test
+
+# # safelist
+# branches:
+#   only:
+#   - master

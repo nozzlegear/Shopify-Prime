@@ -1,17 +1,14 @@
-/// <reference path="./../typings/index.d.ts" />
-
-import {expect} from "chai";
+import { expect } from "chai";
 import * as config from "./_utils";
-import {ScriptTag, ScriptTags} from "../index";
+import { ScriptTags, Models } from "shopify-prime";
+import ScriptTag = Models.ScriptTag;
 
-describe("Script Tags", function ()
-{
+describe("Script Tags", function () {
     this.timeout(30000);
 
     const service = new ScriptTags(config.shopDomain, config.accessToken);
     const toBeDeleted: ScriptTag[] = [];
-    function createTag()
-    {
+    function createTag() {
         const tag: ScriptTag = {
             src: `https://localhost:3000/scripts/${new Date().getMilliseconds()}.js`,
             event: "onload",
@@ -20,27 +17,26 @@ describe("Script Tags", function ()
         return tag;
     }
 
-    after(() =>
-    {
+    after((cb) => {
         const count = toBeDeleted.length;
-        
+
         toBeDeleted.forEach(async (tag) => await service.delete(tag.id));
-        
+
         console.log(`Deleted ${count} script tags.`);
+
+        // Wait 1 second to help empty the API rate limit bucket
+        setTimeout(cb, 1000);
     })
 
-    it("should delete a script tag", async () =>
-    {
+    it("should delete a script tag", async () => {
         let error;
 
-        try
-        {
+        try {
             const tag = await service.create(createTag());
 
             await service.delete(tag.id);
         }
-        catch (e)
-        {
+        catch (e) {
             console.log("Error deleting tag", e);
 
             error = e;
@@ -49,8 +45,7 @@ describe("Script Tags", function ()
         expect(error).to.be.undefined;
     })
 
-    it("should create a script tag", async () =>
-    {
+    it("should create a script tag", async () => {
         const tag = await service.create(createTag());
 
         toBeDeleted.push(tag);
@@ -64,8 +59,7 @@ describe("Script Tags", function ()
         expect(tag.event).to.equal("onload");
     })
 
-    it("should get a script tag", async () =>
-    {
+    it("should get a script tag", async () => {
         let tag = await service.create(createTag());
 
         toBeDeleted.push(tag);
@@ -76,13 +70,12 @@ describe("Script Tags", function ()
         expect(tag).to.not.be.undefined;
     });
 
-    it("should get a tag with only the src field", async () =>
-    {
+    it("should get a tag with only the src field", async () => {
         let tag = await service.create(createTag());
 
         toBeDeleted.push(tag);
 
-        tag = await service.get(tag.id, {fields: ["src"]} );
+        tag = await service.get(tag.id, { fields: "src" });
 
         expect(tag).to.not.be.null;
         expect(tag).to.not.be.undefined;
@@ -91,10 +84,8 @@ describe("Script Tags", function ()
         expect(tag.created_at).to.be.undefined;
     })
 
-    it("should count script tags", async () =>
-    {
-        for (let i = 0; i < 3; i ++)
-        {
+    it("should count script tags", async () => {
+        for (let i = 0; i < 3; i++) {
             toBeDeleted.push(await service.create(createTag()));
         }
 
@@ -104,10 +95,8 @@ describe("Script Tags", function ()
         expect(count).to.be.at.least(3);
     })
 
-    it("should list script tags", async () =>
-    {
-        for (let i = 0; i < 3; i ++)
-        {
+    it("should list script tags", async () => {
+        for (let i = 0; i < 3; i++) {
             toBeDeleted.push(await service.create(createTag()));
         }
 
@@ -126,14 +115,13 @@ describe("Script Tags", function ()
         expect(tag.event).to.equal("onload");
     })
 
-    it("should update a script tag", async () =>
-    {
+    it("should update a script tag", async () => {
         const newSrc = "https://localhost:3000/scripts/my-updated-src.js";
         let tag = await service.create(createTag());
 
         toBeDeleted.push(tag);
 
-        tag = await service.update(tag.id, {src: newSrc});
+        tag = await service.update(tag.id, { src: newSrc });
 
         expect(tag).to.not.be.null;
         expect(tag).to.not.be.undefined;
