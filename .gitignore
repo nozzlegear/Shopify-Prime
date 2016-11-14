@@ -38,6 +38,7 @@ built_tests
 dist/tests
 dist/
 bin/
+tests/built/
 
 # Ignore private configuration files
 *.private.json

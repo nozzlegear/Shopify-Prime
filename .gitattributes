@@ -9,3 +9,4 @@ dist/* linguist-vendored
 gulpfile.js linguist-vendored
 typings/modules/* linguist-vendored
 typings/globals/* linguist-vendored
+lib/.tasks/* linguist-vendored
