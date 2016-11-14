@@ -9,6 +9,7 @@
     "test": "npm run refresh && npm run build && node ./node_modules/.bin/mocha built",
     "test:auth": "node ./node_modules/.bin/mocha built/authorization.js",
     "test:charges": "node ./node_modules/.bin/mocha built/charges.js",
+    "test:credits": "node ./node_modules/.bin/mocha built/application_credits.js",
     "test:errors": "node ./node_modules/.bin/mocha built/shopify_error.js",
     "test:orders": "node ./node_modules/.bin/mocha built/orders.js",
     "test:recurring_charges": "node ./node_modules/.bin/mocha built/recurring_charges.js",

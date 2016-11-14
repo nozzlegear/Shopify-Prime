@@ -13,6 +13,7 @@ import Webhooks from "./services/webhooks";
 import ScriptTags from "./services/script_tags";
 import UsageCharges from "./services/usage_charges";
 import RecurringCharges from "./services/recurring_charges";
+import ApplicationCredits from "./services/application_credits";
 
 export {
     Auth,
@@ -23,4 +24,5 @@ export {
     ScriptTags,
     UsageCharges,
     RecurringCharges,
+    ApplicationCredits,
 };
