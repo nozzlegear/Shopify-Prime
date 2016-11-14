@@ -80,6 +80,7 @@ This library is still pretty new. It currently suppports the following Shopify A
 - [Webhooks](#webhooks)
 - [Script Tags](#script-tags)
 - [Orders](#orders)
+- [Application Credits](#application-credits)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -655,4 +656,57 @@ import { Orders } from "shopify-prime";
 
 const service = new Orders(shopDomain, shopAccessToken);
 const order = await service.open(id);
+```
+
+### Canceling an Order
+
+```js
+import { Orders } from "shopify-prime";
+
+const service = new Orders(shopDomain, shopAccessToken);
+
+await service.cancel(id, {
+    reason: "customer"
+});
+```
+
+## Application Credits
+
+Shopify's Application Credit API lets you offer credits for payments your app customers have made via the Application Charge, Recurring Application Charge, and Usage Charge APIs.
+
+The total amount of all Application Credits created by an application must not exceed:
+
+1. Total amount paid to the application by the shop owner in the last 30 days.
+2. Total amount of pending receivables in the partner account associated with the application.
+
+Additionally, Application Credits cannot be used by private applications.
+
+### Creating an Application Credit
+
+```js
+const { ApplicationCredits } from "shopify-prime";
+
+const service = new ApplicationCredits(shopDomain, shopAccessToken);
+const credit = await service.create({
+    description: "Refund for Foo",
+    amount: 10.00
+});
+```
+
+### Getting an Application Credit
+
+```js
+const { ApplicationCredits } from "shopify-prime";
+
+const service = new ApplicationCredits(shopDomain, shopAccessToken);
+const credit = await service.get(id);
+```
+
+### Listing Application Credits
+
+```js
+const { ApplicationCredits } from "shopify-prime";
+
+const service = new ApplicationCredits(shopDomain, shopAccessToken);
+const credits = await service.list();
 ```
