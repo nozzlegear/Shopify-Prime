@@ -17,6 +17,8 @@ describe("Script Tags", function () {
         return tag;
     }
 
+    afterEach((cb) => setTimeout(cb, 500));
+
     after((cb) => {
         const count = toBeDeleted.length;
 

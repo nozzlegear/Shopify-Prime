@@ -17,6 +17,8 @@ describe("Webhooks", function () {
         return webhook;
     }
 
+    afterEach((cb) => setTimeout(cb, 500));
+
     after((cb) => {
         const count = toBeDeleted.length;
 

@@ -33,6 +33,8 @@ describe("Articles", function () {
         }).then(cb);
     })
 
+    afterEach((cb) => setTimeout(cb, 500));
+
     after((cb) => {
         createdArticles.forEach(async (article) => await service.delete(blogId, article.id));
 

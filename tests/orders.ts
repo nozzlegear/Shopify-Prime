@@ -56,6 +56,8 @@ describe("Orders", function () {
         return order;
     }
 
+    afterEach((cb) => setTimeout(cb, 500));
+
     after((cb) => {
         const count = toBeDeleted.length;
 

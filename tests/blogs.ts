@@ -21,6 +21,8 @@ describe("Blogs", async function () {
         return blog;
     }
 
+    afterEach((cb) => setTimeout(cb, 500));
+
     after((cb) => {
         createdBlogs.forEach(async (blog) => await service.delete(blog.id));
 
