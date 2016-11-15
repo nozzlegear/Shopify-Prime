@@ -9,6 +9,7 @@ import Shops from "./services/shops";
 import Orders from "./services/orders";
 import * as Auth from "./services/auth";
 import Charges from "./services/charges";
+import Articles from "./services/articles";
 import Webhooks from "./services/webhooks";
 import ScriptTags from "./services/script_tags";
 import UsageCharges from "./services/usage_charges";
@@ -20,6 +21,7 @@ export {
     Shops,
     Orders,
     Charges,
+    Articles,
     Webhooks,
     ScriptTags,
     UsageCharges,

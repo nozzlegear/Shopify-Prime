@@ -1,3 +1,5 @@
+import { PublishedStatus } from "../enums/published_status";
+
 export interface FieldOptions {
     /**
      * A comma-separated list of fields that will be returned instead of the whole object.
@@ -54,4 +56,21 @@ export interface ListOptions {
      * Restricts results to those created after the given id.
      */
     since_id?: number;
+}
+
+export interface PublishedOptions {
+    /**
+     * Filter results to those published after date (format: 2014-04-25T16:15:47-04:00)
+     */
+    published_at_min?: string;
+
+    /**
+     * Filter results to those published before date (format: 2014-04-25T16:15:47-04:00)
+     */
+    published_at_max?: string;
+
+    /**
+     * Filter results to those with the given publish status.
+     */
+    published_status?: PublishedStatus;
 }
