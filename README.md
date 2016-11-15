@@ -81,6 +81,8 @@ This library is still pretty new. It currently suppports the following Shopify A
 - [Script Tags](#script-tags)
 - [Orders](#orders)
 - [Application Credits](#application-credits)
+- [Blogs](#blogs)
+- [Articles](#articles)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -709,4 +711,169 @@ import { ApplicationCredits } from "shopify-prime";
 
 const service = new ApplicationCredits(shopDomain, shopAccessToken);
 const credits = await service.list();
+```
+
+## Blogs
+
+In addition to an online storefront, Shopify shops come with a built-in blogging engine, allowing a shop to have one or more blogs. This class is for interacting with blogs themselves, [not blog posts](#articles).
+
+### Creating a Blog
+
+```js
+import { Blogs } from "shopify-prime";
+
+const service = new Blogs(shopDomain, shopAccessToken)
+const blog = await service.create({
+    title: "My new blog",
+})
+```
+
+### Getting a Blog
+
+```js
+import { Blogs } from "shopify-prime";
+
+const service = new Blogs(shopDomain, shopAccessToken)
+const blog = await service.get(blogId);
+```
+
+### Updating a Blog
+
+```js
+import { Blogs } from "shopify-prime";
+
+const service = new Blogs(shopDomain, shopAccessToken)
+const blog = await service.update(blogId, {
+    title: "My updated blog title"
+})
+```
+
+### Listing Blogs
+
+```js
+import { Blogs } from "shopify-prime";
+
+const service = new Blogs(shopDomain, shopAccessToken)
+const blogs = await service.list();
+```
+
+### Counting Blogs
+
+```js
+import { Blogs } from "shopify-prime";
+
+const service = new Blogs(shopDomain, shopAccessToken)
+const count = await service.count();
+```
+
+### Deleting a Blog
+
+```js
+import { Blogs } from "shopify-prime";
+
+const service = new Blogs(shopDomain, shopAccessToken)
+
+await service.delete(blogId);
+```
+
+## Articles
+
+Articles are objects representing a blog post. Each article belongs to a [Blog](#blogs).
+
+### Creating an Article
+
+```js
+import { Articles } from "shopify-prime";
+
+const service = new Articles(shopDomain, shopAccessToken);
+const article = await service.create(blogId, {
+    title: "My new Article title",
+    author: "John Smith",
+    tags: "This Post, Has Been Tagged",
+    body_html: "<h1>Hello world!</h1>",
+    image: {
+        attachment: "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==\n"
+    }
+})
+```
+
+### Getting an Article
+
+```js
+import { Articles } from "shopify-prime";
+
+const service = new Articles(shopDomain, shopAccessToken);
+const article = await service.get(blogId, articleId);
+```
+
+### Updating an Article
+
+```js
+import { Articles } from "shopify-prime";
+
+const service = new Articles(shopDomain, shopAccessToken);
+const article = await service.update(blogId, articleId, {
+    title: "My updated title"
+})
+```
+
+### Listing Articles
+
+```js
+import { Articles } from "shopify-prime";
+
+const service = new Articles(shopDomain, shopAccessToken);
+const articles = await service.list(blogId);
+```
+
+### Counting Articles
+
+```js
+import { Articles } from "shopify-prime";
+
+const service = new Articles(shopDomain, shopAccessToken);
+const count = await service.count(blogId);
+```
+
+### Deleting an Article
+
+```js
+import { Articles } from "shopify-prime";
+
+const service = new Articles(shopDomain, shopAccessToken);
+
+await service.delete(blogId, articleId);
+```
+
+### Listing all Article authors
+
+```js
+import { Articles } from "shopify-prime";
+
+const service = new Articles(shopDomain, shopAccessToken);
+const authors = await service.listAuthors();
+
+console.log(authors); // ['John Doe', 'Jane Doe']
+```
+
+### Listing all Article tags
+
+```js
+import { Articles } from "shopify-prime";
+
+const service = new Articles(shopDomain, shopAccessToken);
+const tags = await service.listTags();
+
+console.log(tags); // ['Tag One', 'Tag Two']
+```
+
+### Listing all Article tags for a blog
+
+```js
+import { Articles } from "shopify-prime";
+
+const service = new Articles(shopDomain, shopAccessToken);
+const tags = await service.listTagsForBlog(blogId);
+
+console.log(tags); // ['Tag One', 'Tag Two']
 ```
