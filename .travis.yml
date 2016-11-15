@@ -6,10 +6,10 @@ before_install:
   - npm install -g yarn --cache-min 999999999
 
 install:
-  - cd lib && yarn
+  - yarn install
 
 script: 
-  - cd ../tests && yarn test
+  - cd ./tests && yarn test
 
 # # safelist
 # branches:
