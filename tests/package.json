@@ -4,10 +4,12 @@
   "private": true,
   "scripts": {
     "build": "node ./node_modules/.bin/tsc -p .",
-    "build:lib": "cd ../lib && npm run build && cd ../tests",
-    "refresh": "npm run build:lib && yarn cache clean && yarn add file:../lib",
+    "build:lib": "cd ../ && npm run build && cd ./tests",
+    "refresh": "npm run build:lib && yarn cache clean && rm -rf node_modules && yarn add file:../",
     "test": "npm run refresh && npm run build && node ./node_modules/.bin/mocha built",
     "test:auth": "node ./node_modules/.bin/mocha built/authorization.js",
+    "test:articles": "node ./node_modules/.bin/mocha built/articles.js",
+    "test:blogs": "node ./node_modules/.bin/mocha built/blogs.js",
     "test:charges": "node ./node_modules/.bin/mocha built/charges.js",
     "test:credits": "node ./node_modules/.bin/mocha built/application_credits.js",
     "test:errors": "node ./node_modules/.bin/mocha built/shopify_error.js",
@@ -19,7 +21,7 @@
     "test:webhooks": "node ./node_modules/.bin/mocha built/webhooks.js"
   },
   "dependencies": {
-    "shopify-prime": "file:../lib"
+    "shopify-prime": "file:../"
   },
   "devDependencies": {
     "@types/chai": "^3.4.34",

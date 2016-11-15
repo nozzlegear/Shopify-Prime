@@ -45,8 +45,17 @@ export default class Articles extends BaseService {
      * @param blogId Id of the blog that the articles belong to.
      * @param options Options for filtering the results.
      */
-    public list(blogId: number, options: Options.FieldOptions & Options.DateOptions & Options.ListOptions & Options.PublishedOptions & ArticleListOptions) {
+    public list(blogId: number, options?: Options.FieldOptions & Options.DateOptions & Options.ListOptions & Options.PublishedOptions & ArticleListOptions) {
         return this.createRequest<Article[]>("GET", `blogs/${blogId}/articles.json`, "articles", options);
+    }
+
+    /**
+     * Counts the articles on the given blog.
+     * @param blogId Id of the blog that the articles belong to.
+     * @param options Options for filtering the results.
+     */
+    public count(blogId: number, options?: Options.DateOptions & Options.PublishedOptions) {
+        return this.createRequest<number>("GET", `blogs/${blogId}/articles/count.json`, "count", options);
     }
 
     /**

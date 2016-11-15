@@ -6,6 +6,7 @@ export {
 
 // Import and export services
 import Shops from "./services/shops";
+import Blogs from "./services/blogs";
 import Orders from "./services/orders";
 import * as Auth from "./services/auth";
 import Charges from "./services/charges";
@@ -19,6 +20,7 @@ import ApplicationCredits from "./services/application_credits";
 export {
     Auth,
     Shops,
+    Blogs,
     Orders,
     Charges,
     Articles,
