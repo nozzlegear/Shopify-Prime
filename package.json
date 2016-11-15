@@ -8,9 +8,7 @@
     "build": "node ./node_modules/.bin/tsc -p . && npm run declarations",
     "declarations": "node ./.tasks/add-custom-declarations",
     "readme:add": "cp ../README.md README.md",
-    "readme:remove": "rm README.md",
-    "prepublish": "in-publish && npm run test || exit 0",
-    "test": "cd ../tests && npm run test"
+    "readme:remove": "rm README.md"
   },
   "repository": {
     "type": "git",
@@ -39,7 +37,6 @@
     "@types/node": "^6.0.46",
     "@types/node-fetch": "^1.6.5",
     "glob": "^7.1.1",
-    "in-publish": "^2.0.0",
     "mkdirp": "^0.5.1",
     "typescript": "2.0.8"
   }
