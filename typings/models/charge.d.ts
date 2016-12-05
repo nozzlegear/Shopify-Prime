@@ -22,7 +22,7 @@ export interface Charge extends ShopifyObject {
     /**
      * The price of the application charge. Note: Shopify returns this value as a string.
      */
-    price: string | number;
+    price?: string | number;
 
     /**
      * The URL the customer is sent to once they accept/decline a charge.

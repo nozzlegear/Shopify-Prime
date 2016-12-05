@@ -10,6 +10,16 @@ export interface RecurringCharge extends Charge {
     activated_on?: string;
 
     /**
+     * When using usage charges, this value indicates the total usage charges accrued during the current billing period.
+     */
+    balance_used?: number;
+
+    /**
+     * When using usage charges, this value indicates the remaining balance until the capped_amount is reached.
+     */
+    balance_remaining?: number;
+
+    /**
      * The date and time the customer will be billed. Will be null if the charge has not been activated.
      */
     billing_on?: string;
@@ -20,9 +30,9 @@ export interface RecurringCharge extends Charge {
     cancelled_on?: string;
 
     /**
-     * The capped amount is the limit a customer can be charged for usage based billing.
+     * The capped amount is the limit a customer can be charged for usage based billing. Note that Shopify returns this value as a string.
      */
-    capped_amount?: number;
+    capped_amount?: number | string;
 
     /**
      * tates the terms and conditions of usage based billing charges. Must be present in order to create usage charges. These are presented to the merchant when they approve the usage charges for your app.
