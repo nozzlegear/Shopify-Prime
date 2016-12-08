@@ -13,7 +13,7 @@ export interface ScriptTag extends ShopifyObject {
     /**
      * Where the script tag should be included on the store. Known values are 'online_store', 'order_status' or 'all'. Defaults to 'all'.
      */
-    display_scope: ScriptTagDisplayScope;
+    display_scope?: ScriptTagDisplayScope;
 
     /**
      * DOM event which triggers the loading of the script. Currently, 'onload' is the only accepted value.
