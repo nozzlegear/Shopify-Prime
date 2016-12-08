@@ -12,6 +12,7 @@ describe("Script Tags", function () {
         const tag: ScriptTag = {
             src: `https://localhost:3000/scripts/${new Date().getMilliseconds()}.js`,
             event: "onload",
+            display_scope: "all"
         }
 
         return tag;
