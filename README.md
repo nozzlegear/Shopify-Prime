@@ -488,8 +488,9 @@ import { ScriptTags } from "shopify-prime";
 
 const service = new ScriptTags(shopDomain, shopAccessToken);
 let tag = {
-    event = "onload",
-    src  = "https://example.com/my-javascript-file.js"
+    event: "onload",
+    src: "https://example.com/my-javascript-file.js",
+    display_scope: "all"
 }
 
 tag = await service.create(tag);
