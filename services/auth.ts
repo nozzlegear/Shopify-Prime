@@ -98,7 +98,8 @@ export async function isAuthenticWebhook(headers: { [index: string]: any } | str
         hmac = headers;
     }
     else {
-        hmac = headers["X-Shopify-Hmac-SHA256"];
+        const headerName = "X-Shopify-Hmac-SHA256";
+        hmac = headers[headerName] || headers[headerName.toLowerCase()];
     }
 
     if (!hmac) {
