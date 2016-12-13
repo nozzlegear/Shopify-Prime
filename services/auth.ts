@@ -44,8 +44,20 @@ function buildHashString(type: "web" | "proxy", querystring: { [index: string]: 
     return kvps;
 }
 
-function getHmacHash(secretKey: string, hashString: string) {
-    return crypto.HmacSHA256(hashString, secretKey).toString().toUpperCase();
+/**
+ * Computes an hmac-sha256 hash from the given key and string.
+ * @param secretKey The application's secret Shopify key.
+ * @param hashString The string being hashed.
+ * @param convertToBase64 Whether the resulting hash should be converted to base64 or left as hex. Should be true for validating webhook requests.
+ */
+function getHmacHash(secretKey: string, hashString: string, convertToBase64 = false) {
+    let hash = crypto.HmacSHA256(hashString, secretKey); 
+
+    if (convertToBase64) {
+        hash = crypto.enc.Base64.stringify(hash);
+    }
+
+    return hash.toString().toUpperCase();
 }
 
 /**
@@ -106,7 +118,7 @@ export async function isAuthenticWebhook(headers: { [index: string]: any } | str
         return false;
     }
 
-    const computed = getHmacHash(shopifySecretKey, requestBody)
+    const computed = getHmacHash(shopifySecretKey, requestBody, true);
 
     return computed === hmac.toUpperCase();
 }

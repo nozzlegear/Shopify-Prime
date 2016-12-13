@@ -127,7 +127,7 @@ describe("Shopify Prime auth functions", function () {
 
     describe(".isAuthenticWebhook", () => {
         const body = '{"order":{"id":123456}}';
-        const header = "117448acb11a944b2c30aaef38dcfee66ad51772e602a921aeab8268157ebe3a";
+        const header = "EXRIrLEalEssMKrvONz+5mrVF3LmAqkhrquCaBV+vjo=";
 
         it("should return true for a valid request with a header string", async () => {
             const result = await Auth.isAuthenticWebhook(header, body, config.secretKey);
