@@ -17,7 +17,7 @@ function isType3(err): err is ErrorType3 {
 }
 
 class ShopifyError extends Error {
-    constructor(response: Response, public body: ErrorType1 | ErrorType2 | ErrorType3) {
+    constructor(response: { status: number, statusText: string}, public body: ErrorType1 | ErrorType2 | ErrorType3) {
         super();
 
         this.statusCode = response.status;
