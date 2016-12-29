@@ -193,4 +193,14 @@ export interface Shop extends ShopifyObject {
      * Indicates whether the shop has any outstanding setup steps or not.
      */
     setup_required?: boolean;
+
+    /**
+     * Indicates whether the shop supports the Discounts api 
+     */
+    has_discounts?: boolean
+
+    /**
+     * Indicates whether the shop supports the Gift Cards api 
+     */
+    has_gift_cards?: boolean
 }

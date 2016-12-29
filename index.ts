@@ -16,6 +16,9 @@ import ScriptTags from "./services/script_tags";
 import UsageCharges from "./services/usage_charges";
 import RecurringCharges from "./services/recurring_charges";
 import ApplicationCredits from "./services/application_credits";
+import Discounts from "./services/discounts";
+import GiftCards from "./services/gift_cards";
+import Redirects from "./services/redirects";
 
 export {
     Auth,
@@ -29,4 +32,7 @@ export {
     UsageCharges,
     RecurringCharges,
     ApplicationCredits,
+    Discounts,
+    GiftCards,
+    Redirects
 };

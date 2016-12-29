@@ -14,5 +14,5 @@ export interface DiscountCode extends ShopifyObject {
     /** 
      *  The type of discount. Known values are 'percentage', 'shipping', 'fixed_amount' and 'none'.
      */
-    type?: string;
+    type?: "percentage" | "shipping" | "fixed_amount" | string;
 }

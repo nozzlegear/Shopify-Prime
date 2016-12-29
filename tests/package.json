@@ -18,7 +18,10 @@
     "test:script_tags": "node ./node_modules/.bin/mocha built/script_tags.js",
     "test:shops": "node ./node_modules/.bin/mocha built/shops.js",
     "test:usage_charges": "node ./node_modules/.bin/mocha built/usage_charges.js",
-    "test:webhooks": "node ./node_modules/.bin/mocha built/webhooks.js"
+    "test:webhooks": "node ./node_modules/.bin/mocha built/webhooks.js",
+    "test:discounts": "node ./node_modules/.bin/mocha built/discounts.js",
+    "test:redirects": "node ./node_modules/.bin/mocha built/redirects.js",
+    "test:gift_cards": "node ./node_modules/.bin/mocha built/gift_cards.js"
   },
   "dependencies": {
     "shopify-prime": "file:../"
@@ -28,6 +31,6 @@
     "@types/mocha": "^2.2.32",
     "chai": "^3.5.0",
     "mocha": "^3.1.2",
-    "typescript": "2.0.8"
+    "typescript": "2.1.4"
   }
 }

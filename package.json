@@ -37,6 +37,6 @@
     "@types/node-fetch": "^1.6.5",
     "glob": "^7.1.1",
     "mkdirp": "^0.5.1",
-    "typescript": "2.0.8"
+    "typescript": "^2.1.4"
   }
 }
