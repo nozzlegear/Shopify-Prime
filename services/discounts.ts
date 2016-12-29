@@ -7,14 +7,14 @@ import { FieldOptions, ListOptions } from "../typings/options/base";
  */
 export default class Discounts extends BaseService {
     constructor(shopDomain: string, accessToken: string) {
-        super(shopDomain, accessToken, "");
+        super(shopDomain, accessToken, "discounts");
     }
 
     /**
       * Creates a new discount.
       */
     public create(discount: Discount) {
-        return this.createRequest<Discount>("POST", "discounts.json", "discount", { discount: discount });
+        return this.createRequest<Discount>("POST", ".json", "discount", { discount: discount });
     }
 
     /**
@@ -22,7 +22,7 @@ export default class Discounts extends BaseService {
      * @param options Options for filtering the results.
      */
     public list(options?: ListOptions) {
-        return this.createRequest<Discount[]>("GET", "discounts.json", "discounts", options);
+        return this.createRequest<Discount[]>("GET", ".json", "discounts", options);
     }
 
     /**
@@ -30,27 +30,27 @@ export default class Discounts extends BaseService {
      * @param options Options for filtering the results.
      */
     public get(id: number) {
-        return this.createRequest<Discount>("GET", `discounts/${id}.json`, "discount");
+        return this.createRequest<Discount>("GET", `${id}.json`, "discount");
     }
 
     /**
      * Enables a discount.
      */
     public enable(id: number) {
-        return this.createRequest<Discount>("POST", `discounts/${id}/enable.json`, "discount");
+        return this.createRequest<Discount>("POST", `${id}/enable.json`, "discount");
     }
 
     /**
      * Disable a discount.
      */
     public disable(id: number) {
-        return this.createRequest<Discount>("POST", `discounts/${id}/disable.json`, "discount");
+        return this.createRequest<Discount>("POST", `${id}/disable.json`, "discount");
     }
 
     /**
      * Deletes the discount with the given id.
      */
     public delete(id: number) {
-        return this.createRequest<void>("DELETE", `discounts/${id}.json`);
+        return this.createRequest<void>("DELETE", `${id}.json`);
     }
 }
