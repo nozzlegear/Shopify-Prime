@@ -20,6 +20,10 @@ if (!shopDomain) {
     throw new Error(`Expected 'shopDomain' in process.env to exist.`);
 }
 
+if (! /https:\/\//.test(shopDomain)) {
+    throw new Error(`Expected 'shopDomain' to be a full URL with 'https://' protocol.`);
+}
+
 if (!accessToken) {
     throw new Error(`Expected 'accessToken' in process.env to exist.`);
 }

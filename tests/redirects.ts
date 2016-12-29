@@ -11,7 +11,7 @@ describe("Redirects", function () {
 
     it("should create a redirect", async () => {
         let newRedirect: Redirect = {
-            path: `https://${config.shopDomain}/primetest`,
+            path: `${config.shopDomain}/primetest`,
             target: `https://www.gooogle.com?q=croatia`
         }
 
@@ -29,8 +29,6 @@ describe("Redirects", function () {
         expect(res.id).to.be.a("number");
         expect(res.path).to.be.a("string");
         expect(res.target).to.be.a("string");
-
-        console.log(res)
     })
 
     it("should delete a redirect by Id", async () => {
