@@ -11,6 +11,19 @@ describe("Redirects", function () {
 
     afterEach((cb) => setTimeout(cb, 500));
 
+    it("should list redirects", async () => {
+        const list = await service.list();
+
+        expect(Array.isArray(list)).to.be.true;
+    })
+
+    it("should count redirects", async () => {
+        const count = await service.count();
+
+        expect(count).to.be.a("number");
+        expect(count).to.be.gte(0);
+    })
+
     it("should create a redirect", async () => {
         let newRedirect: Redirect = {
             path: `${config.shopDomain}/primetest`,
