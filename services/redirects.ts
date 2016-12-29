@@ -10,7 +10,7 @@ import { FieldOptions, ListOptions } from "../typings/options/base";
  */
 export default class Redirects extends BaseService {
     constructor(shopDomain: string, accessToken: string) {
-        super(shopDomain, accessToken, "");
+        super(shopDomain, accessToken, "redirects");
     }
 
     /**
@@ -18,7 +18,7 @@ export default class Redirects extends BaseService {
      * @param options Options for filtering the results.
      */
     public count(options?: RedirectOptions) {
-        return this.createRequest<number>("GET", "count.json", "redirect", options);
+        return this.createRequest<number>("GET", "count.json", "count", options);
     }
 
     /**
@@ -26,7 +26,7 @@ export default class Redirects extends BaseService {
      * @param options Options for filtering the results.
      */
     public list(options?: RedirectOptions & ListOptions & FieldOptions) {
-        return this.createRequest<Redirect[]>("GET", ".json", "redirect", options);
+        return this.createRequest<Redirect[]>("GET", ".json", "redirects", options);
     }
 
     /**
@@ -34,14 +34,14 @@ export default class Redirects extends BaseService {
      * @param options Options for filtering the results.
      */
     public get(id: number, options?: FieldOptions) {
-        return this.createRequest<Redirect>("GET", `redirects/${id}.json`, "redirect", options);
+        return this.createRequest<Redirect>("GET", `${id}.json`, "redirect", options);
     }
 
     /**
      * Creates a new redirect.
      */
     public create(redirect: Redirect) {
-        return this.createRequest<Redirect>("POST", "redirects.json", "redirect", { redirect: redirect });
+        return this.createRequest<Redirect>("POST", ".json", "redirect", { redirect: redirect });
     }
 
     /**
@@ -56,6 +56,6 @@ export default class Redirects extends BaseService {
      * Deletes the redirect with the given id.
      */
     public delete(id: number) {
-        return this.createRequest<void>("DELETE", `redirects/${id}.json`);
+        return this.createRequest<void>("DELETE", `${id}.json`);
     }
 }
