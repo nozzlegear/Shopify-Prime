@@ -9,6 +9,8 @@ describe("Gift Cards", function () {
     const service = new GiftCards(config.shopDomain, config.accessToken);
     let g: GiftCard
 
+    afterEach((cb) => setTimeout(cb, 500));
+
     it("should create a Gift Card", async () => {
         let newGiftCard: GiftCard = {
             initial_value: 100,

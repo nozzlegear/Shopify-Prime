@@ -9,6 +9,8 @@ describe("Redirects", function () {
     const service = new Redirects(config.shopDomain, config.accessToken);
     let r: Redirect
 
+    afterEach((cb) => setTimeout(cb, 500));
+
     it("should create a redirect", async () => {
         let newRedirect: Redirect = {
             path: `${config.shopDomain}/primetest`,

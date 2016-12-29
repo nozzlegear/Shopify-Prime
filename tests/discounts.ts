@@ -9,6 +9,8 @@ describe("Discounts", function () {
     const service = new Discounts(config.shopDomain, config.accessToken);
     let d: Discount
 
+    afterEach((cb) => setTimeout(cb, 500));
+
     it("should create a discount", async () => {
         try {
             let newDiscount: Discount = {
