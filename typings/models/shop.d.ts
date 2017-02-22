@@ -10,6 +10,11 @@ export interface Shop extends ShopifyObject {
     address1?: string;
 
     /**
+     * The second line of the shop's street address.
+     */
+    address2?: string;
+
+    /**
      * The city in which the shop is located.
      */
     city?: string;
