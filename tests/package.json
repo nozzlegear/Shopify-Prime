@@ -5,7 +5,7 @@
   "scripts": {
     "build": "node ./node_modules/.bin/tsc -p .",
     "build:lib": "cd ../ && npm run build && cd ./tests",
-    "refresh": "npm run build:lib && yarn cache clean && rimraf node_modules && yarn add file:../",
+    "refresh": "npm run build:lib && yarn cache clean && rm -rf node_modules && yarn add file:../",
     "test": "npm run refresh && npm run build && node ./node_modules/.bin/mocha built",
     "test:auth": "node ./node_modules/.bin/mocha built/authorization.js",
     "test:articles": "node ./node_modules/.bin/mocha built/articles.js",
@@ -32,7 +32,6 @@
     "@types/mocha": "^2.2.32",
     "chai": "^3.5.0",
     "mocha": "^3.1.2",
-    "rimraf": "^2.6.1",
     "typescript": "2.1.4"
   }
 }
