@@ -1,6 +1,6 @@
-import { expect } from "chai";
-import * as config from "./_utils";
-import { PriceRules, PriceRuleDiscounts, Models } from "shopify-prime";
+import * as config from './_utils';
+import { expect } from 'chai';
+import { Models, PriceRuleDiscounts, PriceRules } from 'shopify-prime';
 import PriceRule = Models.PriceRule;
 import PriceRuleDiscountCode = Models.PriceRuleDiscountCode;
 
@@ -83,76 +83,76 @@ describe("Price Rules", function () {
         setTimeout(cb, 1000);
     })
 
-    it("should create a price rule", async () => {
+    it("should create a price rule, but cannot be tested without a Plus account.")//, async () => {
 
-        const pr = await createPriceRule();
-        expect(pr).to.be.an("object");
-        expect(pr.title).to.be.a("string");
-        expect(pr.id).to.be.a("number").and.to.be.gte(1);
+    //     const pr = await createPriceRule();
+    //     expect(pr).to.be.an("object");
+    //     expect(pr.title).to.be.a("string");
+    //     expect(pr.id).to.be.a("number").and.to.be.gte(1);
 
-        const dc = await createPriceRuleDiscountCode(pr)
-        expect(dc).to.be.an("object");
-        expect(dc.code).to.be.a("string");
-        expect(dc.id).to.be.a("number").and.to.be.gte(1);
+    //     const dc = await createPriceRuleDiscountCode(pr)
+    //     expect(dc).to.be.an("object");
+    //     expect(dc.code).to.be.a("string");
+    //     expect(dc.id).to.be.a("number").and.to.be.gte(1);
 
-        // Throws a 'exceeded max number of discount codes permitted' error for now until shopify change their limits
-        try {
-            const dc2 = await createPriceRuleDiscountCode(pr, "unit2")
-            expect(dc2).to.be.an("object");
-            expect(dc2.code).to.be.a("string");
-            expect(dc2.id).to.be.a("number").and.to.be.gte(1);
-        } catch (err) {
-            console.log(err)
-        }
+    //     // Throws a 'exceeded max number of discount codes permitted' error for now until shopify change their limits
+    //     try {
+    //         const dc2 = await createPriceRuleDiscountCode(pr, "unit2")
+    //         expect(dc2).to.be.an("object");
+    //         expect(dc2.code).to.be.a("string");
+    //         expect(dc2.id).to.be.a("number").and.to.be.gte(1);
+    //     } catch (err) {
+    //         console.log(err)
+    //     }
 
-    });
+    // });
 
-    it("should get a price rule", async () => {
-        const id = (await createPriceRule()).id;
-        const pr = await prService.get(id);
+    it("should get a price rule, but can't be tested without a Plus account.")//, async () => {
+    //     const id = (await createPriceRule()).id;
+    //     const pr = await prService.get(id);
 
-        expect(pr).to.be.an("object");
-        expect(pr.title).to.be.a("string");
-        expect(pr.id).to.be.a("number").and.to.be.gte(1);
-    });
+    //     expect(pr).to.be.an("object");
+    //     expect(pr.title).to.be.a("string");
+    //     expect(pr.id).to.be.a("number").and.to.be.gte(1);
+    // });
 
-    it("should list PriceRules", async () => {
-        await createPriceRule();
+    it("should list PriceRules, but can't be tested without a Plus account.")//, async () => {
+    //     await createPriceRule();
 
-        const list = await prService.list();
+    //     const list = await prService.list();
 
-        expect(Array.isArray(list)).to.be.true;
-        list.forEach(pr => {
-            expect(pr).to.be.an("object");
-            expect(pr.id).to.be.gte(1);
-            expect(pr.title).to.be.a("string");
-        })
-    });
+    //     expect(Array.isArray(list)).to.be.true;
+    //     list.forEach(pr => {
+    //         expect(pr).to.be.an("object");
+    //         expect(pr.id).to.be.gte(1);
+    //         expect(pr.title).to.be.a("string");
+    //     })
+    // });
 
-    it("should update a price rule", async () => {
-        const pr = await createPriceRule();
-        pr.value = "-5.0";
+    it("should update a price rule, but can't be tested without a Plus account.")//, async () => {
+    //     const pr = await createPriceRule();
+    //     pr.value = "-5.0";
 
-        const updated = await prService.update(pr.id, pr);
-        expect(updated).to.be.an("object");
-        expect(updated.id).to.be.gte(1);
-        expect(updated.value).to.equal(pr.value);
-    })
+    //     const updated = await prService.update(pr.id, pr);
+    //     expect(updated).to.be.an("object");
+    //     expect(updated.id).to.be.gte(1);
+    //     expect(updated.value).to.equal(pr.value);
+    // })
 
-    it("should update a price rule discount code", async () => {
-        const pr = await createPriceRule();
+    it("should update a price rule discount code, but can't be tested without a Plus account.")//, async () => {
+    //     const pr = await createPriceRule();
 
-        // Create discount code 
-        const dc = await createPriceRuleDiscountCode(pr, "before")
-        expect(dc).to.be.an("object");
-        expect(dc.code).to.be.a("string");
-        expect(dc.id).to.be.a("number").and.to.be.gte(1);
+    //     // Create discount code 
+    //     const dc = await createPriceRuleDiscountCode(pr, "before")
+    //     expect(dc).to.be.an("object");
+    //     expect(dc.code).to.be.a("string");
+    //     expect(dc.id).to.be.a("number").and.to.be.gte(1);
 
-        // Update discount code 
-        let updatedCode = "after"
-        let dcService = new PriceRuleDiscounts(config.shopDomain, config.accessToken, pr.id);
-        let updated = await dcService.update(dc.id, { code: updatedCode })
-        expect(updated).to.be.an("object");
-        expect(updated.code).to.be.a("string").and.to.be.eq(updatedCode);
-    })
+    //     // Update discount code 
+    //     let updatedCode = "after"
+    //     let dcService = new PriceRuleDiscounts(config.shopDomain, config.accessToken, pr.id);
+    //     let updated = await dcService.update(dc.id, { code: updatedCode })
+    //     expect(updated).to.be.an("object");
+    //     expect(updated.code).to.be.a("string").and.to.be.eq(updatedCode);
+    // })
 });
