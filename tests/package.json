@@ -21,7 +21,8 @@
     "test:webhooks": "node ./node_modules/.bin/mocha built/webhooks.js",
     "test:discounts": "node ./node_modules/.bin/mocha built/discounts.js",
     "test:redirects": "node ./node_modules/.bin/mocha built/redirects.js",
-    "test:gift_cards": "node ./node_modules/.bin/mocha built/gift_cards.js"
+    "test:gift_cards": "node ./node_modules/.bin/mocha built/gift_cards.js",
+    "test:price_rules": "node ./node_modules/.bin/mocha built/price_rules.js"
   },
   "dependencies": {
     "shopify-prime": "file:../"

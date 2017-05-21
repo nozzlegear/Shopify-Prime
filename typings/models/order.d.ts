@@ -4,6 +4,7 @@ import { Customer } from "./customer";
 import { ShopifyObject } from "./base";
 import { LineItem } from "./line_item";
 import { Fulfillment } from "./fulfillment";
+import { Refund } from "./refund";
 import { ShippingLine } from "./shipping_line";
 import { DiscountCode } from "./discount_code";
 import { ClientDetails } from "./client_details";
@@ -68,6 +69,8 @@ export interface Order extends ShopifyObject {
 
     /// The fulfillment status for this order. Known values are 'fulfilled', 'partial' or null.
     fulfillment_status?: "fulfilled" | "partial" | string;
+
+    refunds?: Refund[];
 
     /// Tags are additional short descriptors, commonly used for filtering and searching, formatted as a string of comma-separated values.    
     tags?: string;

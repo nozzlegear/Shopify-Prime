@@ -1,6 +1,6 @@
 import uri = require("jsuri");
 import fetch from "node-fetch";
-import { resolve } from "path"; 
+import { resolve } from "path";
 import ShopifyError from "./shopify_error";
 
 //Get package.json from 2-levels up as this file will be in dist/infrastructure.
