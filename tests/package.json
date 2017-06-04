@@ -14,6 +14,7 @@
     "test:credits": "node ./node_modules/.bin/mocha built/application_credits.js",
     "test:errors": "node ./node_modules/.bin/mocha built/shopify_error.js",
     "test:orders": "node ./node_modules/.bin/mocha built/orders.js",
+    "test:products": "node ./node_modules/.bin/mocha built/products.js",
     "test:recurring_charges": "node ./node_modules/.bin/mocha built/recurring_charges.js",
     "test:script_tags": "node ./node_modules/.bin/mocha built/script_tags.js",
     "test:shops": "node ./node_modules/.bin/mocha built/shops.js",
@@ -22,10 +23,13 @@
     "test:discounts": "node ./node_modules/.bin/mocha built/discounts.js",
     "test:redirects": "node ./node_modules/.bin/mocha built/redirects.js",
     "test:gift_cards": "node ./node_modules/.bin/mocha built/gift_cards.js",
-    "test:price_rules": "node ./node_modules/.bin/mocha built/price_rules.js"
+    "test:price_rules": "node ./node_modules/.bin/mocha built/price_rules.js",
+    "test:custom_collections": "node ./node_modules/.bin/mocha built/custom_collections.js",
+    "test:smart_collections": "node ./node_modules/.bin/mocha built/smart_collections.js"
   },
   "dependencies": {
-    "shopify-prime": "file:../"
+    "shopify-prime": "file:../",
+    "shopify-prime-dc": "file:../"
   },
   "devDependencies": {
     "@types/chai": "^3.4.34",

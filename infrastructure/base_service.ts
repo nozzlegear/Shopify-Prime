@@ -58,6 +58,12 @@ class BaseService {
 
         //Fetch will only throw an exception when there is a network-related error, not when Shopify returns a non-200 response.
         const result = await fetch(url.toString(), options);
+
+        // Shopify implement 204 - no content for DELETE requests 
+        if (result.status == 204) {
+            return
+        }
+
         let json = await result.text() as any;
 
         try {
