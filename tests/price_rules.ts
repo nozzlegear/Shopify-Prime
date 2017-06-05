@@ -1,18 +1,43 @@
-import { expect } from "chai";
-import * as config from "./_utils";
-import { PriceRules, PriceRuleDiscounts, Models } from "shopify-prime";
-import PriceRule = Models.PriceRule;
-import PriceRuleDiscountCode = Models.PriceRuleDiscountCode;
+import * as Prime from '../';
+import inspect from 'logspect/bin';
+import {
+    AsyncSetupFixture,
+    AsyncTeardownFixture,
+    AsyncTest,
+    IgnoreTest,
+    TestFixture,
+    Timeout
+    } from 'alsatian';
+import { Config, Expect } from './_utils';
 
-describe("Price Rules", function () {
-    this.timeout(30000);
+@TestFixture("PriceRules Tests")
+class OrderTests {
+    private service = new Prime.PriceRules(Config.shopDomain, Config.accessToken);
 
-    const prService: PriceRules = new PriceRules(config.shopDomain, config.accessToken);
-    const prToBeDeleted: PriceRule[] = [];
-    const dcToBeDeleted: { [prId: number]: PriceRuleDiscountCode[] } = {};
+    private discountService = new Prime.PriceRuleDiscounts(Config.shopDomain, Config.accessToken);
 
-    function mockPriceRule() {
-        const pr: PriceRule = {
+    private created: Prime.Models.PriceRule[] = [];
+
+    private createdDiscounts: { [prId: number]: Prime.Models.PriceRuleDiscountCode[] } = {};
+
+    @AsyncTeardownFixture
+    private async teardownAsync() {
+        await Promise.all(this.created.map(async created => {
+            // Delete children discounts
+            if (this.createdDiscounts[created.id]) {
+                await Promise.all(this.createdDiscounts[created.id].map(dc => {
+                    return this.discountService.delete(dc.id)
+                }));
+            }
+
+            await this.service.delete(created.id);
+        }));
+
+        inspect(`Deleted ${this.created.length} objects during teardown.`);
+    }
+
+    private async create(scheduleForDeletion = true) {
+        const obj = await this.service.create({
             title: "Base",
             value_type: "percentage",
             target_type: "line_item",
@@ -25,134 +50,114 @@ describe("Price Rules", function () {
                 greater_than_or_equal_to: 40.0
             },
             starts_at: new Date().toISOString()
+        })
+
+        if (scheduleForDeletion) {
+            this.created.push(obj);
         };
 
-        return pr;
+        return obj;
     }
-
-    async function createPriceRule() {
-        const pr = await prService.create(mockPriceRule());
-        prToBeDeleted.push(pr);
-        return pr;
-    }
-
-    function mockPriceRuleDiscountCode(code: string = "unit") {
-        const dc: PriceRuleDiscountCode = {
+    
+    private async createDiscountCode(ruleId: number, code: string = "unit") {
+        const dc = await this.discountService.create({
             code
-        };
-
-        return dc;
-    }
-
-    async function createPriceRuleDiscountCode(pr: PriceRule, code?: string) {
-        const service = new PriceRuleDiscounts(config.shopDomain, config.accessToken, pr.id);
-        const dc = await service.create(mockPriceRuleDiscountCode(code));
-
-        // Track discount codes, relative to their owner (price rule)
-        if (dcToBeDeleted[pr.id]) {
-            dcToBeDeleted[pr.id].push(dc)
-        } else {
-            dcToBeDeleted[pr.id] = [dc]
-        }
-        return dc;
-    }
-
-    afterEach((cb) => setTimeout(cb, 500));
-
-    after((cb) => {
-        const count = prToBeDeleted.length;
-
-        prToBeDeleted.forEach(async (pr) => {
-
-            // Delete children discounts
-            const dcService = new PriceRuleDiscounts(config.shopDomain, config.accessToken, pr.id);
-
-            if (dcToBeDeleted[pr.id]) {
-                dcToBeDeleted[pr.id].forEach(async (dc) => {
-                    await dcService.delete(dc.id)
-                });
-            }
-
-            // Finally, delete parent  
-            await prService.delete(pr.id)
         });
 
-        console.log(`Deleted ${count} PriceRules.`);
+        // Track discount codes, relative to their owner (price rule)
+        if (this.createdDiscounts[ruleId]) {
+            this.createdDiscounts[ruleId].push(dc)
+        } else {
+            this.createdDiscounts[ruleId] = [dc]
+        }
 
-        // Wait 1 second to help empty the API rate limit bucket
-        setTimeout(cb, 1000);
-    })
+        return dc;
+    }
 
-    it("should create a price rule", async () => {
+    @AsyncTest("should create a price rule")
+    @Timeout(5000)
+    public async Test1() {
+        const pr = await this.create();
+        Expect(pr).toBeType("object");
+        Expect(pr.title).toBeType("string");
+        Expect(pr.id).toBeType("number");
+        Expect(pr.id).toBeGreaterThanOrEqualTo(1);
 
-        const pr = await createPriceRule();
-        expect(pr).to.be.an("object");
-        expect(pr.title).to.be.a("string");
-        expect(pr.id).to.be.a("number").and.to.be.gte(1);
-
-        const dc = await createPriceRuleDiscountCode(pr)
-        expect(dc).to.be.an("object");
-        expect(dc.code).to.be.a("string");
-        expect(dc.id).to.be.a("number").and.to.be.gte(1);
+        const dc = await this.createDiscountCode(pr.id)
+        Expect(dc).toBeType("object");
+        Expect(dc.code).toBeType("string");
+        Expect(dc.id).toBeType("number");
+        Expect(dc.id).toBeGreaterThanOrEqualTo(1);
 
         // Throws a 'exceeded max number of discount codes permitted' error for now until shopify change their limits
         try {
-            const dc2 = await createPriceRuleDiscountCode(pr, "unit2")
-            expect(dc2).to.be.an("object");
-            expect(dc2.code).to.be.a("string");
-            expect(dc2.id).to.be.a("number").and.to.be.gte(1);
+            const dc2 = await this.createDiscountCode(pr.id, "unit2")
+            Expect(dc2).toBeType("object");
+            Expect(dc2.code).toBeType("string");
+            Expect(dc2.id).toBeType("number");
+            Expect(dc2.id).toBeGreaterThanOrEqualTo(1);
         } catch (err) {
             console.log(err)
         }
 
-    });
+    }
 
-    it("should get a price rule", async () => {
-        const id = (await createPriceRule()).id;
-        const pr = await prService.get(id);
+    @AsyncTest("should get a price rule")
+    @Timeout(5000)
+    public async Test2() {
+        const id = (await this.create()).id;
+        const pr = await this.service.get(id);
 
-        expect(pr).to.be.an("object");
-        expect(pr.title).to.be.a("string");
-        expect(pr.id).to.be.a("number").and.to.be.gte(1);
-    });
+        Expect(pr).toBeType("object");
+        Expect(pr.title).toBeType("string");
+        Expect(pr.id).toBeType("number")
+        Expect(pr.id).toBeGreaterThanOrEqualTo(1);
+    }
 
-    it("should list PriceRules", async () => {
-        await createPriceRule();
+    @AsyncTest("should list PriceRules")
+    @Timeout(5000)
+    public async Test3() {
+        await this.create();
 
-        const list = await prService.list();
+        const list = await this.service.list();
 
-        expect(Array.isArray(list)).to.be.true;
+        Expect(Array.isArray(list)).toBe(true);
         list.forEach(pr => {
-            expect(pr).to.be.an("object");
-            expect(pr.id).to.be.gte(1);
-            expect(pr.title).to.be.a("string");
+            Expect(pr).toBeType("object");
+            Expect(pr.id).toBeGreaterThanOrEqualTo(1);
+            Expect(pr.title).toBeType("string");
         })
-    });
+    }
 
-    it("should update a price rule", async () => {
-        const pr = await createPriceRule();
+    @AsyncTest("should update a price rule")
+    @Timeout(5000)
+    public async Test4() {
+        const pr = await this.create();
         pr.value = "-5.0";
 
-        const updated = await prService.update(pr.id, pr);
-        expect(updated).to.be.an("object");
-        expect(updated.id).to.be.gte(1);
-        expect(updated.value).to.equal(pr.value);
-    })
+        const updated = await this.service.update(pr.id, pr);
+        Expect(updated).toBeType("object");
+        Expect(updated.id).toBeGreaterThanOrEqualTo(1);
+        Expect(updated.value).toEqual(pr.value);
+    }
 
-    it("should update a price rule discount code", async () => {
-        const pr = await createPriceRule();
+    @AsyncTest("should update a price rule discount code")
+    @Timeout(5000)
+    public async Test5() {
+        const pr = await this.create();
 
         // Create discount code 
-        const dc = await createPriceRuleDiscountCode(pr, "before")
-        expect(dc).to.be.an("object");
-        expect(dc.code).to.be.a("string");
-        expect(dc.id).to.be.a("number").and.to.be.gte(1);
+        const dc = await this.createDiscountCode(pr.id, "before")
+        Expect(dc).toBeType("object");
+        Expect(dc.code).toBeType("string");
+        Expect(dc.id).toBeType("number")
+        Expect(dc.id).toBeGreaterThanOrEqualTo(1);
 
         // Update discount code 
         let updatedCode = "after"
-        let dcService = new PriceRuleDiscounts(config.shopDomain, config.accessToken, pr.id);
-        let updated = await dcService.update(dc.id, { code: updatedCode })
-        expect(updated).to.be.an("object");
-        expect(updated.code).to.be.a("string").and.to.be.eq(updatedCode);
-    })
-});
+        let updated = await this.discountService.update(dc.id, { code: updatedCode })
+        Expect(updated).toBeType("object");
+        Expect(updated.code).toBeType("string");
+        Expect(updated.code).toEqual(updatedCode);
+    }
+}

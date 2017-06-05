@@ -1,13 +1,30 @@
-import { expect } from "chai";
-import * as config from "./_utils";
-import { Charges } from "shopify-prime";
+import * as Prime from '../';
+import inspect from 'logspect/bin';
+import {
+    AsyncSetupFixture,
+    AsyncTeardownFixture,
+    AsyncTest,
+    IgnoreTest,
+    TestFixture,
+    Timeout
+    } from 'alsatian';
+import { Config, Expect } from './_utils';
 
-describe("Charges", function () {
-    it("should list charges, but cannot be tested with a private app.");
+@TestFixture("Charge Tests")
+class ChargeTests {
+    @AsyncTest("should list charges,")
+    @IgnoreTest("Cannot be tested with a private app.")
+    public async Test1() { }
 
-    it("should get a charge, but cannot be tested with a private app.")
+    @AsyncTest("should get a charge")
+    @IgnoreTest("Cannot be tested with a private app.")
+    public async Test2() { }
 
-    it("should create a charge, but cannot be tested with a private app.");
+    @AsyncTest("should create a charge")
+    @IgnoreTest("Cannot be tested with a private app.")
+    public async Test3() { }
 
-    it("should activate a charge, but cannot be tested with a private app.");
-})
+    @AsyncTest("should activate a charge")
+    @IgnoreTest("Cannot be tested with a private app.")
+    public async Test4() { }
+}

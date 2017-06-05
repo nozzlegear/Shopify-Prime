@@ -1,16 +1,39 @@
-import { expect } from "chai";
-import * as config from "./_utils";
-import { Articles, Blogs, Models } from "shopify-prime";
+import * as Prime from '../';
+import inspect from 'logspect/bin';
+import {
+    AsyncSetupFixture,
+    AsyncTeardownFixture,
+    AsyncTest,
+    IgnoreTest,
+    TestFixture,
+    Timeout
+    } from 'alsatian';
+import { Config, Expect } from './_utils';
 
-describe("Articles", function () {
-    this.timeout(30000);
+@TestFixture("Article Tests")
+class ArticleTests {
+    private service = new Prime.Articles(Config.shopDomain, Config.accessToken);
 
-    const service = new Articles(config.shopDomain, config.accessToken);
-    const createdArticles: Models.Article[] = [];
-    let blogId: number;
+    private created: Prime.Models.Article[] = [];
 
-    async function createArticle(scheduleForDeletion = true) {
-        const article = await service.create(blogId, {
+    private blogId: number;
+
+    @AsyncSetupFixture
+    private async setupAsync() {
+        const blogs = await new Prime.Blogs(Config.shopDomain, Config.accessToken).list();
+
+        this.blogId = blogs[0].id;
+    }
+
+    @AsyncTeardownFixture
+    private async teardownAsync() {
+        await Promise.all(this.created.map(created => this.service.delete(this.blogId, created.id)));
+
+        inspect(`Deleted ${this.created.length} articles during teardown.`);
+    }
+
+    private async create(scheduleForDeletion = true) {
+        const obj = await this.service.create(this.blogId, {
             title: "My article title - " + Date.now(),
             author: "John Smith",
             tags: "This Post, Has Been Tagged",
@@ -21,102 +44,104 @@ describe("Articles", function () {
         });
 
         if (scheduleForDeletion) {
-            createdArticles.push(article);
+            this.created.push(obj);
         }
 
-        return article;
+        return obj;
     }
 
-    before((cb) => {
-        new Blogs(config.shopDomain, config.accessToken).list().then((blogs) => {
-            blogId = blogs[0].id;
-        }).then(cb);
-    })
+    @AsyncTest("should create an article")
+    @Timeout(5000)
+    public async CreatesArticles() {
+        const article = await this.create();
 
-    afterEach((cb) => setTimeout(cb, 500));
+        Expect(article).toBeType("object");
+        Expect(article.title).toContain("My article title - ");
+        Expect(article.tags).toBeType("string");
+        Expect(article.body_html).toEqual("<h1>I like articles</h1>\n<p><strong>Yea</strong>, I like posting them through <span class=\"caps\">REST</span>.</p>");
+        Expect(article.image.src).toBeType('string');
+    }
 
-    after((cb) => {
-        createdArticles.forEach(async (article) => await service.delete(blogId, article.id));
-
-        console.log(`Deleted ${createdArticles.length} articles.`);
-
-        setTimeout(cb, 1000);
-    })
-
-    it("should create an article", async () => {
-        const article = await createArticle();
-
-        expect(article).to.be.an("object");
-        expect(article.title).to.contain("My article title - ");
-        expect(article.tags).to.be.a("string");
-        expect(article.body_html).to.equal("<h1>I like articles</h1>\n<p><strong>Yea</strong>, I like posting them through <span class=\"caps\">REST</span>.</p>");
-        expect(article.image.src).to.be.a('string');
-    })
-
-    it("should update an article", async () => {
-        const id = (await createArticle()).id;
+    @AsyncTest("should update an article")
+    @Timeout(5000)
+    public async UpdatesArticles() {
+        const id = (await this.create()).id;
         const title = "My updated title";
-        const article = await service.update(blogId, id, { title });
+        const article = await this.service.update(this.blogId, id, { title });
 
-        expect(article).to.be.an("object");
-        expect(article.title).to.equal(title);
-        expect(article.tags).to.be.a("string");
-        expect(article.body_html).to.equal("<h1>I like articles</h1>\n<p><strong>Yea</strong>, I like posting them through <span class=\"caps\">REST</span>.</p>");
-        expect(article.image.src).to.be.a('string');
-    })
+        Expect(article).toBeType("object");
+        Expect(article.title).toEqual(title);
+        Expect(article.tags).toBeType("string");
+        Expect(article.body_html).toEqual("<h1>I like articles</h1>\n<p><strong>Yea</strong>, I like posting them through <span class=\"caps\">REST</span>.</p>");
+        Expect(article.image.src).toBeType('string');
+    }
 
-    it("should get an article", async () => {
-        const id = (await createArticle()).id;
-        const article = await service.get(blogId, id);
+    @AsyncTest("should get an article")
+    @Timeout(5000)
+    public async GetsArticles() {
+        const id = (await this.create()).id;
+        const article = await this.service.get(this.blogId, id);
 
-        expect(article).to.be.an("object");
-        expect(article.title).to.contain("My article title - ");
-        expect(article.tags).to.be.a("string");
-        expect(article.body_html).to.equal("<h1>I like articles</h1>\n<p><strong>Yea</strong>, I like posting them through <span class=\"caps\">REST</span>.</p>");
-        expect(article.image.src).to.be.a('string');
-    })
+        Expect(article).toBeType("object");
+        Expect(article.title).toContain("My article title - ");
+        Expect(article.tags).toBeType("string");
+        Expect(article.body_html).toEqual("<h1>I like articles</h1>\n<p><strong>Yea</strong>, I like posting them through <span class=\"caps\">REST</span>.</p>");
+        Expect(article.image.src).toBeType('string');
+    }
 
-    it("should list articles", async () => {
-        const articles = await service.list(blogId);
+    @AsyncTest("should list articles")
+    @Timeout(5000)
+    public async ListsArticles() {
+        const articles = await this.service.list(this.blogId);
 
-        expect(Array.isArray(articles)).to.be.true;
-    })
+        Expect(articles).toBeAnArray();
+    }
 
-    it("should count articles", async () => {
-        const count = await service.count(blogId);
+    @AsyncTest("should count articles")
+    @Timeout(5000)
+    public async CountsArticles() {
+        const count = await this.service.count(this.blogId);
 
-        expect(count).to.be.a("number");
-        expect(count).to.be.gte(0);
-    })
+        Expect(count).toBeType("number");
+        Expect(count).toBeGreaterThanOrEqualTo(0);
+    }
 
-    it("should delete an article", async () => {
-        const id = (await createArticle(false)).id;
+    @AsyncTest("should delete an article")
+    @Timeout(5000)
+    public async DeletesArticles() {
+        const id = (await this.create(false)).id;
         let error;
 
         try {
-            await service.delete(blogId, id);
+            await this.service.delete(this.blogId, id);
         } catch (e) {
             error = e;
         }
 
-        expect(error).to.be.undefined;
-    })
+        Expect(error).toBeNullOrUndefined();
+    }
 
-    it("should list authors", async () => {
-        const authors = await service.listAuthors();
+    @AsyncTest("should list authors")
+    @Timeout(5000)
+    public async ListsAuthors() {
+        const authors = await this.service.listAuthors();
 
-        expect(Array.isArray(authors)).to.be.true;
-    })
+        Expect(authors).toBeAnArray();
+    }
 
-    it("should list tags", async () => {
-        const tags = await service.listTags();
+    @AsyncTest("should list tags")
+    @Timeout(5000)
+    public async ListsTags() {
+        const tags = await this.service.listTags();
 
-        expect(Array.isArray(tags)).to.be.true;
-    })
+        Expect(tags).toBeAnArray();
+    }
 
-    it("should list tags for a blog", async () => {
-        const tags = await service.listTagsForBlog(blogId);
+    @AsyncTest("should list tags for a blog")
+    @Timeout(5000)
+    public async ListsTagsForBlog() {
+        const tags = await this.service.listTagsForBlog(this.blogId);
 
-        expect(Array.isArray(tags)).to.be.true;
-    })
-})
+        Expect(tags).toBeAnArray();
+    }
+}

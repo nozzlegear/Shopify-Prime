@@ -7,12 +7,11 @@
         "forceConsistentCasingInFileNames": true,
         "preserveConstEnums": true,
         "outDir": "dist",
-        "declaration": true
+        "declaration": true,
+        "experimentalDecorators": true
     },
     "exclude": [
         "node_modules",
-        "dist",
-        "tests",
-        "test2"
+        "dist"
     ]
 }

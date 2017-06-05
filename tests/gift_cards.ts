@@ -1,20 +1,39 @@
-import { expect } from "chai";
-import * as config from "./_utils";
-import { GiftCards, Models } from "shopify-prime";
-import GiftCard = Models.GiftCard;
+import * as Prime from '../';
+import inspect from 'logspect/bin';
+import {
+    AsyncSetupFixture,
+    AsyncTeardownFixture,
+    AsyncTest,
+    IgnoreTest,
+    TestFixture,
+    Timeout
+    } from 'alsatian';
+import { Config, Expect } from './_utils';
 
-describe("Gift Cards", function () {
-    this.timeout(10000);
+@TestFixture("GiftCard Tests")
+class GiftCardTests {
+    @AsyncTest("should create a Gift Card")    
+    @IgnoreTest("cannot be tested without a Shopify Plus account.")
+    public async Test1() { }
 
-    it("should create a Gift Card, but cannot be tested without a Shopify Plus account.");
+    @AsyncTest("should get a Gift Card")
+    @IgnoreTest("cannot be tested without a Shopify Plus account.")
+    public async Test2() { }
 
-    it("should get a Gift Card, but cannot be tested without a Shopify Plus account.");
+    @AsyncTest("should search for a Gift")
+    @IgnoreTest(" but cannot be tested without a Shopify Plus account.")
+    public async Test3() { }
 
-    it("should search for a Gift Card, but cannot be tested without a Shopify Plus account.");
+    @AsyncTest("should count Gift Cards,")
+    @IgnoreTest("annot be tested without a Shopify Plus account.")
+    public async Test4() { }
 
-    it("should count Gift Cards, but cannot be tested without a Shopify Plus account.");
+    @AsyncTest("should list Gift Cards,")
+    @IgnoreTest("annot be tested without a Shopify Plus account.")
+    public async Test5() { }
 
-    it("should list Gift Cards, but cannot be tested without a Shopify Plus account.");
+    @AsyncTest("should delete a Gift Card")
+    @IgnoreTest("cannot be tested without a Shopify Plus account.")
+    public async Test6() { }
 
-    it("should delete a Gift Card, but cannot be tested without a Shopify Plus account.");
-}) 
+}

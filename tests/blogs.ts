@@ -1,86 +1,103 @@
-import { expect } from "chai";
-import * as config from "./_utils";
-import { Blogs, Models } from "shopify-prime";
+import * as Prime from '../';
+import inspect from 'logspect/bin';
+import {
+    AsyncSetupFixture,
+    AsyncTeardownFixture,
+    AsyncTest,
+    IgnoreTest,
+    TestFixture,
+    Timeout
+    } from 'alsatian';
+import { Config, Expect } from './_utils';
 
-describe("Blogs", async function () {
-    this.timeout(30000);
+@TestFixture("Blog tests")
+class BlogTests {
+    private service = new Prime.Blogs(Config.shopDomain, Config.accessToken);
 
-    const service = new Blogs(config.shopDomain, config.accessToken);
-    const createdBlogs: Models.Article[] = [];
+    private created: Prime.Models.Blog[] = [];
 
-    async function createBlog(scheduleForDeletion = true) {
-        const blog = await service.create({
+    @AsyncTeardownFixture
+    private async teardownAsync() {
+        await Promise.all(this.created.map(created => this.service.delete(created.id)));
+
+        inspect(`Deleted ${this.created.length} objects during teardown.`);
+    }
+
+    private async create(scheduleForDeletion = true) {
+        const obj = await this.service.create({
             title: "Shopify Prime Test Blog - " + Date.now(),
             commentable: "moderate"
         });
 
         if (scheduleForDeletion) {
-            createdBlogs.push(blog);
+            this.created.push(obj);
         };
 
-        return blog;
+        return obj;
     }
 
-    afterEach((cb) => setTimeout(cb, 500));
+    @AsyncTest("should create a blog")
+    @Timeout(5000)
+    public async Test1() {
+        const blog = await this.create();
 
-    after((cb) => {
-        createdBlogs.forEach(async (blog) => await service.delete(blog.id));
+        Expect(blog).toBeType("object");
+        Expect(blog.title).toContain("Shopify Prime Test Blog - ");
+        Expect(blog.commentable).toEqual("moderate");        
+    }
 
-        console.log(`Deleted ${createdBlogs.length} blogs.`);
+    @AsyncTest("should get a blog")
+    @Timeout(5000)
+    public async Test2() {
+        const id = (await this.create()).id;
+        const blog = await this.service.get(id);
 
-        setTimeout(cb, 1000);
-    })
+        Expect(blog).toBeType("object");
+        Expect(blog.title).toContain("Shopify Prime Test Blog - ");
+        Expect(blog.commentable).toEqual("moderate");
+    }
 
-    it("should create a blog", async () => {
-        const blog = await createBlog();
-
-        expect(blog).to.be.an("object");
-        expect(blog.title).to.contain("Shopify Prime Test Blog - ");
-        expect(blog.commentable).to.equal("moderate");        
-    })
-
-    it("should get a blog", async () => {
-        const id = (await createBlog()).id;
-        const blog = await service.get(id);
-
-        expect(blog).to.be.an("object");
-        expect(blog.title).to.contain("Shopify Prime Test Blog - ");
-        expect(blog.commentable).to.equal("moderate");
-    })
-
-    it("should update a blog", async () => {
+    @AsyncTest("should update a blog")
+    @Timeout(5000)
+    public async Test3() {
         const title = "My Updated Title";
-        const id = (await createBlog()).id;
-        const blog = await service.update(id, {title});
+        const id = (await this.create()).id;
+        const blog = await this.service.update(id, {title});
 
-        expect(blog).to.be.an("object");
-        expect(blog.title).to.equal(title);
-        expect(blog.commentable).to.equal("moderate");
-    })
+        Expect(blog).toBeType("object");
+        Expect(blog.title).toEqual(title);
+        Expect(blog.commentable).toEqual("moderate");
+    }
 
-    it("should list blogs", async () => {
-        const list = await service.list();
+    @AsyncTest("should list blogs")
+    @Timeout(5000)
+    public async Test4() {
+        const list = await this.service.list();
 
-        expect(Array.isArray(list)).to.be.true;
-    })
+        Expect(list).toBeAnArray();
+    }
 
-    it("should count blogs", async () => {
-        const count = await service.count();
+    @AsyncTest("should count blogs")
+    @Timeout(5000)
+    public async Test5() {
+        const count = await this.service.count();
 
-        expect(count).to.be.a("number");
-        expect(count).to.be.gte(1);
-    })
+        Expect(count).toBeType("number");
+        Expect(count).toBeGreaterThanOrEqualTo(1);
+    }
 
-    it("should delete a blog", async () => {
-        const blog = await createBlog(false);
+    @AsyncTest("should delete a blog")
+    @Timeout(5000)
+    public async Test6() {
+        const blog = await this.create(false);
         let error;
 
         try {
-            await service.delete(blog.id);
+            await this.service.delete(blog.id);
         } catch (e) {
             error = e;
         }
 
-        expect(error).to.be.undefined;
-    });
-})
+        Expect(error).toBeNullOrUndefined;
+    }
+}

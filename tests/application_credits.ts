@@ -1,18 +1,27 @@
-import { expect } from "chai";
-import * as config from "./_utils";
-import { ApplicationCredits } from "shopify-prime";
+import * as Prime from '../';
+import {
+    AsyncTest,
+    IgnoreTest,
+    TestFixture,
+    Timeout
+    } from 'alsatian';
+import { Config, Expect } from './_utils';
 
-describe("Application Credits", function () {
-    this.timeout(30000);
+@TestFixture("Application Credits")
+class ApplicationCreditTests {
+    @AsyncTest("Creates an application credit")
+    @IgnoreTest("Cannot be tested with a private app.")
+    public async CreatesCredits() { }
 
-    it("should create an application credit, but cannot be tested with a private app.");
+    @AsyncTest("Gets an application credit")
+    @IgnoreTest("Cannot be tested with a private app.")
+    public async GetsCredits() { }
 
-    it("should get an application credit, but cannot be tested with a private app.");
-
-    it("should list application credits", async function () {
-        const service = new ApplicationCredits(config.shopDomain, config.accessToken);
+    @AsyncTest("Lists application credits")
+    public async ListsCredits() {
+        const service = new Prime.ApplicationCredits(Config.shopDomain, Config.accessToken);
         const credits = await service.list();
 
-        expect(Array.isArray(credits)).to.be.true;
-    })
-})
+        Expect(credits).toBeAnArray();
+    }
+}

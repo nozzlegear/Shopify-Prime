@@ -1,16 +1,30 @@
-import { expect } from "chai";
-import * as config from "./_utils";
-import { Orders, Models } from "shopify-prime";
-import Order = Models.Order;
+import * as Prime from '../';
+import inspect from 'logspect/bin';
+import {
+    AsyncSetupFixture,
+    AsyncTeardownFixture,
+    AsyncTest,
+    IgnoreTest,
+    TestFixture,
+    Timeout
+    } from 'alsatian';
+import { Config, Expect } from './_utils';
 
-describe("Orders", function () {
-    this.timeout(30000);
+@TestFixture("Order Tests")
+class OrderTests {
+    private service = new Prime.Orders(Config.shopDomain, Config.accessToken);
 
-    const service = new Orders(config.shopDomain, config.accessToken);
-    const toBeDeleted: Order[] = [];
+    private created: Prime.Models.Order[] = [];
 
-    function mockOrder() {
-        const order: Order = {
+    @AsyncTeardownFixture
+    private async teardownAsync() {
+        await Promise.all(this.created.map(created => this.service.delete(created.id)));
+
+        inspect(`Deleted ${this.created.length} objects during teardown.`);
+    }
+
+    private async create(scheduleForDeletion = true) {
+        const obj = await this.service.create({
             billing_address: {
                 address1: "123 4th Street",
                 city: "Minneapolis",
@@ -43,137 +57,145 @@ describe("Orders", function () {
             total_price: 5.00,
             email: Date.now + "@example.com",
             note: "Test note about the customer.",
+        }, undefined, { send_receipt: false, send_fulfillment_receipt: false })
+
+        if (scheduleForDeletion) {
+            this.created.push(obj);
         };
 
-        return order;
+        return obj;
     }
 
-    async function createOrder() {
-        const order = await service.create(mockOrder(), undefined, { send_receipt: false, send_fulfillment_receipt: false });
-
-        toBeDeleted.push(order);
-
-        return order;
-    }
-
-    afterEach((cb) => setTimeout(cb, 500));
-
-    after((cb) => {
-        const count = toBeDeleted.length;
-
-        toBeDeleted.forEach(async (order) => await service.delete(order.id));
-
-        console.log(`Deleted ${count} orders.`);
-
-        // Wait 1 second to help empty the API rate limit bucket
-        setTimeout(cb, 1000);
-    })
-
-    it("should delete an order", async () => {
+    @AsyncTest("should delete an order")
+    @Timeout(5000)
+    public async Test1() {
         let error;
 
         try {
-            const order = await createOrder();
+            const order = await this.create();
 
-            await service.delete(order.id);
+            await this.service.delete(order.id);
         } catch (e) {
             error = e;
         }
 
-        expect(error).to.be.undefined;
-    });
+        Expect(error).toBeNullOrUndefined();
+    }
 
-    it("should create an order", async () => {
-        const order = await createOrder();
+    @AsyncTest("should create an order")
+    @Timeout(5000)
+    public async Test2() {
+        const order = await this.create();
 
-        expect(order).to.be.an("object");
-        expect(order.contact_email).to.be.a("string");
-        expect(order.id).to.be.a("number").and.to.be.gte(1);
-    });
+        Expect(order).toBeType("object");
+        Expect(order.contact_email).toBeType("string");
+        Expect(order.id).toBeType("number")
+        Expect(order.id).toBeGreaterThanOrEqualTo(1);
+    }
 
-    it("should get an order", async () => {
-        const id = (await createOrder()).id;
-        const order = await service.get(id);
+    @AsyncTest("should get an order")
+    @Timeout(5000)
+    public async Test3() {
+        const id = (await this.create()).id;
+        const order = await this.service.get(id);
 
-        expect(order).to.be.an("object");
-        expect(order.contact_email).to.be.a("string");
-        expect(order.id).to.be.a("number").and.to.be.gte(1);
-    });
+        Expect(order).toBeType("object");
+        Expect(order.contact_email).toBeType("string");
+        Expect(order.id).toBeType("number")
+        Expect(order.id).toBeGreaterThanOrEqualTo(1);
+    }
 
-    it("should get an order with only one field", async () => {
-        const id = (await createOrder()).id;
-        const order = await service.get(id, { fields: "id" });
+    @AsyncTest("should create an order with only one field")
+    @Timeout(5000)
+    public async Test4() {
+        const id = (await this.create()).id;
+        const order = await this.service.get(id, { fields: "id" })
 
-        expect(order).to.be.an("object");
-        expect(order.id).to.be.gte(1);
-        expect(Object.getOwnPropertyNames(order).every(key => key === "id")).to.be.true;
-    });
+        Expect(order).toBeType("object");
+        Expect(order.id).toBeGreaterThanOrEqualTo(1);
+        Expect(Object.getOwnPropertyNames(order).every(key => key === "id")).toBe(true);
+    }
 
-    it("should count orders", async () => {
-        await createOrder();
+    @AsyncTest("should count orders")
+    @Timeout(5000)
+    public async Test5() {
+        await this.create();
 
-        const count = await service.count();
+        const count = await this.service.count();
 
-        expect(count).to.be.gte(1);
-    });
+        Expect(count).toBeGreaterThanOrEqualTo(1);
+    }
 
-    it("should list orders", async () => {
-        await createOrder();
+    @AsyncTest("should list orders")
+    @Timeout(5000)
+    public async Test6() {
+        await this.create();
 
-        const list = await service.list();
+        const list = await this.service.list();
 
-        expect(Array.isArray(list)).to.be.true;
+        Expect(Array.isArray(list)).toBe(true);
         list.forEach(order => {
-            expect(order).to.be.an("object");
-            expect(order.id).to.be.gte(1);
-            expect(order.contact_email).to.be.a("string");
+            Expect(order).toBeType("object");
+            Expect(order.id).toBeGreaterThanOrEqualTo(1);
+            Expect(order.contact_email).toBeType("string");
         })
-    });
+    }
 
-    it("should update an order", async () => {
-        const id = (await createOrder()).id;
+    @AsyncTest("should update an order")
+    @Timeout(5000)
+    public async Test7() {
+        const id = (await this.create()).id;
         const note = "Updated note";
-        const order = await service.update(id, { note });
+        const order = await this.service.update(id, { note })
 
-        expect(order).to.be.an("object");
-        expect(order.id).to.be.gte(1);
-        expect(order.note).to.equal(note);
-    })
+        Expect(order).toBeType("object");
+        Expect(order.id).toBeGreaterThanOrEqualTo(1);
+        Expect(order.note).toEqual(note);
+    }
 
-    it("should close an order", async () => {
-        const id = (await createOrder()).id;
-        const order = await service.close(id);
+    @AsyncTest("should close an order")
+    @Timeout(5000)
+    public async Test8() {
+        const id = (await this.create()).id;
+        const order = await this.service.close(id);
 
-        expect(order).to.be.an("object");
-        expect(order.closed_at).to.be.a("string").and.not.be.undefined.and.not.be.null;
-    })
+        Expect(order).toBeType("object");
+        Expect(order.closed_at).toBeType("string")
+        Expect(order.closed_at).not.toBeNullOrUndefined();
+    }
 
-    it("should open an order", async () => {
-        const id = (await createOrder()).id;
+    @AsyncTest("should open an order")
+    @Timeout(5000)
+    public async Test9() {
+        const id = (await this.create()).id;
 
-        await service.close(id);
+        await this.service.close(id);
 
-        const order = await service.open(id);
+        const order = await this.service.open(id);
 
-        expect(order).to.be.an("object");
-        expect(order.closed_at).to.satisfy((closed_at) => closed_at === null || closed_at === undefined);
-    })
+        Expect(order).toBeType("object");
+        Expect(order.closed_at).toBeNullOrUndefined();
+    }
 
-    it("should cancel an order", async () => {
-        const id = (await createOrder()).id;
-        const order = await service.cancel(id);
+    @AsyncTest("should cancel an order")
+    @Timeout(5000)
+    public async Test10() {
+        const id = (await this.create()).id;
+        const order = await this.service.cancel(id);
     
-        expect(order).to.be.an("object");
-        expect(order.id).to.equal(id);
-    })
+        Expect(order).toBeType("object");
+        Expect(order.id).toEqual(id);
+    }
 
-    it("should cancel an order with options", async () => {
-        const id = (await createOrder()).id;
-        const order = await service.cancel(id, {
+    @AsyncTest("should cancel an order with options")
+    @Timeout(5000)
+    public async Test11() {
+        const id = (await this.create()).id;
+        const order = await this.service.cancel(id, {
             reason: "customer",
         })
 
-        expect(order).to.be.an("object");
-        expect(order.id).to.equal(id);
-    })
-});
+        Expect(order).toBeType("object");
+        Expect(order.id).toEqual(id);
+    }
+}

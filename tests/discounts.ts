@@ -1,20 +1,38 @@
-import { expect } from "chai";
-import * as config from "./_utils";
-import { Discounts, Models } from "shopify-prime";
-import Discount = Models.Discount;
+import * as Prime from '../';
+import inspect from 'logspect/bin';
+import {
+    AsyncSetupFixture,
+    AsyncTeardownFixture,
+    AsyncTest,
+    IgnoreTest,
+    TestFixture,
+    Timeout
+    } from 'alsatian';
+import { Config, Expect } from './_utils';
 
-describe("Discounts", function () {
-    this.timeout(10000);
+@TestFixture("Discount Tests")
+class DiscountTests {
+    @AsyncTest("should create a Discount")
+    @IgnoreTest("cannot be tested without a Shopify Plus account.")
+    public async Test1() { }
 
-    it("should create a Discount, but cannot be tested without a Shopify Plus account.")
+    @AsyncTest("should get a Discount")
+    @IgnoreTest("cannot be tested without a Shopify Plus account.")
+    public async Test2() { }
 
-    it("should get a Discount, but cannot be tested without a Shopify Plus account.");
+    @AsyncTest("should list Discounts,")
+    @IgnoreTest("annot be tested without a Shopify Plus account.")
+    public async Test3() { }
 
-    it("should list Discounts, but cannot be tested without a Shopify Plus account.");
+    @AsyncTest("should delete a Discount")
+    @IgnoreTest("cannot be tested without a Shopify Plus account.")
+    public async Test4() { }
 
-    it("should delete a Discount, but cannot be tested without a Shopify Plus account.");
+    @AsyncTest("should enable a Discount")
+    @IgnoreTest("cannot be tested without a Shopify Plus account.")
+    public async Test5() { }
 
-    it("should enable a Discount, but cannot be tested without a Shopify Plus account.");
-
-    it("should disable a Discount, but cannot be tested without a Shopify Plus account.");
-}) 
+    @AsyncTest("should disable a Discount")
+    @IgnoreTest("cannot be tested without a Shopify Plus account.")
+    public async Test6() { }
+}
