@@ -1,12 +1,11 @@
-import { Blog } from "../typings/models/blog";
-import * as Options from "../typings/options/base";
-import BaseService from "../infrastructure/base_service";
-import { BlogListOptions } from "../typings/options/blogs";
+import * as Options from '../options';
+import { BaseService } from '../infrastructure';
+import { Blog } from '../models';
 
 /**
  * A service for manipulating a Shopify shop's blogs. For manipulating a blog's posts, use the Articles class instead.
  */
-export default class Articles extends BaseService {
+export class Blogs extends BaseService {
     constructor(shopDomain: string, accessToken: string) {
         super(shopDomain, accessToken, "blogs");
     }
@@ -41,7 +40,7 @@ export default class Articles extends BaseService {
      * Gets a list of all blogs on the shop.
      * @param options Options for filtering the results.
      */
-    public list(options?: Options.FieldOptions & BlogListOptions) {
+    public list(options?: Options.FieldOptions & Options.BlogListOptions) {
         return this.createRequest<Blog[]>("GET", `.json`, "blogs", options);
     }
 
@@ -60,3 +59,5 @@ export default class Articles extends BaseService {
         return this.createRequest<void>("DELETE", `${id}.json`);
     }
 }
+
+export default Blogs;

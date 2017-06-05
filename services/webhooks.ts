@@ -1,14 +1,11 @@
-import { Webhook } from "../typings/models/webhook";
-import BaseService from "../infrastructure/base_service";
-
-// Enums
-import { WebhookOptions } from "../typings/options/webhooks";
-import { FieldOptions, ListOptions, DateOptions } from "../typings/options/base";
+import * as Options from '../options';
+import { BaseService } from '../infrastructure';
+import { Webhook } from '../models';
 
 /**
  * A service for manipulating Shopify webhooks.
  */
-export default class Webhooks extends BaseService {
+export class Webhooks extends BaseService {
     constructor(shopDomain: string, accessToken: string) {
         super(shopDomain, accessToken, "webhooks");
     }
@@ -17,7 +14,7 @@ export default class Webhooks extends BaseService {
      * Gets a count of all of the shop's webhooks.
      * @param options Options for filtering the results.
      */
-    public count(options?: WebhookOptions) {
+    public count(options?: Options.WebhookOptions) {
         return this.createRequest<number>("GET", "count.json", "count", options);
     }
 
@@ -25,7 +22,7 @@ export default class Webhooks extends BaseService {
      * Gets a list of up to 250 of the shop's webhooks.
      * @param options Options for filtering the results.
      */
-    public list(options?: WebhookOptions & ListOptions & DateOptions & FieldOptions) {
+    public list(options?: Options.WebhookOptions & Options.ListOptions & Options.DateOptions & Options.FieldOptions) {
         return this.createRequest<Webhook[]>("GET", ".json", "webhooks", options);
     }
 
@@ -33,7 +30,7 @@ export default class Webhooks extends BaseService {
      * Retrieves the webhook with the given id.
      * @param options Options for filtering the results.
      */
-    public get(id: number, options?: FieldOptions) {
+    public get(id: number, options?: Options.FieldOptions) {
         return this.createRequest<Webhook>("GET", `${id}.json`, "webhook", options);
     }
 
@@ -59,3 +56,5 @@ export default class Webhooks extends BaseService {
         return this.createRequest<void>("DELETE", `${id}.json`);
     }
 }
+
+export default Webhooks;

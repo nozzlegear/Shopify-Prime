@@ -1,4 +1,2 @@
-import BaseService from "./base_service";
-import ShopifyError from "./shopify_error";
-
-export { BaseService, ShopifyError };
+export * from "./base_service";
+export * from "./shopify_error";

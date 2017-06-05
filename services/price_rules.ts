@@ -1,14 +1,11 @@
-import { PriceRule } from "../typings/models/price_rule";
-import BaseService from "../infrastructure/base_service";
-
-// Enums 
-import { PriceRuleOptions } from "../typings/options/price_rules";
-import { FieldOptions, ListOptions } from "../typings/options/base";
+import * as Options from '../options';
+import { BaseService } from '../infrastructure';
+import { PriceRule } from '../models';
 
 /**
  * A service for manipulating Shopify Price Rules.
  */
-export default class PriceRules extends BaseService {
+export class PriceRules extends BaseService {
 
     constructor(shopDomain: string, accessToken: string) {
         super(shopDomain, accessToken, "price_rules");
@@ -18,7 +15,7 @@ export default class PriceRules extends BaseService {
      * Gets a list of up to 250 of the shop's Price Rules.
      * @param options Options for filtering the results.
      */
-    public list(options?: PriceRuleOptions & ListOptions & FieldOptions) {
+    public list(options?: Options.PriceRuleOptions & Options.ListOptions & Options.FieldOptions) {
         return this.createRequest<PriceRule[]>("GET", ".json", "price_rules", options);
     }
 
@@ -54,3 +51,5 @@ export default class PriceRules extends BaseService {
         return this.createRequest<void>("DELETE", `${id}.json`);
     }
 }
+
+export default PriceRules;

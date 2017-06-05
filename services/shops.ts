@@ -1,11 +1,11 @@
-import { Shop } from "../typings/models/shop";
-import BaseService from "../infrastructure/base_service";
-import { FieldOptions, ListOptions } from "../typings/options/base";
+import * as Options from '../options';
+import { BaseService } from '../infrastructure';
+import { Shop } from '../models';
 
 /**
  * A service for manipulating Shopify shops.
  */
-export default class Shops extends BaseService {
+export class Shops extends BaseService {
     constructor(shopDomain: string, accessToken: string) {
         super(shopDomain, accessToken, "");
     }
@@ -14,7 +14,7 @@ export default class Shops extends BaseService {
      * Returns shop data for the shop.
      * @param options Options for filtering the result.
      */
-    public get(options?: FieldOptions) {
+    public get(options?: Options.FieldOptions) {
         return this.createRequest<Shop>("GET", "shop.json", "shop", options);
     }
 
@@ -25,3 +25,5 @@ export default class Shops extends BaseService {
         return this.createRequest<void>("DELETE", "api_permissions/current.json");
     }
 }
+
+export default Shops;

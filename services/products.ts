@@ -1,11 +1,8 @@
-import { Product } from "../typings/models/product";
-import BaseService from "../infrastructure/base_service";
+import * as Options from '../options';
+import { BaseService } from '../infrastructure';
+import { Product } from '../models';
 
-// Enums
-import { FieldOptions } from "../typings/options/base";
-import { ProductCountOptions, ProductListOptions } from "../typings/options/products";
-
-export default class Products extends BaseService {
+export class Products extends BaseService {
     constructor(shopDomain: string, accessToken: string) {
         super(shopDomain, accessToken, "products");
     }
@@ -15,7 +12,7 @@ export default class Products extends BaseService {
      * @param options Options for filtering the results.
      * @see https://help.shopify.com/api/reference/product#count
      */
-    public count(options?: ProductCountOptions) {
+    public count(options?: Options.ProductCountOptions) {
         return this.createRequest<number>("GET", "count.json", "count", options);
     }
 
@@ -23,7 +20,7 @@ export default class Products extends BaseService {
      * Gets a list of up to 250 of the shop's Products.
      * @param options Options for filtering the results.
      */
-    public list(options?: ProductListOptions) {
+    public list(options?: Options.ProductListOptions) {
         return this.createRequest<Product[]>("GET", ".json", "products", options);
     }
 
@@ -96,3 +93,5 @@ export default class Products extends BaseService {
     //     return this.createRequest<Product>("POST", `${id}/cancel.json`, 'Product');
     // }
 }
+
+export default Products;

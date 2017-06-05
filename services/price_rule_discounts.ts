@@ -1,13 +1,11 @@
-import { PriceRuleDiscountCode } from "../typings/models/price_rule_discount_code";
-import BaseService from "../infrastructure/base_service";
-
-// Enums 
-import { FieldOptions, ListOptions } from "../typings/options/base";
+import * as Options from '../options';
+import { BaseService } from '../infrastructure';
+import { PriceRuleDiscountCode } from '../models';
 
 /**
  * A service for manipulating Shopify Price Rules.
  */
-export default class PriceRuleDiscounts extends BaseService {
+export class PriceRuleDiscounts extends BaseService {
 
     constructor(shopDomain: string, accessToken: string, priceRuleId: number) {
         super(shopDomain, accessToken, `price_rules/${priceRuleId}/discount_codes`);
@@ -17,7 +15,7 @@ export default class PriceRuleDiscounts extends BaseService {
      * Returns a list of discount codes belonging to a specified price rule.
      * @param options Options for filtering the results.
      */
-    public list(options?: ListOptions) {
+    public list(options?: Options.ListOptions) {
         return this.createRequest<PriceRuleDiscountCode[]>("GET", ".json", "discount_codes", options);
     }
 
@@ -63,3 +61,5 @@ export default class PriceRuleDiscounts extends BaseService {
         return this.createRequest<void>("DELETE", `${id}.json`);
     }
 }
+
+export default PriceRuleDiscounts;

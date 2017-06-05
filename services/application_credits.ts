@@ -1,11 +1,11 @@
-import { FieldOptions } from "../typings/options/base";
-import BaseService from "../infrastructure/base_service";
-import { ApplicationCredit } from "../typings/models/application_credit";
+import * as Options from '../options';
+import { ApplicationCredit } from '../models';
+import { BaseService } from '../infrastructure';
 
 /**
  * A service for offering credits for payments made via the Application Charge, Recurring Application Charge, and Usage Charge APIs.
  */
-export default class ApplicationCredits extends BaseService {
+export class ApplicationCredits extends BaseService {
     constructor(shopDomain: string, accessToken: string) {
         super(shopDomain, accessToken, "application_credits");
     }
@@ -22,7 +22,7 @@ export default class ApplicationCredits extends BaseService {
      * @param id The id of the credit to get.
      * @param options Options for filtering the result.
      */
-    public get(id: number, options?: FieldOptions) {
+    public get(id: number, options?: Options.FieldOptions) {
         return this.createRequest<ApplicationCredit>("GET", `${id}.json`, "application_credit", options);
     }
 
@@ -30,7 +30,9 @@ export default class ApplicationCredits extends BaseService {
      * Retrieves a list of all past and present application credits.
      * @param options Options for filtering the result.
      */
-    public list(options?: FieldOptions) {
+    public list(options?: Options.FieldOptions) {
         return this.createRequest<ApplicationCredit[]>("GET", ".json", "application_credits", options);
     }
 }
+
+export default ApplicationCredits;

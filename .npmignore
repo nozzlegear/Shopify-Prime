@@ -2,3 +2,13 @@ tests/
 ./tests/
 ./tests
 ./tests/**/*
+test2/
+./test2/
+
+enums/*.ts
+models/*.ts
+auth/*.ts
+infrastructure/*.ts
+options/*.ts
+services/*.ts
+index.ts

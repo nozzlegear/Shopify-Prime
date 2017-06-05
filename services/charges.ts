@@ -1,11 +1,11 @@
-import { Charge } from "../typings/models/charge";
-import BaseService from "../infrastructure/base_service";
-import { FieldOptions, ListOptions, DateOptions } from "../typings/options/base";
+import * as Options from '../options';
+import { BaseService } from '../infrastructure';
+import { Charge } from '../models';
 
 /**
  * A service for manipulating Shopify's ApplicationCharge API.
  */
-export default class Charges extends BaseService {
+export class Charges extends BaseService {
     constructor(shopDomain: string, accessToken: string) {
         super(shopDomain, accessToken, "application_charges");
     }
@@ -22,7 +22,7 @@ export default class Charges extends BaseService {
      * @param id The id of the charge to get.
      * @param options Options for filtering the result.
      */
-    public get(id: number, options?: FieldOptions) {
+    public get(id: number, options?: Options.FieldOptions) {
         return this.createRequest<Charge>("GET", `${id}.json`, "application_charge", options);
     }
 
@@ -30,7 +30,7 @@ export default class Charges extends BaseService {
      * Retrieves a list of all past and present charges.
      * @param options Options for filtering the result.
      */
-    public list(options?: ListOptions & DateOptions & FieldOptions) {
+    public list(options?: Options.ListOptions & Options.DateOptions & Options.FieldOptions) {
         return this.createRequest<Charge[]>("GET", ".json", "application_charges", options);
     }
 
@@ -42,3 +42,5 @@ export default class Charges extends BaseService {
         return this.createRequest<void>("POST", `${id}/activate.json`);
     }
 }
+
+export default Charges;

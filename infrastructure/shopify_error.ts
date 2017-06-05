@@ -1,4 +1,4 @@
-import { Response } from "node-fetch";
+import { Response } from 'node-fetch';
 
 export type ErrorType1 = { errors: string };
 export type ErrorType2 = { errors: { [index:string]: string | string[] } };
@@ -16,7 +16,7 @@ function isType3(err): err is ErrorType3 {
     return err.error && err.error_description;
 }
 
-class ShopifyError extends Error {
+export class ShopifyError extends Error {
     constructor(response: { status: number, statusText: string}, public body: ErrorType1 | ErrorType2 | ErrorType3) {
         super();
 

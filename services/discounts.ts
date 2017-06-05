@@ -1,11 +1,11 @@
-import { Discount } from "../typings/models/discount";
-import BaseService from "../infrastructure/base_service";
-import { FieldOptions, ListOptions } from "../typings/options/base";
+import * as Options from '../options';
+import { BaseService } from '../infrastructure';
+import { Discount } from '../models';
 
 /**
  * A service for manipulating Shopify discounts.
  */
-export default class Discounts extends BaseService {
+export class Discounts extends BaseService {
     constructor(shopDomain: string, accessToken: string) {
         super(shopDomain, accessToken, "discounts");
     }
@@ -21,7 +21,7 @@ export default class Discounts extends BaseService {
      * Gets a list of up to 250 of the shop's discounts.
      * @param options Options for filtering the results.
      */
-    public list(options?: ListOptions) {
+    public list(options?: Options.ListOptions) {
         return this.createRequest<Discount[]>("GET", ".json", "discounts", options);
     }
 
@@ -54,3 +54,5 @@ export default class Discounts extends BaseService {
         return this.createRequest<void>("DELETE", `${id}.json`);
     }
 }
+
+export default Discounts;

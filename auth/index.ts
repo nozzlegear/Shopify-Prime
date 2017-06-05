@@ -1,9 +1,8 @@
+import * as crypto from 'crypto-js';
+import BaseService from '../infrastructure/base_service';
+import fetch from 'node-fetch';
+import { AuthGrant, AuthScope } from '../enums';
 import uri = require("jsuri");
-import fetch from "node-fetch";
-import * as crypto from "crypto-js";
-import { AuthGrant } from "../typings/enums/auth_grant";
-import { AuthScope } from "../typings/enums/auth_scope";
-import BaseService from "../infrastructure/base_service";
 
 /**
  * Replaces special querystring characters when calculating an authenticity signature in @isAuthenticRequest and @isAuthenticProxyRequest.

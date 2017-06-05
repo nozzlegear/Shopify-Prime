@@ -1,11 +1,8 @@
-import { CustomCollection } from "../typings/models/product_collection";
-import BaseService from "../infrastructure/base_service";
+import * as Options from '../options';
+import { BaseService } from '../infrastructure';
+import { CustomCollection } from '../models';
 
-// Enums
-import { FieldOptions, PublishedOptions, DateOptions } from "../typings/options/base";
-import { CollectionListOptions } from "../typings/options/product_collection";
-
-export default class CustomCollections extends BaseService {
+export class CustomCollections extends BaseService {
     constructor(shopDomain: string, accessToken: string) {
         super(shopDomain, accessToken, "custom_collections");
     }
@@ -15,7 +12,7 @@ export default class CustomCollections extends BaseService {
      * @param options Options for filtering the results.
      * @see https://help.shopify.com/api/reference/customcollection#count
      */
-    public count(options?: { title?: string, product_id?: number } & DateOptions & PublishedOptions) {
+    public count(options?: { title?: string, product_id?: number } & Options.DateOptions & Options.PublishedOptions) {
         return this.createRequest<number>("GET", "count.json", "count", options);
     }
 
@@ -23,7 +20,7 @@ export default class CustomCollections extends BaseService {
      * Get a list of all custom collections that contain a given product
      * @param options Options for filtering the results.
      */
-    public list(options?: CollectionListOptions) {
+    public list(options?: Options.CollectionListOptions) {
         return this.createRequest<CustomCollection[]>("GET", ".json", "custom_collections", options);
     }
 
@@ -32,7 +29,7 @@ export default class CustomCollections extends BaseService {
      * @param id The collection's id.
      * @param options Options for filtering the results.
      */
-    public get(id: number, options?: FieldOptions) {
+    public get(id: number, options?: Options.FieldOptions) {
         return this.createRequest<CustomCollection>("GET", `${id}.json`, "custom_collection", options);
     }
 
@@ -62,3 +59,5 @@ export default class CustomCollections extends BaseService {
         return this.createRequest<void>("DELETE", `${id}.json`);
     }
 }
+
+export default CustomCollections;

@@ -1,14 +1,11 @@
-import { ScriptTag } from "../typings/models/script_tag";
-import BaseService from "../infrastructure/base_service";
-
-// Enums
-import { ScriptTagOptions } from "../typings/options/script_tags";
-import { FieldOptions, ListOptions, DateOptions } from "../typings/options/base";
+import * as Options from '../options';
+import { BaseService } from '../infrastructure';
+import { ScriptTag } from '../models';
 
 /**
  * A service for manipulating Shopify script tags.
  */
-export default class ScriptTags extends BaseService {
+export class ScriptTags extends BaseService {
     constructor(shopDomain: string, accessToken: string) {
         super(shopDomain, accessToken, "script_tags");
     }
@@ -17,7 +14,7 @@ export default class ScriptTags extends BaseService {
      * Gets a count of all of the shop's script tags.
      * @param options Options for filtering the results.
      */
-    public count(options?: ScriptTagOptions) {
+    public count(options?: Options.ScriptTagOptions) {
         return this.createRequest<number>("GET", "count.json", "count", options);
     }
 
@@ -25,7 +22,7 @@ export default class ScriptTags extends BaseService {
      * Gets a list of up to 250 of the shop's script tags.
      * @param options Options for filtering the results.
      */
-    public list(options?: ScriptTagOptions & ListOptions & DateOptions & FieldOptions) {
+    public list(options?: Options.ScriptTagOptions & Options.ListOptions & Options.DateOptions & Options.FieldOptions) {
         return this.createRequest<ScriptTag[]>("GET", ".json", "script_tags", options);
     }
 
@@ -33,7 +30,7 @@ export default class ScriptTags extends BaseService {
      * Retrieves the script tag with the given id.
      * @param options Options for filtering the results.
      */
-    public get(id: number, options?: FieldOptions) {
+    public get(id: number, options?: Options.FieldOptions) {
         return this.createRequest<ScriptTag>("GET", `${id}.json`, "script_tag", options);
     }
 
@@ -59,3 +56,5 @@ export default class ScriptTags extends BaseService {
         return this.createRequest<void>("DELETE", `${id}.json`);
     }
 }
+
+export default ScriptTags;

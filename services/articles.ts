@@ -1,12 +1,11 @@
-import * as Options from "../typings/options/base";
-import { Article } from "../typings/models/article";
-import BaseService from "../infrastructure/base_service";
-import { ArticleListOptions, ArticleTagListOptions } from "../typings/options/articles";
+import * as Options from '../options';
+import { Article } from '../models';
+import { BaseService } from '../infrastructure';
 
 /**
  * A service for manipulating a blog's articles.
  */
-export default class Articles extends BaseService {
+export class Articles extends BaseService {
     constructor(shopDomain: string, accessToken: string) {
         super(shopDomain, accessToken, "");
     }
@@ -45,7 +44,7 @@ export default class Articles extends BaseService {
      * @param blogId Id of the blog that the articles belong to.
      * @param options Options for filtering the results.
      */
-    public list(blogId: number, options?: Options.FieldOptions & Options.DateOptions & Options.ListOptions & Options.PublishedOptions & ArticleListOptions) {
+    public list(blogId: number, options?: Options.FieldOptions & Options.DateOptions & Options.ListOptions & Options.PublishedOptions & Options.ArticleListOptions) {
         return this.createRequest<Article[]>("GET", `blogs/${blogId}/articles.json`, "articles", options);
     }
 
@@ -78,7 +77,7 @@ export default class Articles extends BaseService {
      * Gets a list of all article tags.
      * @param options Options for filtering the results.
      */
-    public listTags(options?: ArticleTagListOptions) {
+    public listTags(options?: Options.ArticleTagListOptions) {
         return this.createRequest<string[]>("GET", `articles/tags.json`, "tags", options);
     }
 
@@ -87,7 +86,9 @@ export default class Articles extends BaseService {
      * @param blogId Id of the blog that the tags belong to.
      * @param options Options for filtering the results.
      */
-    public listTagsForBlog(blogId: number, options?: ArticleTagListOptions) {
+    public listTagsForBlog(blogId: number, options?: Options.ArticleTagListOptions) {
         return this.createRequest<string[]>("GET", `blogs/${blogId}/articles/tags.json`, "tags", options);
     }
 }
+
+export default Articles;

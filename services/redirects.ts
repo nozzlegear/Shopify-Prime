@@ -1,14 +1,11 @@
-import { Redirect } from "../typings/models/redirect";
-import BaseService from "../infrastructure/base_service";
-
-// Enums 
-import { RedirectOptions } from "../typings/options/redirects";
-import { FieldOptions, ListOptions } from "../typings/options/base";
+import * as Options from '../options';
+import { BaseService } from '../infrastructure';
+import { Redirect } from '../models';
 
 /**
  * A service for manipulating Shopify redirects.
  */
-export default class Redirects extends BaseService {
+export class Redirects extends BaseService {
     constructor(shopDomain: string, accessToken: string) {
         super(shopDomain, accessToken, "redirects");
     }
@@ -17,7 +14,7 @@ export default class Redirects extends BaseService {
      * Gets a count of all of the shop's redirects.
      * @param options Options for filtering the results.
      */
-    public count(options?: RedirectOptions) {
+    public count(options?: Options.RedirectOptions) {
         return this.createRequest<number>("GET", "count.json", "count", options);
     }
 
@@ -25,7 +22,7 @@ export default class Redirects extends BaseService {
      * Gets a list of up to 250 of the shop's redirects.
      * @param options Options for filtering the results.
      */
-    public list(options?: RedirectOptions & ListOptions & FieldOptions) {
+    public list(options?: Options.RedirectOptions & Options.ListOptions & Options.FieldOptions) {
         return this.createRequest<Redirect[]>("GET", ".json", "redirects", options);
     }
 
@@ -33,7 +30,7 @@ export default class Redirects extends BaseService {
      * Retrieves the redirect with the given id.
      * @param options Options for filtering the results.
      */
-    public get(id: number, options?: FieldOptions) {
+    public get(id: number, options?: Options.FieldOptions) {
         return this.createRequest<Redirect>("GET", `${id}.json`, "redirect", options);
     }
 
@@ -59,3 +56,5 @@ export default class Redirects extends BaseService {
         return this.createRequest<void>("DELETE", `${id}.json`);
     }
 }
+
+export default Redirects;

@@ -1,12 +1,8 @@
-import { Order } from "../typings/models/order";
-import BaseService from "../infrastructure/base_service";
-import { Transaction } from "../typings/models/transaction";
+import * as Options from '../options';
+import { BaseService } from '../infrastructure';
+import { Order, Transaction } from '../models';
 
-// Enums
-import { FieldOptions } from "../typings/options/base";
-import { OrderCountOptions, OrderListOptions, OrderCreateOptions, OrderCancelOptions } from "../typings/options/orders";
-
-export default class Orders extends BaseService {
+export class Orders extends BaseService {
     constructor(shopDomain: string, accessToken: string) {
         super(shopDomain, accessToken, "orders");
     }
@@ -15,7 +11,7 @@ export default class Orders extends BaseService {
      * Gets a count of all of the shop's orders.
      * @param options Options for filtering the results.
      */
-    public count(options?: OrderCountOptions) {
+    public count(options?: Options.OrderCountOptions) {
         return this.createRequest<number>("GET", "count.json", "count", options);
     }
 
@@ -23,7 +19,7 @@ export default class Orders extends BaseService {
      * Gets a list of up to 250 of the shop's orders.
      * @param options Options for filtering the results.
      */
-    public list(options?: OrderListOptions) {
+    public list(options?: Options.OrderListOptions) {
         return this.createRequest<Order[]>("GET", ".json", "orders", options);
     }
 
@@ -32,7 +28,7 @@ export default class Orders extends BaseService {
      * @param customerId The customer's id.
      * @param options Options for filtering the results.
      */
-    public listForCustomer(customerId: number, options?: OrderListOptions) {
+    public listForCustomer(customerId: number, options?: Options.OrderListOptions) {
         return this.createRequest<Order[]>("GET", ".json", "orders", Object.assign({ customer_id: customerId }, options));
     }
 
@@ -41,7 +37,7 @@ export default class Orders extends BaseService {
      * @param orderId The order's id.
      * @param options Options for filtering the results.
      */
-    public get(orderId: number, options?: FieldOptions) {
+    public get(orderId: number, options?: Options.FieldOptions) {
         return this.createRequest<Order>("GET", `${orderId}.json`, "order", options);
     }
 
@@ -50,7 +46,7 @@ export default class Orders extends BaseService {
      * @param order The order being created.
      * @param options Options for creating the order.
      */
-    public create(order: Order, transactions?: Transaction[], options?: OrderCreateOptions) {
+    public create(order: Order, transactions?: Transaction[], options?: Options.OrderCreateOptions) {
         return this.createRequest<Order>("POST", ".json", "order", { order: Object.assign({}, order, options, { transactions }) });
     }
 
@@ -92,7 +88,9 @@ export default class Orders extends BaseService {
      * @param id The order's id.
      * @param options Options for canceling the order.
      */
-    public cancel(id: number, options?: OrderCancelOptions) {
+    public cancel(id: number, options?: Options.OrderCancelOptions) {
         return this.createRequest<Order>("POST", `${id}/cancel.json`, 'order');
     }
 }
+
+export default Orders;

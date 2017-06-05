@@ -1,11 +1,11 @@
-import { FieldOptions } from "../typings/options/base";
-import BaseService from "../infrastructure/base_service";
-import { UsageCharge } from "../typings/models/usage_charge";
+import * as Options from '../options';
+import { BaseService } from '../infrastructure';
+import { UsageCharge } from '../models';
 
 /**
  * A service for manipulating Shopify's UsageCharges API.
  */
-export default class UsageCharges extends BaseService {
+export class UsageCharges extends BaseService {
     constructor(shopDomain: string, accessToken: string) {
         super(shopDomain, accessToken, "recurring_application_charges");
     }
@@ -24,7 +24,7 @@ export default class UsageCharges extends BaseService {
      * @param id The id of the charge to get.
      * @param options Options for filtering the result.
      */
-    public get(recurringChargeId: number, id: number, options?: FieldOptions) {
+    public get(recurringChargeId: number, id: number, options?: Options.FieldOptions) {
         return this.createRequest<UsageCharge>("GET", `${recurringChargeId}/usage_charges/${id}.json`, "usage_charge", options);
     }
 
@@ -33,7 +33,9 @@ export default class UsageCharges extends BaseService {
      * @param recurringChargeId The id of the recurring charge that this usage charge belongs to.
      * @param options Options for filtering the result.
      */
-    public list(recurringChargeId: number, options?: FieldOptions) {
+    public list(recurringChargeId: number, options?: Options.FieldOptions) {
         return this.createRequest<UsageCharge[]>("GET", `${recurringChargeId}/usage_charges.json`, "usage_charges", options);
     }
 }
+
+export default UsageCharges;
