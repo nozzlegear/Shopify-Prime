@@ -1,167 +1,194 @@
-import { expect } from "chai";
-import * as config from "./_utils";
-import { Products, Models } from "shopify-prime";
-import Product = Models.Product;
+import * as Prime from '../';
+import inspect from 'logspect/bin';
+import {
+    AsyncSetupFixture,
+    AsyncTeardownFixture,
+    AsyncTest,
+    IgnoreTest,
+    TestFixture,
+    Timeout
+    } from 'alsatian';
+import { Config, Expect } from './_utils';
 
-describe("Products", function () {
-    this.timeout(30000);
+@TestFixture("Product Tests")
+class ProductTests {
+    private service = new Prime.Products(Config.shopDomain, Config.accessToken);
 
-    const service = new Products(config.shopDomain, config.accessToken);
-    const toBeDeleted: Product[] = [];
+    private created: Prime.Models.Product[] = [];
 
-    function mockProduct() {
-        const product: Product = {
+    @AsyncTeardownFixture
+    private async teardownAsync() {
+        //await Promise.all(this.created.map(created => this.service.delete(created.id)));
 
-        };
-
-        return product;
+        inspect(`Deleted ${this.created.length} objects during teardown.`);
     }
 
-    // async function createOrder() {
-    //     const product = await service.create(mockProduct(), undefined, { send_receipt: false, send_fulfillment_receipt: false });
+    private async create(scheduleForDeletion = true) {
+        // const obj = await this.service.create({
 
-    //     toBeDeleted.push(product);
+        // });
 
-    //     return product;
-    // }
+        // if (scheduleForDeletion) {
+        //     this.created.push(obj);
+        // };
 
-    // afterEach((cb) => setTimeout(cb, 500));
+        // return obj;
 
-    // after((cb) => {
-    //     const count = toBeDeleted.length;
+        return {} as Prime.Models.Product;
+    }
 
-    //     toBeDeleted.forEach(async (product) => await service.delete(product.id));
+    @AsyncTest("should delete a product")
+    @Timeout(5000)
+    public async Test1() { 
+        const product = await this.create();
+        let error;
 
-    //     console.log(`Deleted ${count} Products.`);
-
-    //     // Wait 1 second to help empty the API rate limit bucket
-    //     setTimeout(cb, 1000);
-    // })
-
-    // it("should delete an product", async () => {
-    //     let error;
-
-    //     try {
-    //         const product = await createOrder();
-
-    //         await service.delete(product.id);
-    //     } catch (e) {
-    //         error = e;
-    //     }
-
-    //     expect(error).to.be.undefined;
-    // });
-
-    // it("should create an product", async () => {
-    //     const product = await createOrder();
-
-    //     expect(product).to.be.an("object");
-    //     expect(product.contact_email).to.be.a("string");
-    //     expect(product.id).to.be.a("number").and.to.be.gte(1);
-    // });
-
-    // it("should get an product", async () => {
-    //     const id = (await createOrder()).id;
-    //     const product = await service.get(id);
-
-    //     expect(product).to.be.an("object");
-    //     expect(product.contact_email).to.be.a("string");
-    //     expect(product.id).to.be.a("number").and.to.be.gte(1);
-    // });
-
-    // it("should get an product with only one field", async () => {
-    //     const id = (await createOrder()).id;
-    //     const product = await service.get(id, { fields: "id" });
-
-    //     expect(product).to.be.an("object");
-    //     expect(product.id).to.be.gte(1);
-    //     expect(Object.getOwnPropertyNames(product).every(key => key === "id")).to.be.true;
-    // });
-
-    it("should count Products", async () => {
-        // await createOrder();
-
-        const count = await service.count();
-        console.log(count)
-        expect(count).to.be.gte(1);
-    });
-
-    it("should list Products", async () => {
-        // await createOrder();
-
-        const list = await service.list();
-        console.log(list)
-        expect(Array.isArray(list)).to.be.true;
-        list.forEach(product => {
-            expect(product).to.be.an("object");
-            expect(product.id).to.be.gte(1);
-            // expect(product.contact_email).to.be.a("string");
-        })
-    });
-
-    it("should list Products with only specific fields", async () => {
-        // await createOrder();
-
-        let opts: any = {
-            fields: "id,title,vendor,product_type"
+        try {
+            //await this.service.delete(product.id);
+            throw new Error("Not implemented.");
+        } catch (e) {
+            error = e;
         }
 
-        const list = await service.list(opts);
-        console.log(list)
-        expect(Array.isArray(list)).to.be.true;
-        list.forEach(product => {
-            expect(product).to.be.an("object");
-            expect(product.id).to.be.gte(1);
-            expect(product.title).to.be.a("string");
-            expect(product.vendor).to.be.a("string");
-            expect(product.product_type).to.be.a("string");
+        Expect(error).toBeNullOrUndefined();
+    }
+
+    @AsyncTest("should create a product")
+    @Timeout(5000)
+    public async Test2() { 
+        const product = await this.create();
+
+        Expect(product).toBeType("object");
+        Expect(product.id).toBeType("number");
+        Expect(product.id).toBeGreaterThanOrEqualTo(1);
+    }
+
+    @AsyncTest("should get a product")
+    @Timeout(5000)
+    public async Test3() { 
+        throw new Error("Not implemented.");
+        // const id = (await this.create()).id;
+        // const product = await this.service.get(id);
+
+        // Expect(product).toBeType("object");
+        // Expect(product.contact_email).toBeType("string");
+        // Expect(product.id).toBeType("number");
+        // Expect(product.id).toBeGreaterThanOrEqualTo(1);
+    }
+
+    @AsyncTest("should get a product with only one field")
+    @Timeout(5000)
+    public async Test4() { 
+        throw new Error("Not implemented.");
+        // const id = (await this.create()).id;
+        // const product = await this.service.get(id, { fields: "id" });
+
+        // Expect(product).toBeType("object");
+        // Expect(product.id).toBeGreaterThanOrEqualTo(1);
+        // Expect(Object.getOwnPropertyNames(product).every(key => key === "id")).toBe(true);
+    }
+
+    @AsyncTest("should count Products")
+    @Timeout(5000)
+    public async Test5() { 
+        const count = await this.service.count();
+        
+        Expect(count).toBeGreaterThanOrEqualTo(1);
+    }
+
+    @AsyncTest("should list Products")
+    @Timeout(5000)
+    public async Test6() { 
+        const list = await this.service.list();
+        
+        Expect(list).toBeAnArray();
+        Expect(list).itemsToPassValidator<Prime.Models.Product>(item => {
+            Expect(item.id).toBeGreaterThanOrEqualTo(1);
         })
-    });
+    }
 
-    // it("should update an product", async () => {
-    //     const id = (await createOrder()).id;
-    //     const note = "Updated note";
-    //     const product = await service.update(id, { note });
+    @AsyncTest("should list Products with only specific fields")
+    @Timeout(5000)
+    public async Test7() {
+        const list = await this.service.list({
+            fields: "id,title,vendor,product_type"
+        });
+        
+        Expect(list).toBeAnArray();
+        Expect(list).itemsToPassValidator<Prime.Models.Product>(product => {
+            Expect(product).toBeType("object");
+            Expect(product.id).toBeGreaterThanOrEqualTo(1);
+            Expect(product.title).toBeType("string");
+            Expect(product.vendor).toBeType("string");
+            Expect(product.product_type).toBeType("string");
+        })
+    }
 
-    //     expect(product).to.be.an("object");
-    //     expect(product.id).to.be.gte(1);
-    //     expect(product.note).to.equal(note);
-    // })
+    @AsyncTest("should update a product")
+    @Timeout(5000)
+    public async Test8() { 
+        throw new Error("Not implemented.");
+        
+        // const id = (await this.create()).id;
+        // const note = "Updated note";
+        // const product = await this.service.update(id, { note });
 
-    // it("should close an product", async () => {
-    //     const id = (await createOrder()).id;
-    //     const product = await service.close(id);
+        // Expect(product).toBeType("object");
+        // Expect(product.id).toBeGreaterThanOrEqualTo(1);
+        // Expect(product.note).toEqual(note);
+    }
 
-    //     expect(product).to.be.an("object");
-    //     expect(product.closed_at).to.be.a("string").and.not.be.undefined.and.not.be.null;
-    // })
+    @AsyncTest("should close a product")
+    @Timeout(5000)
+    public async Test9() { 
+        throw new Error("Not implemented.");
 
-    // it("should open an product", async () => {
-    //     const id = (await createOrder()).id;
+        // const id = (await this.create()).id;
+        // const product = await this.service.close(id);
 
-    //     await service.close(id);
+        // Expect(product).toBeType("object");
+        // Expect(product.closed_at).toBeType("string")
+        // Expect(product.closed_at).not.toBeNullOrUndefined();
+    }
 
-    //     const product = await service.open(id);
+    @AsyncTest("should open a product")
+    @Timeout(5000)
+    public async Test10() { 
+        throw new Error("Not implemented.");
+        
+        // const id = (await this.create()).id;
 
-    //     expect(product).to.be.an("object");
-    //     expect(product.closed_at).to.satisfy((closed_at) => closed_at === null || closed_at === undefined);
-    // })
+        // await this.service.close(id);
 
-    // it("should cancel an product", async () => {
-    //     const id = (await createOrder()).id;
-    //     const product = await service.cancel(id);
+        // const product = await this.service.open(id);
 
-    //     expect(product).to.be.an("object");
-    //     expect(product.id).to.equal(id);
-    // })
+        // Expect(product).toBeType("object");
+        // Expect(product.closed_at).toBeNullOrUndefined();
+    }
 
-    // it("should cancel an product with options", async () => {
-    //     const id = (await createOrder()).id;
-    //     const product = await service.cancel(id, {
-    //         reason: "customer",
-    //     })
+    @AsyncTest("should cancel a product")
+    @Timeout(5000)
+    public async Test11() { 
+        throw new Error("Not implemented.");
 
-    //     expect(product).to.be.an("object");
-    //     expect(product.id).to.equal(id);
-    // })
-});
+        // const id = (await this.create()).id;
+        // const product = await this.service.cancel(id);
+
+        // Expect(product).toBeType("object");
+        // Expect(product.id).toEqual(id);
+    }
+
+    @AsyncTest("should cancel a product with options")
+    @Timeout(5000)
+    public async Test12() { 
+        throw new Error("Not implemented.");
+        
+        // const id = (await this.create()).id;
+        // const product = await this.service.cancel(id, {
+        //     reason: "customer",
+        // })
+
+        // Expect(product).toBeType("object");
+        // Expect(product.id).toEqual(id);
+    }
+}
