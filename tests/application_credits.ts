@@ -5,7 +5,7 @@ import {
     TestFixture,
     Timeout
     } from 'alsatian';
-import { Config, Expect } from './_utils';
+import { Config, Expect } from './test_utils';
 
 @TestFixture("Application Credits")
 export class ApplicationCreditTests {

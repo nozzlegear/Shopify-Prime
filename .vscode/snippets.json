@@ -13,7 +13,7 @@
 			"\tTestFixture,",
 			"\tTimeout",
 			"\t} from 'alsatian';",
-			"import { Config, Expect } from './_utils';",
+			"import { Config, Expect } from './test_utils';",
 			"",
 			"@TestFixture(\"$1 Tests\") ",
 			"class $1Tests {",

@@ -8,7 +8,7 @@ import {
     TestFixture,
     Timeout
     } from 'alsatian';
-import { Config, createGuid, Expect } from './_utils';
+import { Config, createGuid, Expect } from './test_utils';
 
 @TestFixture("Webhook Tests") 
 export class WebhookTests {

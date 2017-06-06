@@ -56,7 +56,7 @@
         "barrel:services": "barrelsby -d services --delete",
         "barrel:infrastructure": "barrelsby -d infrastructure --delete",
         "barrel": "concurrently --raw \"npm run barrel:enums\" \"npm run barrel:models\" \"npm run barrel:options\" \"npm run barrel:services\" \"npm run barrel:infrastructure\"",
-        "pretest": "npm run build",
+        
         "pretest:raw": "npm run build",
         "test": "alsatian -T ./dist/tests/*.js | tap-spec",
         "test:raw": "alsatian -T ./dist/tests/*.js",

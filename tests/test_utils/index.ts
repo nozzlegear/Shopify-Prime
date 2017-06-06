@@ -1,3 +1,4 @@
+import { IgnoreTests } from 'alsatian';
 import { Matcher } from 'alsatian/core';
 import { MatchError } from 'alsatian/core/alsatian-core';
 
@@ -45,6 +46,7 @@ export function createGuid() {
         s4() + '-' + s4() + s4() + s4();
 }
 
+@IgnoreTests("Not a test fixture")
 export class MatcherExtension extends Matcher {
     constructor(value) {
         super(value);
