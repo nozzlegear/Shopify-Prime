@@ -1,63 +1,93 @@
-import { expect } from "chai";
-import * as config from "./_utils";
-import { Redirects, Models } from "shopify-prime";
-import Redirect = Models.Redirect;
+import * as Prime from '../';
+import inspect from 'logspect/bin';
+import {
+    AsyncSetupFixture,
+    AsyncTeardownFixture,
+    AsyncTest,
+    IgnoreTest,
+    TestFixture,
+    Timeout
+    } from 'alsatian';
+import { Config, Expect } from './_utils';
 
-describe("Redirects", function () {
-    this.timeout(10000);
+@TestFixture("Redirect Tests") 
+class RedirectTests {
+    private service = new Prime.Redirects(Config.shopDomain, Config.accessToken);
 
-    const service = new Redirects(config.shopDomain, config.accessToken);
-    let r: Redirect
+    private created: Prime.Models.Redirect[] = [];
 
-    afterEach((cb) => setTimeout(cb, 500));
+    @AsyncTeardownFixture
+    private async teardownAsync() {
+        await Promise.all(this.created.map(created => this.service.delete(created.id)));
 
-    it("should list redirects", async () => {
-        const list = await service.list();
+        inspect(`Deleted ${this.created.length} objects during teardown.`);
+    }
 
-        expect(Array.isArray(list)).to.be.true;
-    })
-
-    it("should count redirects", async () => {
-        const count = await service.count();
-
-        expect(count).to.be.a("number");
-        expect(count).to.be.gte(0);
-    })
-
-    it("should create a redirect", async () => {
-        let newRedirect: Redirect = {
-            path: `${config.shopDomain}/primetest`,
+    private async create(scheduleForDeletion = true) {
+        const obj = await this.service.create({
+            path: `${Config.shopDomain}/primetest`,
             target: `https://www.gooogle.com?q=croatia`
-        }
+        });
 
-        r = await service.create(newRedirect);
+        if (scheduleForDeletion) {
+            this.created.push(obj);
+        };
 
-        expect(r).to.not.be.null;
-        expect(r.id).to.be.a("number");
-    });
+        return obj;
+    }
 
-    it("should get a redirect by Id", async () => {
-        const res = await service.get(r.id)
+    @AsyncTest("should list redirects")
+    @Timeout(5000)
+    public async Test1() {
+        const list = await this.service.list();
 
-        expect(res).to.not.be.null;
-        expect(res.id).to.not.be.null;
-        expect(res.id).to.be.a("number");
-        expect(res.path).to.be.a("string");
-        expect(res.target).to.be.a("string");
-    })
+        Expect(Array.isArray(list)).toBe(true);
+    }
 
-    it("should delete a redirect by Id", async () => {
-        await service.delete(r.id)
+    @AsyncTest("should count redirects")
+    @Timeout(5000)
+    public async Test2() {
+        const count = await this.service.count();
+
+        Expect(count).toBeType("number");
+        Expect(count).toBeGreaterThanOrEqualTo(0);
+    }
+
+    @AsyncTest("should create a redirect")
+    @Timeout(5000)
+    public async Test3() {
+        const newRedirect = await this.create();
+
+        Expect(newRedirect.id).toBeType("number");
+        Expect(newRedirect.target).toBeType("string");
+        Expect(newRedirect.path).toBeType("string");
+    }
+
+    @AsyncTest("should get a redirect by Id")
+    @Timeout(5000)
+    public async Test4() {
+        const created = await this.create();
+        const res = await this.service.get(created.id)
+
+        Expect(res.id).toBeType("number");
+        Expect(res.path).toBeType("string");
+        Expect(res.target).toBeType("string");
+    }
+
+    @AsyncTest("should delete a redirect by Id")
+    @Timeout(5000)
+    public async Test5() {
+        const created = await this.create(false);
+        let error;
 
         try {
-            await service.get(r.id)
-
-            throw new Error("Expected an error")
-
-        } catch (err) {
-            // Expect a 404 Not Found
-            expect(err.statusCode).to.eq(404)
+            await this.service.delete(created.id);
+        } catch (_e) {
+            error = _e;
+            
+            this.created.push(created);
         }
-    })
 
-}) 
+        Expect(error).toBeNullOrUndefined();
+    }
+}

@@ -1,133 +1,131 @@
-import { expect } from "chai";
-import * as config from "./_utils";
-import { ScriptTags, Models } from "shopify-prime";
-import ScriptTag = Models.ScriptTag;
+import * as Prime from '../';
+import inspect from 'logspect/bin';
+import {
+    AsyncSetupFixture,
+    AsyncTeardownFixture,
+    AsyncTest,
+    IgnoreTest,
+    TestFixture,
+    Timeout
+    } from 'alsatian';
+import { Config, Expect } from './_utils';
 
-describe("Script Tags", function () {
-    this.timeout(30000);
+@TestFixture("ScriptTag Tests") 
+class ScriptTagTests {
+    private service = new Prime.ScriptTags(Config.shopDomain, Config.accessToken);
 
-    const service = new ScriptTags(config.shopDomain, config.accessToken);
-    const toBeDeleted: ScriptTag[] = [];
-    function createTag() {
-        const tag: ScriptTag = {
-            src: `https://localhost:3000/scripts/${new Date().getMilliseconds()}.js`,
-            event: "onload",
-            display_scope: "all"
-        }
+    private created: Prime.Models.ScriptTag[] = [];
 
-        return tag;
+    @AsyncTeardownFixture
+    private async teardownAsync() {
+        await Promise.all(this.created.map(created => this.service.delete(created.id)));
+
+        inspect(`Deleted ${this.created.length} objects during teardown.`);
     }
 
-    afterEach((cb) => setTimeout(cb, 500));
+    private async create(scheduleForDeletion = true) {
+        const obj = await this.service.create({
+            src: `https://localhost:3000/scripts/${Date.now()}.js`,
+            event: "onload",
+            display_scope: "all"   
+        });
 
-    after((cb) => {
-        const count = toBeDeleted.length;
+        if (scheduleForDeletion) {
+            this.created.push(obj);
+        };
 
-        toBeDeleted.forEach(async (tag) => await service.delete(tag.id));
+        return obj;
+    }
 
-        console.log(`Deleted ${count} script tags.`);
-
-        // Wait 1 second to help empty the API rate limit bucket
-        setTimeout(cb, 1000);
-    })
-
-    it("should delete a script tag", async () => {
+    @AsyncTest("should delete a script tag")
+    @Timeout(5000)
+    public async Test1() {
+        const created = await this.create(false);
         let error;
 
         try {
-            const tag = await service.create(createTag());
-
-            await service.delete(tag.id);
+            await this.service.delete(created.id);
         }
         catch (e) {
-            console.log("Error deleting tag", e);
+            inspect("Error deleting tag", e);
 
             error = e;
+
+            this.created.push(created);
         }
 
-        expect(error).to.be.undefined;
-    })
+        Expect(error).toBeNullOrUndefined();
+    }
 
-    it("should create a script tag", async () => {
-        const tag = await service.create(createTag());
+    @AsyncTest("should create a script tag")
+    @Timeout(5000)
+    public async Test2() {
+        const tag = await this.create();
 
-        toBeDeleted.push(tag);
+        Expect(tag.id).toBeType("number");
+        Expect(tag.src).toMatch(/^https:\/\/localhost:3000\/scripts\//i);
+        Expect(tag.created_at).toBeType("string");
+        Expect(tag.updated_at).toBeType("string");
+        Expect(tag.event).toEqual("onload");
+    }
 
-        expect(tag).to.not.be.null;
-        expect(tag).to.not.be.undefined;
-        expect(tag.id).to.be.a("number");
-        expect(tag.src).to.match(/^https:\/\/localhost:3000\/scripts\//i);
-        expect(tag.created_at).to.be.a("string");
-        expect(tag.updated_at).to.be.a("string");
-        expect(tag.event).to.equal("onload");
-    })
+    @AsyncTest("should get a script tag")
+    @Timeout(5000)
+    public async Test3() {
+        let tag = await this.create();
 
-    it("should get a script tag", async () => {
-        let tag = await service.create(createTag());
+        tag = await this.service.get(tag.id);
 
-        toBeDeleted.push(tag);
+        Expect(tag).not.toBeNull();
+        Expect(tag).not.toBeNullOrUndefined();
+    }
 
-        tag = await service.get(tag.id);
+    @AsyncTest("should get a tag with only the src field")
+    @Timeout(5000)
+    public async Test4() {
+        let tag = await this.create();
 
-        expect(tag).to.not.be.null;
-        expect(tag).to.not.be.undefined;
-    });
+        tag = await this.service.get(tag.id, { fields: "src" });
 
-    it("should get a tag with only the src field", async () => {
-        let tag = await service.create(createTag());
+        Expect(tag).not.toBeNull();
+        Expect(tag).not.toBeNullOrUndefined();
+        Expect(Object.getOwnPropertyNames(tag).length).toEqual(1);
+        Expect(tag.src).toBeType("string");
+        Expect(tag.created_at).toBeNullOrUndefined();
+    }
 
-        toBeDeleted.push(tag);
+    @AsyncTest("should count script tags")
+    @Timeout(5000)
+    public async Test5() {
+        const count = await this.service.count();
 
-        tag = await service.get(tag.id, { fields: "src" });
+        Expect(count).toBeType("number");
+        Expect(count).toBeGreaterThanOrEqualTo(1);
+    }
 
-        expect(tag).to.not.be.null;
-        expect(tag).to.not.be.undefined;
-        expect(Object.getOwnPropertyNames(tag).length).to.equal(1);
-        expect(tag.src).to.be.a("string");
-        expect(tag.created_at).to.be.undefined;
-    })
+    @AsyncTest("should list script tags")
+    @Timeout(5000)
+    public async Test6() {
+        const list = await this.service.list();
 
-    it("should count script tags", async () => {
-        for (let i = 0; i < 3; i++) {
-            toBeDeleted.push(await service.create(createTag()));
-        }
+        Expect(list.length).toBeGreaterThanOrEqualTo(1);
+        Expect(list).itemsToPassValidator<Prime.Models.ScriptTag>(tag => {
+            Expect(tag.id).toBeType("number");
+            Expect(tag.src).toMatch(/^https:\/\/localhost:3000\/scripts\//i);
+            Expect(tag.created_at).toBeType("string");
+            Expect(tag.updated_at).toBeType("string");
+            Expect(tag.event).toEqual("onload");
+        });
+    }
 
-        const count = await service.count();
-
-        expect(count).to.be.a("number");
-        expect(count).to.be.at.least(3);
-    })
-
-    it("should list script tags", async () => {
-        for (let i = 0; i < 3; i++) {
-            toBeDeleted.push(await service.create(createTag()));
-        }
-
-        const list = await service.list();
-
-        expect(list.length).to.be.at.least(3);
-
-        const tag = list[0];
-
-        expect(tag).to.not.be.null;
-        expect(tag).to.not.be.undefined;
-        expect(tag.id).to.be.a("number");
-        expect(tag.src).to.match(/^https:\/\/localhost:3000\/scripts\//i);
-        expect(tag.created_at).to.be.a("string");
-        expect(tag.updated_at).to.be.a("string");
-        expect(tag.event).to.equal("onload");
-    })
-
-    it("should update a script tag", async () => {
+    @AsyncTest("should update a script tag")
+    @Timeout(5000)
+    public async Test7() {
         const newSrc = "https://localhost:3000/scripts/my-updated-src.js";
-        let tag = await service.create(createTag());
+        let tag = await this.create();
 
-        toBeDeleted.push(tag);
+        tag = await this.service.update(tag.id, { src: newSrc });
 
-        tag = await service.update(tag.id, { src: newSrc });
-
-        expect(tag).to.not.be.null;
-        expect(tag).to.not.be.undefined;
-        expect(tag.src).to.equal(newSrc);
-    });
-});
+        Expect(tag.src).toEqual(newSrc);
+    }
+}

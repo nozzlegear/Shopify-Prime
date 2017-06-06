@@ -11,17 +11,13 @@ import { Config, Expect } from './_utils';
 class ApplicationCreditTests {
     @AsyncTest("Creates an application credit")
     @IgnoreTest("Cannot be tested with a private app.")
-    public async CreatesCredits() { }
+    public async Test1() { }
 
     @AsyncTest("Gets an application credit")
     @IgnoreTest("Cannot be tested with a private app.")
-    public async GetsCredits() { }
+    public async Test2() { }
 
     @AsyncTest("Lists application credits")
-    public async ListsCredits() {
-        const service = new Prime.ApplicationCredits(Config.shopDomain, Config.accessToken);
-        const credits = await service.list();
-
-        Expect(credits).toBeAnArray();
-    }
+    @IgnoreTest("Cannot be tested with a private app.")
+    public async Test3() { }
 }

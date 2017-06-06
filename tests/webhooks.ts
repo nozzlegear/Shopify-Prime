@@ -1,115 +1,118 @@
-import { expect } from "chai";
-import * as config from "./_utils";
-import { Webhooks, Models } from "shopify-prime";
-import Webhook = Models.Webhook;
+import * as Prime from '../';
+import inspect from 'logspect/bin';
+import {
+    AsyncSetupFixture,
+    AsyncTeardownFixture,
+    AsyncTest,
+    IgnoreTest,
+    TestFixture,
+    Timeout
+    } from 'alsatian';
+import { Config, createGuid, Expect } from './_utils';
 
-describe("Webhooks", function () {
-    this.timeout(30000);
+@TestFixture("Webhook Tests") 
+class WebhookTests {
+    private service = new Prime.Webhooks(Config.shopDomain, Config.accessToken);
 
-    const service = new Webhooks(config.shopDomain, config.accessToken);
-    const toBeDeleted: Webhook[] = [];
-    function createWebhook() {
-        const webhook: Webhook = {
-            address: `http://requestb.in/100lt5e1/?webhook_id=${config.createGuid()}`,
-            topic: "themes/publish",
-        };
+    private created: Prime.Models.Webhook[] = [];
 
-        return webhook;
+    @AsyncTeardownFixture
+    private async teardownAsync() {
+        await Promise.all(this.created.map(created => this.service.delete(created.id)));
+
+        inspect(`Deleted ${this.created.length} objects during teardown.`);
     }
 
-    afterEach((cb) => setTimeout(cb, 500));
+    private async create(scheduleForDeletion = true) {
+        const obj = await this.service.create({
+            address: `http://requestb.in/100lt5e1/?webhook_id=${createGuid()}`,
+            topic: "themes/publish",
+        });
 
-    after((cb) => {
-        const count = toBeDeleted.length;
+        if (scheduleForDeletion) {
+            this.created.push(obj);
+        };
 
-        toBeDeleted.forEach(async (webhook) => await service.delete(webhook.id));
+        return obj;
+    }
 
-        console.log(`Deleted ${count} webhooks.`);
-
-        // Wait 1 second to help empty the API rate limit bucket
-        setTimeout(cb, 1000);
-    })
-
-    it("should delete a webhook", async () => {
+    @AsyncTest("should delete a webhook")
+    @Timeout(5000)
+    public async Test1() {
+        const webhook = await this.create(false);
         let error;
 
         try {
-            const webhook = await service.create(createWebhook());
-
-            await service.delete(webhook.id);
+            await this.service.delete(webhook.id);
         }
         catch (e) {
             error = e;
         }
 
-        expect(error).to.be.undefined;
-    })
+        Expect(error).toBeNullOrUndefined();
+    }
 
-    it("should create a webhook", async () => {
-        const webhook = await service.create(createWebhook());
+    @AsyncTest("should create a webhook")
+    @Timeout(5000)
+    public async Test2() {
+        const webhook = await this.create();
 
-        toBeDeleted.push(webhook);
+        Expect(webhook.id).toBeType("number");
+        Expect(webhook.topic).toEqual("themes/publish");
+    }
 
-        expect(webhook).to.not.be.null;
-        expect(webhook.id).to.be.a("number");
-        expect(webhook.topic).to.equal("themes/publish");
-    })
+    @AsyncTest("should get a webhook")
+    @Timeout(5000)
+    public async Test3() {
+        let webhook = await this.create();
+        webhook = await this.service.get(webhook.id);
 
-    it("should get a webhook", async () => {
-        let webhook = await service.create(createWebhook());
+        Expect(webhook).not.toBeNull();
+        Expect(webhook.id).toBeType("number");
+        Expect(webhook.topic).toEqual("themes/publish");
+    }
 
-        toBeDeleted.push(webhook);
+    @AsyncTest("should get a webhook with only the topic field")
+    @Timeout(5000)
+    public async Test4() {
+        let webhook = await this.create();
+        webhook = await this.service.get(webhook.id, { fields: "topic" });
 
-        webhook = await service.get(webhook.id);
+        Expect(webhook).not.toBeNull();
+        Expect(Object.getOwnPropertyNames(webhook).length).toEqual(1);
+        Expect(webhook.topic).not.toBeNull();
+    }
 
-        expect(webhook).to.not.be.null;
-        expect(webhook.id).to.be.a("number");
-        expect(webhook.topic).to.equal("themes/publish");
-    })
+    @AsyncTest("should count webhooks")
+    @Timeout(5000)
+    public async Test5() {
+        const count = await this.service.count();
 
-    it("should get a webhook with only the topic field", async () => {
-        let webhook = await service.create(createWebhook());
+        Expect(count).toBeType("number");
+        Expect(count).toBeGreaterThanOrEqualTo(1);
+    }
 
-        toBeDeleted.push(webhook);
+    @AsyncTest("should list webhooks")
+    @Timeout(5000)
+    public async Test6() {
+        const list = await this.service.list();
 
-        webhook = await service.get(webhook.id, { fields: "topic" });
+        Expect(list.length).toBeGreaterThanOrEqualTo(1);
+        Expect(list[0]).not.toBeNull();
+        Expect(list[0].id).toBeType("number");
+        Expect(list[0].address).toBeType("string");
+        Expect(list[0].topic).toEqual("themes/publish");
+    }
 
-        expect(webhook).to.not.be.null;
-        expect(Object.getOwnPropertyNames(webhook).length).to.equal(1);
-        expect(webhook.topic).to.not.be.null;
-    })
+    @AsyncTest("should update a webhook")
+    @Timeout(5000)
+    public async Test7() {
+        const newAddress = `http://requestb.in/100lt5e1/?webhook_id=${createGuid()}`;
+        let webhook = await this.create();
+        webhook = await this.service.update(webhook.id, { address: newAddress, topic: undefined })
 
-    it("should count webhooks", async () => {
-        toBeDeleted.push(await service.create(createWebhook()));        
-
-        const count = await service.count();
-
-        expect(count).to.be.a("number");
-        expect(count).to.be.at.least(1);
-    })
-
-    it("should list webhooks", async () => {
-        toBeDeleted.push(await service.create(createWebhook()));        
-
-        const list = await service.list();
-
-        expect(list.length).to.be.at.least(1);
-        expect(list[0]).to.not.be.null;
-        expect(list[0].id).to.be.a("number");
-        expect(list[0].address).to.be.a("string");
-        expect(list[0].topic).to.equal("themes/publish");
-    })
-
-    it("should update a webhook", async () => {
-        const newAddress = `http://requestb.in/100lt5e1/?webhook_id=${config.createGuid()}`;
-        let webhook = await service.create(createWebhook());
-
-        toBeDeleted.push(webhook);
-
-        webhook = await service.update(webhook.id, { address: newAddress, topic: undefined })
-
-        expect(webhook).to.not.be.null;
-        expect(webhook.address.toLowerCase()).to.equal(newAddress.toLowerCase());
-        expect(webhook.topic).to.equal("themes/publish");
-    })
-})
+        Expect(webhook).not.toBeNull();
+        Expect(webhook.address.toLowerCase()).toEqual(newAddress.toLowerCase());
+        Expect(webhook.topic).toEqual("themes/publish");
+    }
+}

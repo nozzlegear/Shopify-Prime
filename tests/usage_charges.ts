@@ -10,8 +10,8 @@ import {
     } from 'alsatian';
 import { Config, Expect } from './_utils';
 
-@TestFixture("UsageCharges Tests")
-class UsageChargesTests {
+@TestFixture("UsageCharge Tests")
+class UsageChargeTests {
     @AsyncTest("should list charges,")
     @IgnoreTest("cannot be tested with a private app.")
     public async Test1() { }

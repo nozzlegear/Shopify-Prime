@@ -1,37 +1,44 @@
-import { expect } from "chai";
-import { Shops, Models } from "shopify-prime";
-import * as config from "./_utils";
-import Shop = Models.Shop;
+import * as Prime from '../';
+import inspect from 'logspect/bin';
+import {
+    AsyncSetupFixture,
+    AsyncTeardownFixture,
+    AsyncTest,
+    IgnoreTest,
+    TestFixture,
+    Timeout
+    } from 'alsatian';
+import { Config, Expect } from './_utils';
 
-describe("Shops", function () {
-    this.timeout(30000);
-    
-    const service = new Shops(config.shopDomain, config.accessToken);
+@TestFixture("Shop Tests") 
+class ShopTests {
+    private service = new Prime.Shops(Config.shopDomain, Config.accessToken);
 
-    after((cb) => {
-        // Wait 1 second to help empty the API rate limit bucket
-        setTimeout(cb, 1000);    
-    })
+    @AsyncTest("should get a shop")
+    @Timeout(5000)
+    public async Test1() {
+        const shop = await this.service.get();
 
-    it("should get a shop", async () => {
-        const shop = await service.get();
+        Expect(shop).not.toBeNull();
+        Expect(shop.name).toBeType("string");
+        Expect(shop.domain).toBeType("string");
+        Expect(shop.address1).toBeType("string");
+        Expect(shop.force_ssl).toBeType("boolean");
+        Expect(shop.shop_owner).toBeType("string");
+        Expect(shop.myshopify_domain).toBeType("string");
+    }
 
-        expect(shop).to.not.be.null;
-        expect(shop.name).to.be.a("string");
-        expect(shop.domain).to.be.a("string");
-        expect(shop.address1).to.be.a("string");
-        expect(shop.force_ssl).to.be.a("boolean");
-        expect(shop.shop_owner).to.be.a("string");
-        expect(shop.myshopify_domain).to.be.a("string");
-    });
+    @AsyncTest("should get a shop with only a name field")
+    @Timeout(5000)
+    public async Test2() {
+        const shop = await this.service.get({ fields: "name" });
 
-    it("should get a shop with only a name field", async () => {
-        const shop = await service.get({ fields: "name" });
+        Expect(shop).not.toBeNull();
+        Expect(Object.getOwnPropertyNames(shop).length).toEqual(1);
+        Expect(shop.name).toBeType("string");
+    }
 
-        expect(shop).to.not.be.null;
-        expect(Object.getOwnPropertyNames(shop).length).to.equal(1);
-        expect(shop.name).to.be.a("string");
-    })
-
-    it("should force uninstall the app, but cannot be tested with a private app");
-}) 
+    @AsyncTest("should force uninstall the app") 
+    @IgnoreTest("cannot be tested with a private app")
+    public async Test3() { }
+}
