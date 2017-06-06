@@ -1,3 +1,4 @@
+import * as joinPaths from 'url-join';
 import fetch from 'node-fetch';
 import ShopifyError from './shopify_error';
 import { resolve } from 'path';
@@ -23,6 +24,13 @@ export class BaseService {
         return headers;
     }
 
+    /**
+     * Joins URI paths into one single string, replacing bad slashes and ensuring the path doesn't end in /.json.
+     */
+    protected joinUriPaths(...paths: string[]): string {
+        return joinPaths(...paths).replace(/\/\.json/ig, ".json");
+    }
+
     protected async createRequest<T>(method: "GET" | "POST" | "PUT" | "DELETE", path: string, rootElement?: string, payload?: Object) {
         method = method.toUpperCase() as any;
 
@@ -38,9 +46,7 @@ export class BaseService {
 
         const url = new uri(this.shopDomain);
         url.protocol("https");
-
-        //Ensure no erroneous double slashes in path and that it doesn't end in /.json
-        url.path(`${this.resource}/${path}`.replace(/\/+/ig, "/").replace(/\/\.json/ig, ".json"));
+        url.path(this.joinUriPaths(this.resource, path));
 
         if ((method === "GET" || method === "DELETE") && payload) {
             for (const prop in payload) {
