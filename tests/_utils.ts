@@ -48,8 +48,6 @@ export function createGuid() {
 export class MatcherExtension extends Matcher {
     constructor(value) {
         super(value);
-
-        this.not = new MatcherExtension(this.actualValue);
     }
 
     readonly not: MatcherExtension;
