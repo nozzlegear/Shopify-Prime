@@ -5,18 +5,21 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "prebuild": "npm run barrel",
-    "build": "npm run tsc",
-    "declarations": "node ./.tasks/add-custom-declarations",
     "prepublishOnly": "npm run build",
     "pretsc": "rimraf dist",
     "tsc": "tsc -p .",
+    "prebuild": "npm run barrel",
+    "build": "npm run tsc",
     "barrel:enums": "barrelsby -d enums --delete",
     "barrel:models": "barrelsby -d models --delete",
     "barrel:options": "barrelsby -d options --delete",
     "barrel:services": "barrelsby -d services --delete",
     "barrel:infrastructure": "barrelsby -d infrastructure --delete",
-    "barrel": "npm run barrel:enums && npm run barrel:models && npm run barrel:options && npm run barrel:services && npm run barrel:infrastructure"
+    "barrel": "concurrently \"npm run barrel:enums\" \"npm run barrel:models\" \"npm run barrel:options\" \"npm run barrel:services\" \"npm run barrel:infrastructure\"",
+    "pretest": "npm run build",
+    "pretest:raw": "npm run build",
+    "test": "alsatian -T ./bin/tests/*.js | tap-bark",
+    "test:raw": "alsatian -T ./bin/tests/*.js"
   },
   "repository": {
     "type": "git",
@@ -41,6 +44,7 @@
     "url-join": "^2.0.2"
   },
   "devDependencies": {
+    "concurrently": "^3.4.0",
     "@types/crypto-js": "^3.1.32",
     "@types/jsuri": "^1.3.28",
     "@types/node": "^6.0.46",
