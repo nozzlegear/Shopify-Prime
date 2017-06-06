@@ -11,7 +11,7 @@ import {
 import { Config, Expect } from './_utils';
 
 @TestFixture("Charge Tests")
-class ChargeTests {
+export class ChargeTests {
     @AsyncTest("should list charges,")
     @IgnoreTest("Cannot be tested with a private app.")
     public async Test1() { }

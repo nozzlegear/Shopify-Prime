@@ -11,7 +11,7 @@ import {
 import { Config, Expect } from './_utils';
 
 @TestFixture("ShopifyError Tests") 
-class ShopifyErrorTests {
+export class ShopifyErrorTests {
     private genericResponse = {
         ok: false,
         status: 422,

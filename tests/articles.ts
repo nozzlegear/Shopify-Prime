@@ -11,7 +11,7 @@ import {
 import { Config, Expect } from './_utils';
 
 @TestFixture("Article Tests")
-class ArticleTests {
+export class ArticleTests {
     private service = new Prime.Articles(Config.shopDomain, Config.accessToken);
 
     private created: Prime.Models.Article[] = [];

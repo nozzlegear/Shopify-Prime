@@ -11,7 +11,7 @@ import {
 import { Config, Expect } from './_utils';
 
 @TestFixture("Discount Tests")
-class DiscountTests {
+export class DiscountTests {
     @AsyncTest("should create a Discount")
     @IgnoreTest("cannot be tested without a Shopify Plus account.")
     public async Test1() { }

@@ -11,7 +11,7 @@ import {
 import { Config, Expect } from './_utils';
 
 @TestFixture("GiftCard Tests")
-class GiftCardTests {
+export class GiftCardTests {
     @AsyncTest("should create a Gift Card")    
     @IgnoreTest("cannot be tested without a Shopify Plus account.")
     public async Test1() { }

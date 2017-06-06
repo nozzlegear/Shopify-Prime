@@ -584,7 +584,7 @@ supports-color@^3.2.3:
   dependencies:
     has-flag "^1.0.0"
 
-tap-bark@1.0.0:
+tap-bark@1.0.0, tap-bark@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/tap-bark/-/tap-bark-1.0.0.tgz#6c03dc51687fed7877f823ad4b1ddd1ef5eb5674"
   dependencies:

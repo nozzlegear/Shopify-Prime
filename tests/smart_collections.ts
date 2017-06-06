@@ -11,7 +11,7 @@ import {
 import { Config, Expect } from './_utils';
 
 @TestFixture("SmartCollection Tests") 
-class SmartCollectionTests {
+export class SmartCollectionTests {
     private service = new Prime.SmartCollections(Config.shopDomain, Config.accessToken);
 
     private created: Prime.Models.SmartCollection[] = [];

@@ -11,7 +11,7 @@ import {
 import { Config, Expect } from './_utils';
 
 @TestFixture("RecurringCharge Tests")
-class RecurringChargeTests {
+export class RecurringChargeTests {
     
     @AsyncTest("should list charges ")
     @IgnoreTest("cannot be tested with a private app.")

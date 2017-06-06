@@ -8,7 +8,7 @@ import {
 import { Config, Expect } from './_utils';
 
 @TestFixture("Application Credits")
-class ApplicationCreditTests {
+export class ApplicationCreditTests {
     @AsyncTest("Creates an application credit")
     @IgnoreTest("Cannot be tested with a private app.")
     public async Test1() { }

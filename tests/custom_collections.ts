@@ -11,7 +11,7 @@ import {
 import { Config, Expect } from './_utils';
 
 @TestFixture("CustomCollection Tests")
-class CustomCollectionTests {
+export class CustomCollectionTests {
     private service = new Prime.CustomCollections(Config.shopDomain, Config.accessToken);
 
     private created: Prime.Models.CustomCollection[] = [];

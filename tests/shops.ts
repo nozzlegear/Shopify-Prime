@@ -11,7 +11,7 @@ import {
 import { Config, Expect } from './_utils';
 
 @TestFixture("Shop Tests") 
-class ShopTests {
+export class ShopTests {
     private service = new Prime.Shops(Config.shopDomain, Config.accessToken);
 
     @AsyncTest("should get a shop")

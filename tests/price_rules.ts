@@ -11,7 +11,7 @@ import {
 import { Config, Expect } from './_utils';
 
 @TestFixture("PriceRules Tests")
-class OrderTests {
+export class OrderTests {
     private service = new Prime.PriceRules(Config.shopDomain, Config.accessToken);
 
     private discountService = new Prime.PriceRuleDiscounts(Config.shopDomain, Config.accessToken);

@@ -11,7 +11,7 @@ import {
 import { Config, Expect } from './_utils';
 
 @TestFixture("ScriptTag Tests") 
-class ScriptTagTests {
+export class ScriptTagTests {
     private service = new Prime.ScriptTags(Config.shopDomain, Config.accessToken);
 
     private created: Prime.Models.ScriptTag[] = [];

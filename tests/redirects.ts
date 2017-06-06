@@ -11,7 +11,7 @@ import {
 import { Config, Expect } from './_utils';
 
 @TestFixture("Redirect Tests") 
-class RedirectTests {
+export class RedirectTests {
     private service = new Prime.Redirects(Config.shopDomain, Config.accessToken);
 
     private created: Prime.Models.Redirect[] = [];

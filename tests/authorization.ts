@@ -11,7 +11,7 @@ import {
 import { Config, Expect } from './_utils';
 
 @TestFixture("Prime.Auth.buildAuthorizationUrl tests")
-class BuildAuthorizationUrlTests {
+export class BuildAuthorizationUrlTests {
     @AsyncTest("should build a valid authorization url")
     @Timeout(5000)
     public async Test1() {
@@ -87,7 +87,7 @@ class BuildAuthorizationUrlTests {
 }
 
 @TestFixture("Prime.Auth.isValidShopifyDomain tests")
-class IsValidShopifyDomainTests {
+export class IsValidShopifyDomainTests {
     @AsyncTest("should return true for a valid domain")
     @Timeout(5000)
     public async Test1() {
@@ -106,7 +106,7 @@ class IsValidShopifyDomainTests {
 }
 
 @TestFixture("Prime.Auth.isAuthenticProxyRequest tests")
-class IsAuthenticProxyRequestTests {
+export class IsAuthenticProxyRequestTests {
     @AsyncTest("should return true for a valid request")
     @Timeout(5000)
     public async Test1() {
@@ -131,7 +131,7 @@ class IsAuthenticProxyRequestTests {
 }
 
 @TestFixture("Prime.Auth.isAuthenticRequest tests")
-class IsAuthenticRequestTests {
+export class IsAuthenticRequestTests {
     @AsyncTest("should return true for a valid request")
     @Timeout(5000)
     public async Test1() {
@@ -159,7 +159,7 @@ class IsAuthenticRequestTests {
 }
 
 @TestFixture("Prime.Auth.isAuthenticWebhook tests")
-class IsAuthenticWebhookTests {
+export class IsAuthenticWebhookTests {
     private body = '{"order":{"id":123456}}';
     private header = "EXRIrLEalEssMKrvONz+5mrVF3LmAqkhrquCaBV+vjo=";
 

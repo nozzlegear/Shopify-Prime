@@ -11,7 +11,7 @@ import {
 import { Config, createGuid, Expect } from './_utils';
 
 @TestFixture("Webhook Tests") 
-class WebhookTests {
+export class WebhookTests {
     private service = new Prime.Webhooks(Config.shopDomain, Config.accessToken);
 
     private created: Prime.Models.Webhook[] = [];
