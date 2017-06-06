@@ -5,10 +5,11 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "prebuild": "npm run barrel && rimraf dist",
+    "prebuild": "npm run barrel",
     "build": "npm run tsc",
     "declarations": "node ./.tasks/add-custom-declarations",
     "prepublish": "npm run build",
+    "pretsc": "rimraf dist",
     "tsc": "tsc -p .",
     "barrel:enums": "barrelsby -d enums -c barrelsby.json",
     "barrel:models": "barrelsby -d models -c barrelsby.json",
