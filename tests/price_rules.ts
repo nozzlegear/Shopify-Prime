@@ -14,7 +14,7 @@ import { Config, Expect } from './_utils';
 class OrderTests {
     private service = new Prime.PriceRules(Config.shopDomain, Config.accessToken);
 
-    private discountService: Prime.PriceRuleDiscounts; //new Prime.PriceRuleDiscounts(Config.shopDomain, Config.accessToken);
+    private discountService = new Prime.PriceRuleDiscounts(Config.shopDomain, Config.accessToken);
 
     private created: Prime.Models.PriceRule[] = [];
 
@@ -26,7 +26,7 @@ class OrderTests {
             // Delete children discounts
             if (this.createdDiscounts[created.id]) {
                 await Promise.all(this.createdDiscounts[created.id].map(dc => {
-                    return this.discountService.delete(dc.id)
+                    return this.discountService.delete(created.id, dc.id)
                 }));
             }
 
@@ -60,7 +60,7 @@ class OrderTests {
     }
     
     private async createDiscountCode(ruleId: number, code: string = "unit") {
-        const dc = await this.discountService.create({
+        const dc = await this.discountService.create(ruleId, {
             code
         });
 
@@ -155,7 +155,7 @@ class OrderTests {
 
         // Update discount code 
         let updatedCode = "after"
-        let updated = await this.discountService.update(dc.id, { code: updatedCode })
+        let updated = await this.discountService.update(pr.id, dc.id, { code: updatedCode })
         Expect(updated).toBeType("object");
         Expect(updated.code).toBeType("string");
         Expect(updated.code).toEqual(updatedCode);
