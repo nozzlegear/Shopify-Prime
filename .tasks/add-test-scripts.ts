@@ -16,7 +16,7 @@ testFiles.forEach(fileName => {
     const scriptName = `test:${fileInfo.name}`;
     const rawScriptName = `${scriptName}:raw`;
     const rawScriptValue = `alsatian -T ./dist/tests/${fileInfo.name}.js`;
-    const scriptValue = `${rawScriptValue} | tap-bark`;
+    const scriptValue = `${rawScriptValue} | tap-spec`;
 
     pkg.scripts[scriptName] = scriptValue;
     pkg.scripts[rawScriptName] = rawScriptValue;
