@@ -11,11 +11,11 @@
     "prepublish": "npm run build",
     "pretsc": "rimraf dist",
     "tsc": "tsc -p .",
-    "barrel:enums": "barrelsby -d enums -c barrelsby.json",
-    "barrel:models": "barrelsby -d models -c barrelsby.json",
-    "barrel:options": "barrelsby -d options -c barrelsby.json",
-    "barrel:services": "barrelsby -d services -c barrelsby.json",
-    "barrel:infrastructure": "barrelsby -d infrastructure -c barrelsby.json",
+    "barrel:enums": "barrelsby -d enums --delete",
+    "barrel:models": "barrelsby -d models --delete",
+    "barrel:options": "barrelsby -d options --delete",
+    "barrel:services": "barrelsby -d services --delete",
+    "barrel:infrastructure": "barrelsby -d infrastructure --delete",
     "barrel": "npm run barrel:enums && npm run barrel:models && npm run barrel:options && npm run barrel:services && npm run barrel:infrastructure"
   },
   "repository": {
