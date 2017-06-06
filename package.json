@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
+    "addTests": "ts-node .tasks/add-test-scripts.ts",
     "prepublishOnly": "npm run build",
     "pretsc": "rimraf dist",
     "tsc": "tsc -p .",
@@ -44,7 +45,6 @@
     "url-join": "^2.0.2"
   },
   "devDependencies": {
-    "concurrently": "^3.4.0",
     "@types/crypto-js": "^3.1.32",
     "@types/jsuri": "^1.3.28",
     "@types/node": "^6.0.46",
@@ -52,10 +52,12 @@
     "@types/url-join": "^0.8.2",
     "alsatian": "^1.3.1",
     "barrelsby": "^0.0.3",
+    "concurrently": "^3.4.0",
     "glob": "^7.1.1",
     "logspect": "^1.0.2",
     "mkdirp": "^0.5.1",
     "rimraf": "^2.6.1",
+    "ts-node": "^3.0.6",
     "typescript": "^2.3.4"
   }
 }
