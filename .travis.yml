@@ -9,7 +9,7 @@ install:
   - yarn install
 
 script: 
-  - cd ./tests && yarn test
+  - yarn test
 
 # # safelist
 # branches:
