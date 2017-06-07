@@ -72,7 +72,7 @@ export class ShopifyErrorTests {
     @Timeout(5000)
     public async Test6() {
         Expect(this.genericError.errors).not.toBeNull();
-        Expect(this.genericError.errors["order"]).toBeType("array");
+        Expect(this.genericError.errors["order"]).toBeAnArray();
         Expect(this.genericError.errors["order"].length).toEqual(1);
         Expect(this.genericError.errors["order"][0]).toEqual("must not be null");
     }

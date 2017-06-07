@@ -9,7 +9,7 @@ install:
 script: 
   # Test script runs yarn test and looks for the 'Failed Tests' string, returning an error exit code if found.
   # Necessary because tap test reporters don't ever return an error code.
-  - yarn test | grep 'Failed Tests' && return 1 || return 0
+  - yarn test && return 0 | grep 'Failed Tests' && return 1 || return 0
 
 # # safelist
 # branches:
