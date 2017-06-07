@@ -2,9 +2,6 @@ language: node_js
 node_js:
   - "8.0"
 
-before_install:
-  - npm install -g yarn --cache-min 999999999
-
 install:
   - yarn install
   - ls
