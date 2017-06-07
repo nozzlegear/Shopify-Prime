@@ -4,9 +4,6 @@ import ShopifyError from './shopify_error';
 import { resolve } from 'path';
 import uri = require("jsuri");
 
-//Get package.json from 2-levels up as this file will be in dist/infrastructure.
-const version = require(resolve(__dirname, "../../package.json")).version;
-
 export class BaseService {
     constructor(private shopDomain: string, private accessToken: string, private resource: string) {
         //Ensure resource starts with admin/
@@ -18,7 +15,7 @@ export class BaseService {
     public static buildDefaultHeaders() {
         const headers = {
             "Accept": "application/json",
-            "User-Agent": `Shopify Prime ${version} (https://github.com/nozzlegear/shopify-prime)`
+            "User-Agent": `Shopify Prime (https://github.com/nozzlegear/shopify-prime)`
         }
 
         return headers;
