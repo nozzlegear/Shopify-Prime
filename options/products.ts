@@ -1,4 +1,4 @@
-import { ListOptions, PublishedOptions, FieldOptions } from "./base";
+import { FieldOptions, ListOptions, PublishedOptions } from './base';
 
 export interface ProductBaseOptions {
 
@@ -18,7 +18,7 @@ export interface ProductBaseOptions {
     collection_id?: string;
 }
 
-export interface ProductCountOptions extends ProductBaseOptions, PublishedOptions {
+export interface ProductCountOptions extends ProductBaseOptions {
 
     /**
      * Show products created after date (format: 2014-04-25T16:15:47-04:00)
@@ -35,7 +35,7 @@ export interface ProductCountOptions extends ProductBaseOptions, PublishedOption
     updated_at_max?: string;
 }
 
-export interface ProductListOptions extends ProductBaseOptions, ProductCountOptions, ListOptions, FieldOptions {
+export interface ProductListOptions extends ProductCountOptions {
 
     /**
      * A comma-separated list of product ids

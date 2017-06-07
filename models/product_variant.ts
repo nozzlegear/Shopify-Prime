@@ -1,7 +1,7 @@
-import { ShopifyObject } from "./base";
+import { ShopifyObject } from './base';
 
 /**
- * A list of variant objects, each one representing a slightly different version of the product. 
+ * A list of product variant objects, each one representing a slightly different version of the product. 
  * For example, if a product comes in different sizes and colors, each size and color permutation 
  * (such as "small black", "medium black", "large blue"), would be a variant.
  * 
@@ -9,7 +9,7 @@ import { ShopifyObject } from "./base";
  * attribute on the variant will be ignored.
  * 
  */
-export interface Variant extends ShopifyObject {
+export interface ProductVariant extends ShopifyObject {
 
     /**
      * The barcode, UPC or ISBN number for the product.
