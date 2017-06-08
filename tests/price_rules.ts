@@ -8,7 +8,7 @@ import {
     TestFixture,
     Timeout
     } from 'alsatian';
-import { Config, Expect } from './test_utils';
+import { Config, createGuid, Expect } from './test_utils';
 
 @TestFixture("PriceRules Tests")
 export class OrderTests {
@@ -59,9 +59,9 @@ export class OrderTests {
         return obj;
     }
     
-    private async createDiscountCode(ruleId: number, code: string = "unit") {
+    private async createDiscountCode(ruleId: number) {
         const dc = await this.discountService.create(ruleId, {
-            code
+            code: createGuid()
         });
 
         // Track discount codes, relative to their owner (price rule)
@@ -77,29 +77,34 @@ export class OrderTests {
     @AsyncTest("should create a price rule")
     @Timeout(5000)
     public async Test1() {
-        const pr = await this.create();
-        Expect(pr).toBeType("object");
-        Expect(pr.title).toBeType("string");
-        Expect(pr.id).toBeType("number");
-        Expect(pr.id).toBeGreaterThanOrEqualTo(1);
+        let rule: Prime.Models.PriceRule;
+        let discount: Prime.Models.PriceRuleDiscountCode;
 
-        const dc = await this.createDiscountCode(pr.id)
-        Expect(dc).toBeType("object");
-        Expect(dc.code).toBeType("string");
-        Expect(dc.id).toBeType("number");
-        Expect(dc.id).toBeGreaterThanOrEqualTo(1);
-
-        // Throws a 'exceeded max number of discount codes permitted' error for now until shopify change their limits
         try {
-            const dc2 = await this.createDiscountCode(pr.id, "unit2")
-            Expect(dc2).toBeType("object");
-            Expect(dc2.code).toBeType("string");
-            Expect(dc2.id).toBeType("number");
-            Expect(dc2.id).toBeGreaterThanOrEqualTo(1);
-        } catch (err) {
-            console.log(err)
+            rule = await this.create();
+        } catch (_e) {
+            inspect(`Error creating price rule:`, _e)
+
+            throw _e;
+        }
+        
+        Expect(rule).toBeType("object");
+        Expect(rule.title).toBeType("string");
+        Expect(rule.id).toBeType("number");
+        Expect(rule.id).toBeGreaterThanOrEqualTo(1);
+
+        try {
+            discount = await this.createDiscountCode(rule.id)
+        } catch (_e) {
+            inspect(`Error creating first discount:`, _e);
+
+            throw _e;
         }
 
+        Expect(discount).toBeType("object");
+        Expect(discount.code).toBeType("string");
+        Expect(discount.id).toBeType("number");
+        Expect(discount.id).toBeGreaterThanOrEqualTo(1);
     }
 
     @AsyncTest("should get a price rule")
@@ -147,15 +152,15 @@ export class OrderTests {
         const pr = await this.create();
 
         // Create discount code 
-        const dc = await this.createDiscountCode(pr.id, "before")
+        const dc = await this.createDiscountCode(pr.id)
         Expect(dc).toBeType("object");
         Expect(dc.code).toBeType("string");
         Expect(dc.id).toBeType("number")
         Expect(dc.id).toBeGreaterThanOrEqualTo(1);
 
         // Update discount code 
-        let updatedCode = "after"
-        let updated = await this.discountService.update(pr.id, dc.id, { code: updatedCode })
+        const updatedCode = "after-" + createGuid();
+        const updated = await this.discountService.update(pr.id, dc.id, { code: updatedCode })
         Expect(updated).toBeType("object");
         Expect(updated.code).toBeType("string");
         Expect(updated.code).toEqual(updatedCode);
