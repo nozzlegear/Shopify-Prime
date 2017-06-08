@@ -119,7 +119,7 @@ export class ScriptTagTests {
         Expect(list.length).toBeGreaterThanOrEqualTo(1);
         Expect(list).itemsToPassValidator<Prime.Models.ScriptTag>(tag => {
             Expect(tag.id).toBeType("number");
-            Expect(tag.src).toMatch(/^https:\/\/localhost:3000\/scripts\//i);
+            Expect(tag.src).toBeType("string");
             Expect(tag.created_at).toBeType("string");
             Expect(tag.updated_at).toBeType("string");
             Expect(tag.event).toEqual("onload");
