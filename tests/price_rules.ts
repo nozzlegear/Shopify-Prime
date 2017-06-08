@@ -35,8 +35,8 @@ export class OrderTests {
 
         inspect(`Deleted ${this.created.length} objects during teardown.`);
 
-        // Wait 2 seconds after all tests to let the API rate limit bucket empty.
-        inspect("Waiting 2 seconds to let API rate limit empty.")
+        // Wait 3 seconds after all tests to let the API rate limit bucket empty.
+        inspect("Waiting 3 seconds to let API rate limit empty.")
         
         await new Promise(resolve => setTimeout(() => {
             inspect("Continuing.")
