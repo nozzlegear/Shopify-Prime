@@ -8,10 +8,11 @@ echo "starting tests"
 #2>&1 saves both the stderr and stdout to the variable.
 output=$(yarn test 2>&1)
 
+echo "$output"
+
 if [ $? -ne 0 ]
 then
   echo "yarn test exited with $?"
-  echo -e "$output"
   exit 1
 fi
 
