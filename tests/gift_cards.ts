@@ -21,7 +21,7 @@ export class GiftCardTests {
     public async Test2() { }
 
     @AsyncTest("should search for a Gift")
-    @IgnoreTest(" but cannot be tested without a Shopify Plus account.")
+    @IgnoreTest("cannot be tested without a Shopify Plus account.")
     public async Test3() { }
 
     @AsyncTest("should count Gift Cards,")

@@ -12,7 +12,6 @@ import { Config, Expect } from './test_utils';
 
 @TestFixture("RecurringCharge Tests")
 export class RecurringChargeTests {
-    
     @AsyncTest("should list charges ")
     @IgnoreTest("cannot be tested with a private app.")
     public async Test1() { }

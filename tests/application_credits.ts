@@ -1,5 +1,6 @@
 import * as Prime from '../';
 import {
+    AsyncTeardownFixture,
     AsyncTest,
     IgnoreTest,
     TestFixture,

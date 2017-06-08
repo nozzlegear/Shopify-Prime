@@ -30,6 +30,9 @@ export class ArticleTests {
         await Promise.all(this.created.map(created => this.service.delete(this.blogId, created.id)));
 
         inspect(`Deleted ${this.created.length} articles during teardown.`);
+
+        // Wait 1 second after all tests to let the API rate limit bucket empty.
+        await new Promise((resolve) => setTimeout(resolve, 1000));
     }
 
     private async create(scheduleForDeletion = true) {
