@@ -22,8 +22,13 @@ export class OrderTests {
 
         inspect(`Deleted ${this.created.length} objects during teardown.`);
 
-        // Wait 1 second after all tests to let the API rate limit bucket empty.
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // Wait 2 seconds after all tests to let the API rate limit bucket empty.
+        inspect("Waiting 2 seconds to let API rate limit empty.")
+        
+        await new Promise(resolve => setTimeout(() => {
+            inspect("Continuing.")
+            resolve();
+        }, 2000));
     }
 
     private async create(scheduleForDeletion = true) {
