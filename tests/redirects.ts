@@ -8,7 +8,7 @@ import {
     TestFixture,
     Timeout
     } from 'alsatian';
-import { Config, Expect } from './test_utils';
+import { Config, createGuid, Expect } from './test_utils';
 
 @TestFixture("Redirect Tests") 
 export class RedirectTests {
@@ -33,7 +33,7 @@ export class RedirectTests {
 
     private async create(scheduleForDeletion = true) {
         const obj = await this.service.create({
-            path: `${Config.shopDomain}/primetest`,
+            path: createGuid(),
             target: `https://www.gooogle.com?q=croatia`
         });
 
