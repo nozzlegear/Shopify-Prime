@@ -28,7 +28,7 @@ export class BlogTests {
         await new Promise(resolve => setTimeout(() => {
             inspect("Continuing.")
             resolve();
-        }, 2000));
+        }, 3000));
     }
 
     private async create(scheduleForDeletion = true) {
