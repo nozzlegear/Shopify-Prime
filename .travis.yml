@@ -7,6 +7,7 @@ install:
   - ls
 
 script: 
+  - chmod 777 ./.tasks/test.sh
   - ./.tasks/test.sh
 
 # # safelist

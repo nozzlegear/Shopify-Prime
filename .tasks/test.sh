@@ -4,13 +4,17 @@
 # Necessary because tap test reporters don't ever return an error code.
 
 echo "starting tests"
-output=$(yarn test)
+
+#2>&1 saves both the stderr and stdout to the variable.
+output=$(yarn test 2>&1)
 
 if [ $? -ne 0 ]
 then
-  exit $?
+  echo "yarn test exited with $?"
+  echo -e "$output"
+  exit 1
 fi
 
 echo "Test command exited successfully. Checking tap-reporter output for failed tests."
 
-echo $output | grep 'Failed Tests' && return 1 || return 0;
+echo "$output" | grep 'Failed Tests' && exit 1 || exit 0;
