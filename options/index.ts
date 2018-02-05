@@ -1,6 +1,7 @@
 export * from "./articles";
 export * from "./base";
 export * from "./blogs";
+export * from "./fulfillments";
 export * from "./gift_cards";
 export * from "./orders";
 export * from "./price_rules";
