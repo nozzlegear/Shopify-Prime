@@ -1,6 +1,6 @@
 {
     "name": "shopify-prime",
-    "version": "2.5.0",
+    "version": "2.6.0",
     "description": "Shopify Prime is a NodeJS library built to help developers easily authenticate and make calls against the Shopify API. It was inspired by and borrows heavily from ShopifySharp.",
     "main": "dist/index.js",
     "typings": "dist/index.d.ts",
