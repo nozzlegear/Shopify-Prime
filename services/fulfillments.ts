@@ -7,7 +7,11 @@ import { BaseService } from '../infrastructure';
  */
 export class Fulfillments extends BaseService {
     constructor(shopDomain: string, accessToken: string) {
-        super(shopDomain, accessToken, "");
+        super(shopDomain, accessToken, "orders");
+    }
+
+    private getPath(orderId: number, path: string) {
+        return this.joinUriPaths(`${orderId}/fulfillments`, path);
     }
 
     /**
@@ -16,7 +20,7 @@ export class Fulfillments extends BaseService {
      * @param fulfillment The fulfillment being created.
      */
     public create(orderId: number, fulfillment: Fulfillment) {
-        return this.createRequest<Fulfillment>("POST", `orders/${orderId}/fulfillments.json`, "fulfillment", { fulfillment });
+        return this.createRequest<Fulfillment>("POST", this.getPath(orderId, ".json"), "fulfillment", { fulfillment });
     }
 
     /**
@@ -26,7 +30,7 @@ export class Fulfillments extends BaseService {
      * @param fulfillment The updated fulfillment.
      */
     public update(orderId: number, fulfillmentId: number, fulfillment: Fulfillment) {
-        return this.createRequest<Fulfillment>("PUT", `orders/${orderId}/fulfillments/${fulfillmentId}.json`, "fulfillment", { fulfillment });
+        return this.createRequest<Fulfillment>("PUT", this.getPath(orderId, ".json"), "fulfillment", { fulfillment });
     }
 
     /**
@@ -35,8 +39,8 @@ export class Fulfillments extends BaseService {
      * @param fulfillmentId Id of the fulfillment being retrieved.
      * @param options Options for filtering the result.
      */
-    public get(orderId: number, fulfillmentId: number, options?: Options.FieldOptions) {
-        return this.createRequest<Fulfillment>("GET", `orders/${orderId}/fulfillments/${fulfillmentId}.json`, "fulfillment", options);
+    public get(orderId: number, id: number, options?: Options.FieldOptions) {
+        return this.createRequest<Fulfillment>("GET", this.getPath(orderId, `${id}.json`), "fulfillment", options);
     }
 
     /**
@@ -45,7 +49,7 @@ export class Fulfillments extends BaseService {
      * @param options Options for filtering the results.
      */
     public list(orderId: number, options?: Options.FulfillmentListOptions) {
-        return this.createRequest<Fulfillment[]>("GET", `orders/${orderId}/fulfillments.json`, "fulfillments", options);
+        return this.createRequest<Fulfillment[]>("GET", this.getPath(orderId, ".json"), "fulfillments", options);
     }
 
     /**
@@ -54,15 +58,15 @@ export class Fulfillments extends BaseService {
      * @param options Options for filtering the results.
      */
     public count(orderId: number, options?: Options.FulfillmentCountOptions) {
-        return this.createRequest<number>("GET", `orders/${orderId}/fulfillments/count.json`, "count", options);
+        return this.createRequest<number>("GET", this.getPath(orderId, "count.json"), "count", options);
     }
 
     /**
      * Opens a fulfillment with the given id.
      * @param id The fulfillment's id.
      */
-    public open(id: number) {
-        return this.createRequest<Fulfillment>("POST", `${id}/open.json`, 'fulfillment');
+    public open(orderId: number, id: number) {
+        return this.createRequest<Fulfillment>("POST", this.getPath(orderId, `${id}/open.json`), 'fulfillment');
     }
 
     /**
@@ -70,8 +74,8 @@ export class Fulfillments extends BaseService {
      * @param id The fulfillment's id.
      * @param options Options for canceling the fulfillment.
      */
-    public cancel(id: number) {
-        return this.createRequest<Fulfillment>("POST", `${id}/cancel.json`, 'fulfillment');
+    public cancel(orderId: number, id: number) {
+        return this.createRequest<Fulfillment>("POST", this.getPath(orderId, `${id}/cancel.json`), 'fulfillment');
     }
 
     /**
@@ -79,8 +83,8 @@ export class Fulfillments extends BaseService {
      * @param id The fulfillment's id.
      * @param options Options for canceling the fulfillment.
      */
-    public complete(id: number) {
-        return this.createRequest<Fulfillment>("POST", `${id}/complete.json`, 'fulfillment');
+    public complete(orderId: number, id: number) {
+        return this.createRequest<Fulfillment>("POST", this.getPath(orderId, `${id}/complete.json`), 'fulfillment');
     }
 }
 
