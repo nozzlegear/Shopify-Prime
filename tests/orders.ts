@@ -145,7 +145,10 @@ export class OrderTests {
         list.forEach(order => {
             Expect(order).toBeType("object");
             Expect(order.id).toBeGreaterThanOrEqualTo(1);
-            Expect(order.contact_email).toBeType("string");
+
+            if (order.contact_email !== null) {
+                Expect(order.contact_email).toBeType("string");
+            }
         })
     }
 
