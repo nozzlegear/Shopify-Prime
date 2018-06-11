@@ -12,7 +12,7 @@ export class Products extends BaseService {
      * @param options Options for filtering the results.
      * @see https://help.shopify.com/api/reference/product#count
      */
-    public count(options?: Options.ProductCountOptions & Options.PublishedOptions) {
+    public count(options?: Options.ProductBaseOptions & Options.DateOptions & Options.PublishedOptions) {
         return this.createRequest<number>("GET", "count.json", "count", options);
     }
 

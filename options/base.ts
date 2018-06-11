@@ -41,7 +41,7 @@ export interface ProcessedOptions {
     processed_at_max?: string;
 }
 
-export interface ListOptions {
+export interface BasicListOptions {
     /**
      * The maximum number of objects that should be returned, up to 250. Setting this parameter above 250 will result in an error.
      */
@@ -51,7 +51,9 @@ export interface ListOptions {
      * The page number of the result list to retrieve. Use this in tandem with limit to page through the webhooks in a shop.
      */
     page?: number;
+}
 
+export interface ListOptions extends BasicListOptions {
     /**
      * Restricts results to those created after the given id.
      */

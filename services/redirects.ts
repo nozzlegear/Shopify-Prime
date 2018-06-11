@@ -38,7 +38,7 @@ export class Redirects extends BaseService {
      * Creates a new redirect.
      */
     public create(redirect: Redirect) {
-        return this.createRequest<Redirect>("POST", ".json", "redirect", { redirect: redirect });
+        return this.createRequest<Redirect>("POST", ".json", "redirect", { redirect });
     }
 
     /**
@@ -46,7 +46,7 @@ export class Redirects extends BaseService {
      * @param tag The updated redirect.
      */
     public update(id: number, redirect: Redirect) {
-        return this.createRequest<Redirect>("PUT", `${id}.json`, "redirect", { redirect: redirect });
+        return this.createRequest<Redirect>("PUT", `${id}.json`, "redirect", { redirect });
     }
 
     /**

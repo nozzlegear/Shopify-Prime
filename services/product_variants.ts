@@ -31,10 +31,9 @@ export class ProductVariants extends BaseService {
     /**
      * Counts the variants on the given product.
      * @param productId Id of the product that the variants belong to.
-     * @param options Options for filtering the results.
      */
-    public count(productId: number, options?: Options.FulfillmentCountOptions) {
-        return this.createRequest<number>("GET", `products/${productId}/variants/count.json`, "count", options);
+    public count(productId: number) {
+        return this.createRequest<number>("GET", `products/${productId}/variants/count.json`, "count");
     }
 
     /**

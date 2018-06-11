@@ -38,7 +38,7 @@ export class Webhooks extends BaseService {
      * Creates a new webhook.
      */
     public create(webhook: Webhook) {
-        return this.createRequest<Webhook>("POST", ".json", "webhook", { webhook: webhook });
+        return this.createRequest<Webhook>("POST", ".json", "webhook", { webhook });
     }
 
     /**
@@ -46,7 +46,7 @@ export class Webhooks extends BaseService {
      * @param webhook The updated webhook.
      */
     public update(id: number, webhook: Webhook) {
-        return this.createRequest<Webhook>("PUT", `${id}.json`, "webhook", { webhook: webhook });
+        return this.createRequest<Webhook>("PUT", `${id}.json`, "webhook", { webhook });
     }
 
     /**

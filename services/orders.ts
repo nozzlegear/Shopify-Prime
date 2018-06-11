@@ -89,7 +89,7 @@ export class Orders extends BaseService {
      * @param options Options for canceling the order.
      */
     public cancel(id: number, options?: Options.OrderCancelOptions) {
-        return this.createRequest<Order>("POST", `${id}/cancel.json`, 'order');
+        return this.createRequest<Order>("POST", `${id}/cancel.json`, 'order', options);
     }
 }
 

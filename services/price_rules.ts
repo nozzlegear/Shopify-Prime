@@ -15,7 +15,7 @@ export class PriceRules extends BaseService {
      * Gets a list of up to 250 of the shop's Price Rules.
      * @param options Options for filtering the results.
      */
-    public list(options?: Options.PriceRuleOptions & Options.ListOptions & Options.FieldOptions) {
+    public list(options?: Options.ListOptions & Options.FieldOptions) {
         return this.createRequest<PriceRule[]>("GET", ".json", "price_rules", options);
     }
 

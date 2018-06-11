@@ -39,52 +39,53 @@ export class Fulfillments extends BaseService {
      * @param fulfillmentId Id of the fulfillment being retrieved.
      * @param options Options for filtering the result.
      */
-    public get(orderId: number, id: number, options?: Options.FieldOptions) {
-        return this.createRequest<Fulfillment>("GET", this.getPath(orderId, `${id}.json`), "fulfillment", options);
+    public get(orderId: number, fulfillmentId: number, options?: Options.FieldOptions) {
+        return this.createRequest<Fulfillment>("GET", this.getPath(orderId, `${fulfillmentId}.json`), "fulfillment", options);
     }
 
     /**
-     * Lists up to 250 fulfillments for the given blog.
+     * Lists up to 250 fulfillments for the given order.
      * @param orderId Id of the blog that the fulfillments belong to.
      * @param options Options for filtering the results.
      */
-    public list(orderId: number, options?: Options.FulfillmentListOptions) {
+    public list(orderId: number, options?: Options.FieldOptions & Options.DateOptions & Options.ListOptions) {
         return this.createRequest<Fulfillment[]>("GET", this.getPath(orderId, ".json"), "fulfillments", options);
     }
 
     /**
-     * Counts the fulfillments on the given blog.
+     * Counts the fulfillments on the given order.
      * @param orderId Id of the blog that the fulfillments belong to.
      * @param options Options for filtering the results.
      */
-    public count(orderId: number, options?: Options.FulfillmentCountOptions) {
+    public count(orderId: number, options?: Options.DateOptions) {
         return this.createRequest<number>("GET", this.getPath(orderId, "count.json"), "count", options);
     }
 
     /**
-     * Opens a fulfillment with the given id.
-     * @param id The fulfillment's id.
+     * Opens a fulfillment with the given fulfillmentId.
+     * @param orderId Id of the blog that the fulfillments belong to.
+     * @param fulfillmentId The fulfillment's id.
      */
-    public open(orderId: number, id: number) {
-        return this.createRequest<Fulfillment>("POST", this.getPath(orderId, `${id}/open.json`), 'fulfillment');
+    public open(orderId: number, fulfillmentId: number) {
+        return this.createRequest<Fulfillment>("POST", this.getPath(orderId, `${fulfillmentId}/open.json`), 'fulfillment');
     }
 
     /**
-     * Cancels a fulfillment with the given id.
-     * @param id The fulfillment's id.
+     * Cancels a fulfillment with the given fulfillmentId.
+     * @param fulfillmentId The fulfillment's id.
      * @param options Options for canceling the fulfillment.
      */
-    public cancel(orderId: number, id: number) {
-        return this.createRequest<Fulfillment>("POST", this.getPath(orderId, `${id}/cancel.json`), 'fulfillment');
+    public cancel(orderId: number, fulfillmentId: number) {
+        return this.createRequest<Fulfillment>("POST", this.getPath(orderId, `${fulfillmentId}/cancel.json`), 'fulfillment');
     }
 
     /**
      * Complete a fulfillment with the given id.
-     * @param id The fulfillment's id.
+     * @param fulfillmentId The fulfillment's id.
      * @param options Options for canceling the fulfillment.
      */
-    public complete(orderId: number, id: number) {
-        return this.createRequest<Fulfillment>("POST", this.getPath(orderId, `${id}/complete.json`), 'fulfillment');
+    public complete(orderId: number, fulfillmentId: number) {
+        return this.createRequest<Fulfillment>("POST", this.getPath(orderId, `${fulfillmentId}/complete.json`), 'fulfillment');
     }
 }
 
