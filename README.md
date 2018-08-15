@@ -61,7 +61,7 @@ With promises:
 ```js
 const shop = shops.get().then((shop) => {
     //Do something with the shop.
-}); 
+});
 ```
 
 Both methods are supported and the results won't differ. The only difference is an `await`ed method will throw an error if the method fails, where a promise would just fail silently unless you use `.catch`.
@@ -146,10 +146,10 @@ const usersShopifyUrl = "https://example.myshopify.com";
 const redirectUrl = "https://example.com/my/redirect/url";
 
 //An array of the Shopify access scopes your application needs to run.
-const permissions = ["read_orders", "write_orders"];
+const scopes = ["read_orders", "write_orders"];
 
 //Build the URL and send your user to it where they'll be prompted to install your app.
-const authUrl = Auth.buildAuthorizationUrl(scopes, usersShopifyurl, yourShopifyApiKey, redirect);
+const authUrl = await Auth.buildAuthorizationUrl(scopes, usersShopifyUrl, yourShopifyApiKey, redirectUrl);
 ```
 
 ### Authorize an installation and generate an access token
@@ -164,7 +164,7 @@ shop's resources (e.g. orders, customers, fulfillments, etc.)
 ```js
 import { Auth } from "shopify-prime";
 
-// The querystring will have several parameters you need for authorization. 
+// The querystring will have several parameters you need for authorization.
 // Refer to your server framework docs for details on getting a request querystring.
 const code = request.QueryString["code"];
 const shopUrl = request.QueryString["shop"];
@@ -239,7 +239,7 @@ verification will fail.
 ## Recurring Application Charges (monthly subscriptions)
 
 The Shopify billing API lets you create a recurring charge on a shop owner's account, letting them pay you
-on a monthly basis for using your application. 
+on a monthly basis for using your application.
 
 ### Create a recurring charge
 
