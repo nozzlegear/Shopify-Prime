@@ -45,6 +45,9 @@ export class BaseService {
         url.protocol("https");
         url.path(this.joinUriPaths(this.resource, path));
 
+        console.error("url", url);
+        console.error("url", url.toString());
+
         if ((method === "GET" || method === "DELETE") && payload) {
             for (const prop in payload) {
                 const value = payload[prop];
