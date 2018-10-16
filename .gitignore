@@ -42,6 +42,7 @@ tests/built/
 
 # Ignore private configuration files
 *.private.json
+.vscode
 
 # Ignore test project's yarn.lock
 tests/yarn.lock

@@ -36,6 +36,7 @@ export * from "./refund";
 export * from "./script_tag";
 export * from "./shipping_line";
 export * from "./shop";
+export * from "./theme";
 export * from "./tax_line";
 export * from "./transaction";
 export * from "./usage_charge";
