@@ -20,5 +20,6 @@ export * from "./redirects";
 export * from "./script_tags";
 export * from "./shops";
 export * from "./smart_collections";
+export * from "./themes";
 export * from "./usage_charges";
 export * from "./webhooks";

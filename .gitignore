@@ -2,6 +2,7 @@
 logs
 *.log
 npm-debug.log*
+package-lock.json
 
 # Runtime data
 pids
@@ -42,6 +43,7 @@ tests/built/
 
 # Ignore private configuration files
 *.private.json
+.vscode
 
 # Ignore test project's yarn.lock
 tests/yarn.lock
