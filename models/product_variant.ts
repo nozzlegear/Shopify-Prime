@@ -62,6 +62,11 @@ export interface ProductVariant extends ShopifyObject {
     inventory_quantity: number;
 
     /**
+     * The unique identifier for the inventory item, which is used in the Inventory API to query for inventory information. 
+     */
+    inventory_item_id: number;
+
+    /**
      * Custom properties that a shop owner can use to define product variants. Multiple options can exist. Options are represented as: option1, option2, option3 etc.
      */
     option1: string;
