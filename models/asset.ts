@@ -47,11 +47,3 @@ export interface Asset {
      */
     value?: string;
 }
-
-export interface AssetData {
-    asset: Asset;
-}
-
-export interface ListAssetData {
-    assets: Asset[];
-}

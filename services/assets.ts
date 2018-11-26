@@ -1,6 +1,6 @@
 import * as Options from '../options';
 import { BaseService } from '../infrastructure';
-import { Asset, AssetData, ListAssetData } from '../models';
+import { Asset } from '../models';
 
 /**
  * A service for manipulating a Shopify shop's theme asset.
@@ -17,7 +17,7 @@ export class Assets extends BaseService {
      * @param options Options for filtering the result.
      */
     public get(id: number, key: string, options?: Options.FieldOptions) {
-        return this.createRequest<AssetData>("GET", `${id}/assets.json?asset[key]=${key}&theme_id=${id}`, "", options);
+        return this.createRequest<Asset>("GET", `${id}/assets.json?asset[key]=${key}&theme_id=${id}`, "asset", options);
     }
 
     /**
@@ -27,7 +27,7 @@ export class Assets extends BaseService {
      * @param assets The updated asset.
      */
     public update(id: number, asset: Asset) {
-        return this.createRequest<AssetData>("PUT", `${id}/assets.json`, "", { asset });
+        return this.createRequest<Asset>("PUT", `${id}/assets.json`, "asset", { asset });
     }
 
     /**
@@ -36,7 +36,7 @@ export class Assets extends BaseService {
      * @param options Options for filtering the results.
      */
     public list(id: number, options?: Options.FieldOptions) {
-        return this.createRequest<ListAssetData>("GET", `${id}/assets.json`, "", options);
+        return this.createRequest<Asset[]>("GET", `${id}/assets.json`, "assets", options);
     }
 
     /**
