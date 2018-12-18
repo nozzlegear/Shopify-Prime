@@ -3,7 +3,7 @@ import { BaseService } from '../infrastructure';
 import { Theme } from '../models';
 
 /**
- * A service for manipulating a Shopify shop's theme.
+ * A service for manage Shopify shop's theme.
  */
 export class Themes extends BaseService {
     constructor(shopDomain: string, accessToken: string) {
