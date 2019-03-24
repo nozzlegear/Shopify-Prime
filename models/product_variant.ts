@@ -70,6 +70,8 @@ export interface ProductVariant extends ShopifyObject {
      * Custom properties that a shop owner can use to define product variants. Multiple options can exist. Options are represented as: option1, option2, option3 etc.
      */
     option1: string;
+    option2: string|null;
+    option3: string|null;
 
     /**
      * The order of the product variant in the list of product variants. 1 is the first position. To reorder variants, update the product with the variants in the desired order. The position attribute on the variant will be ignored.
