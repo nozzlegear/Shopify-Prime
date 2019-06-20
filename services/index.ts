@@ -4,6 +4,7 @@ export * from "./assets";
 export * from "./blogs";
 export * from "./charges";
 export * from "./custom_collections";
+export * from "./customer";
 export * from "./discounts";
 export * from "./draft_orders";
 export * from "./fulfillments";
