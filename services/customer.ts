@@ -8,32 +8,30 @@ export class Customers extends BaseService {
     }
 
     /**
-     * Get a count of all custom customers that contain a given product
-     * @param options Options for filtering the results.
-     * @see https://help.shopify.com/api/reference/customcustomer#count
+     * Get a count of all customers
      */
-    public count(options?: { title?: string, product_id?: number } & Options.DateOptions & Options.PublishedOptions) {
-        return this.createRequest<number>("GET", "count.json", "count", options);
+    public count() {
+        return this.createRequest<number>("GET", "count.json", "count");
     }
 
     /**
-     * Get a list of all custom customers that contain a given product
+     * Get a list of all customers
      * @param options Options for filtering the results.
      */
     public list(options?: Options.DateOptions & Options.FieldOptions & Options.ListOptions) {
         return this.createRequest<Customer[]>("GET", ".json", "customers", options);
     }
 
-  /**
-   * Searches for customers that match a supplied query.
-   * @param options Options for searching customers
-   */
+    /**
+     * Searches for customers that match a supplied query.
+     * @param options Options for searching customers
+     */
     public search(options?: Options.CustomerSearchOptions & Options.FieldOptions & Options.BasicListOptions) {
-      return this.createRequest<Customer[]>("GET", "search.json", "customers", options);
+        return this.createRequest<Customer[]>("GET", "search.json", "customers", options);
     }
 
     /**
-     * Get a single custom customer
+     * Get a single customer
      * @param id The customer's id.
      * @param options Options for filtering the results.
      */
