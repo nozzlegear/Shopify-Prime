@@ -70,7 +70,7 @@ export class Customers extends BaseService {
      * @param id The customer's ids
      */
     public createActivationUrl(id: number) {
-        return this.createRequest<string>("POST", `${id}/account_activation_url`, "account_activation_url");
+        return this.createRequest<string>("POST", `${id}/account_activation_url.json`, "account_activation_url");
     }
 
     /**
