@@ -67,6 +67,7 @@
         "test:blogs": "alsatian -T ./dist/tests/blogs.js | tap-spec",
         "test:charges": "alsatian -T ./dist/tests/charges.js | tap-spec",
         "test:custom_collections": "alsatian -T ./dist/tests/custom_collections.js | tap-spec",
+        "test:customers": "alsatian -T ./dist/tests/customers.js | tap-spec",
         "test:discounts": "alsatian -T ./dist/tests/discounts.js | tap-spec",
         "test:gift_cards": "alsatian -T ./dist/tests/gift_cards.js | tap-spec",
         "test:orders": "alsatian -T ./dist/tests/orders.js | tap-spec",

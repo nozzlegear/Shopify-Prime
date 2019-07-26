@@ -550,6 +550,88 @@ let tags = await service.list();
 tags = await service.list({src: "https://example.com/my-filtered-url.js"});
 ```
 
+## Customers 
+The Customer resource stores information about a shop's customers, such as 
+their contact details, their order history, and whether they've agreed to 
+receive email marketing.
+
+### Listing Customers 
+```js 
+import { Customers } from "shopify-prime";
+const service = new Customers(shopDomain, shopAccessToken);
+let customers = await service.list(); 
+
+// Optionally, filter the list for new customers 
+let customers = await service.list({ limit: 10, since_id: customerId });
+```
+
+### Searching Customers 
+```js 
+import { Customers } from "shopify-prime";
+const service = new Customers(shopDomain, shopAccessToken);
+
+let search = await service.search({query: 'Bob country:United States'}); 
+```
+
+### Getting count of Customers 
+```js 
+import { Customers } from "shopify-prime";
+const service = new Customers(shopDomain, shopAccessToken);
+
+let count = await service.count(); 
+```
+
+### Creating a Customer 
+```js 
+import { Customers } from "shopify-prime";
+const service = new Customers(shopDomain, shopAccessToken);
+
+let customer = await service.create({ 
+  email: "customer@myshopify.com",
+  first_name: "Jane",
+  last_name: "Doe"
+});
+```
+
+### Updating a Customer 
+```js 
+import { Customers } from "shopify-prime";
+const service = new Customers(shopDomain, shopAccessToken);
+
+let customer = await service.update({ 
+  email: "newemail@myshopify.com"
+});
+```
+### Deleting a Customer 
+```js 
+import { Customers } from "shopify-prime";
+const service = new Customers(shopDomain, shopAccessToken);
+
+let customer = await service.delete(123456789);
+```
+
+### Generating activation URL 
+```js
+import { Customers } from "shopify-prime";
+const service = new Customers(shopDomain, shopAccessToken);
+
+let url = await service.createActivationUrl(123456789);
+// => https://domain.myshopify.comcom/account/activate/XXXXXX/XXXXXXXXXXXXX
+```
+### Inviting a Customer 
+```js
+import { Customers } from "shopify-prime";
+const service = new Customers(shopDomain, shopAccessToken);
+const invite = await service.invite();
+
+// Optionally, send a custom invite 
+const invite = await service.invite({
+  to: "alternateemail@gmail.com",
+  from: "fromemail@myshopify.com",
+  subject: "Welcome!",
+  custom_message: "My custom message"
+});
+```
 ## Orders
 
 ### Creating an Order
