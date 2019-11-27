@@ -1,3 +1,15 @@
+# Package deprecation notice
+
+Due to time constraints, and due to the fact that I very rarely use Node in a professional or even hobby context, **I've decided to deprecate this package and repository**. I'm not able to dedicate the time needed to keep up with changes from Shopify, let alone implement missing features, type definitions, bug fixes and so on. If you're looking to build a Shopify app and you're not tied to JavaScript, I suggest [taking a look at my actively maintained package for .NET (C# and F#) called ShopifySharp](https://github.com/nozzlegear/shopifysharp). I also [offer a course for building Shopify apps using C# and .NET](https://nozzlegear.com). 
+
+To all of the developers who were using this package, and to everyone who has contributed their time creating pull requests and filing issues, I want to thank you for all of the support and kind words you've sent me. If there's anyone who wants to fork this repository and continue supporting the package, I would be happy to fully endorse your efforts and link to the new fork. This code is MIT licensed, and any developer may fork, change or use it as you see fit. 
+
+If you're a business owner or Shopify user, and you're looking to hire someone to build a new app for your store, my main line of work is freelance Shopify app development and consulting. Please feel free to reach out to me at **joshua(at)nozzlegear.com**.
+
+The documentation for this package is preserved below:
+
+---
+
 # Shopify Prime
 
 [![Build Status](https://travis-ci.org/nozzlegear/Shopify-Prime.svg?branch=master)](https://travis-ci.org/nozzlegear/Shopify-Prime)
